@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bit.pro.mappers.myRecipeMapper"> 
+<!-- 출력리스트 -->
+<select id="recipeList" parameterType="myRecipeVo" resultType="myRecipeVo">
+	select * from myrecipe r join custom c on r.mr_customnum = c.cstmtnum join photo p on r.mr_customnum = p.p_customnum where mr_usernum = #{mr_userNum} order by recipenum desc limit #{startpoint}, #{row}
+</select>
+
+<!-- 페이징용 -->
+<select id="recipeCount" parameterType="myRecipeVo" resultType="int">
+	select count(*) from myrecipe where mr_usernum = #{mr_userNum }
+</select>
+
+<!-- 삭제 -->
+<delete id="deleteRecipe" parameterType="myRecipeVo">
+	delete from myrecipe where mr_usernum = #{mr_userNum } and mr_customnum = #{mr_customNum }
+</delete>
+
+</mapper>

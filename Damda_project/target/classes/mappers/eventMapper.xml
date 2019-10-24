@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.bit.pro.mappers.eventMapper">
+ 
+ <select id="selectEventAll" resultType="com.bit.pro.vo.EventVo">
+ SELECT PHOTO.P_EVENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.ORIGINALNAME, EVENT.* FROM PHOTO JOIN EVENT ON EVENTNUM=P_EVENTNUM WHERE PHOTO.PHOTOCTG2="thumbnail" ORDER BY EVENTNUM DESC LIMIT #{startList}, #{listSize} 
+ </select>
+ <select id="selectEventCnt" resultType="int">
+ 	SELECT COUNT(*) AS LISTCOUNT FROM EVENT
+ </select>
+ <insert id="insertEvent" parameterType="com.bit.pro.vo.EventVo">
+ 	INSERT INTO EVENT (EVENTSUB, EVENTDATESTA, EVENTDATEEND, EVENTCONTENT) VALUES (#{eventsub},#{eventdateSta},#{eventdateEnd},#{eventcontent})
+ </insert>
+ <select id="selectEventOne" resultType="com.bit.pro.vo.EventVo">
+ 	SELECT PHOTO.PHOTOCTG2, PHOTO.P_EVENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.PHOTONUM, PHOTO.ORIGINALNAME , EVENT.* FROM PHOTO JOIN EVENT ON EVENTNUM=P_EVENTNUM WHERE EVENTNUM=#{eventnum}
+  </select>
+ <update id="updateEvent" parameterType="com.bit.pro.vo.EventVo">
+ 	UPDATE EVENT SET EVENTSUB=#{eventsub}, EVENTDATESTA=#{eventdateSta}, EVENTDATEEND=#{eventdateEnd},EVENTCONTENT=#{eventcontent} WHERE EVENTNUM=#{eventnum}  
+ </update>
+ <delete id="deleteEvent" parameterType="int">
+ 	DELETE FROM EVENT WHERE EVENTNUM=#{eventnum}
+ </delete>
+<delete id="deleteEventPhoto" parameterType="int">
+ 	DELETE FROM PHOTO WHERE P_EVENTNUM=#{eventnum}
+ </delete>
+
+</mapper>

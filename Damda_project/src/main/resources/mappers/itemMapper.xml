@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.bit.pro.mappers.itemMapper">
+ <!-- home -->
+ <select id="selectHome" parameterType="allitemVo" resultType="allitemVo">
+	select * from photo join allitem on photo.p_itemnum = allitem.itemnum where photoctg2='thumbnail' and category=#{category} order by itemnum desc limit 0,3;
+ </select>
+ 
+ <!-- main -->
+ <select id="selectItem" parameterType="allitemVo" resultType="allitemVo">
+ 	SELECT * FROM PHOTO join allitem on PHOTO.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' and category=#{category} order by ${itemalign } limit #{startpoint}, #{row}
+ </select> 
+ 
+ <select id="totalItem" parameterType="allitemVo" resultType="int">
+ 	select count(*) from allitem where category=${category};
+ </select>
+ 
+ <!-- best -->
+ <select id="selectBest" parameterType="allitemVo" resultType="allitemVo">
+ 	select * from photo join allitem on photo.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' order by itemsales desc limit #{startpoint}, #{row}
+ </select>
+ 
+ <!-- detail -->
+ <select id="itemDetail" parameterType="allitemVo" resultType="allitemVo">
+ 	SELECT * FROM PHOTO join allitem on PHOTO.p_itemnum = allitem.itemnum where itemnum=#{itemNum} and photoctg2 ='thumbnail';
+ </select>
+ 
+<select id="detailImg" parameterType="allitemVo" resultType="allitemVo">
+	SELECT photoctg, photoname, photopath FROM PHOTO join allitem on PHOTO.p_itemnum = allitem.itemnum where itemnum=#{itemNum} and photoctg2 ='detail';
+</select> 
+
+<!-- insert item -->
+<insert id="insertAllitem" parameterType="allitemVo">
+	INSERT INTO ALLITEM (category,itemprice, itemname, itemcon,itemstock)
+	VALUES (#{category},#{itemPrice},#{itemName}, #{itemCon},#{itemStock});
+	<selectKey keyProperty="itemNum" resultType="Integer" order="AFTER">
+        SELECT LAST_INSERT_ID()
+    </selectKey> 
+</insert>
+ 
+<!-- update item --> 
+<update id="updateAllitem" parameterType="allitemVo">
+	UPDATE ALLITEM SET category=#{category},itemprice=#{itemPrice}
+	, itemname=#{itemName}, itemcon=#{itemCon}, itemstock=#{itemStock}
+	WHERE itemNum=#{itemNum}
+</update>
+
+<!-- selectProductAll" -->
+<select id="selectProductAll" resultType="allitemVo">
+	SELECT * FROM PHOTO join allitem on PHOTO.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' order by itemnum desc limit 0, 10
+<!-- 	limit #{startpoint}, #{row} -->
+</select>
+
+<!-- selectProduct -->
+<select id="selectProduct" resultType="allitemVo">
+	SELECT * FROM PHOTO join allitem on PHOTO.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' and category=#{category} order by itemnum desc limit 0, 10
+</select>
+
+<!-- selectProductBest -->
+<select id="selectProductBest" resultType="allitemVo">
+	SELECT * FROM PHOTO join allitem on PHOTO.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' order by itemSales desc limit 0, 10
+</select>
+
+<delete id="deleteProduct" parameterType="String">
+	DELETE FROM allitem,photo USING allitem INNER JOIN photo ON allitem.itemnum = PHOTO.p_itemnum where itemnum = #{itemNum}
+</delete>
+
+<!-- paging -->
+<select id="selectAllCnt" resultType="int">
+	select count(*) from allitem 
+</select>
+
+<!-- paging allitem -->
+<select id="selectPagingListAll" resultType="allitemVo">
+	select * from photo join allitem on photo.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' order by ${itemalign } desc limit  #{startpoint}, #{row}	
+</select>
+
+<!-- paging selectitem -->
+<select id="selectPagingList" resultType="allitemVo">
+	select * from photo join allitem on photo.p_itemnum = allitem.itemnum where photoctg2 ='thumbnail' and category=#{category} order by itemnum desc limit #{startpoint}, #{row}	
+</select>
+
+</mapper>

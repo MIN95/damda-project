@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+ 		<typeAliases>
+            <typeAlias type="com.bit.pro.vo.AddrVo" alias="addrVo"/>
+            <typeAlias type="com.bit.pro.vo.AllItemVo" alias="allitemVo"/>
+            <typeAlias type="com.bit.pro.vo.CartJoinVo" alias="cartJoinVo"/>
+            <typeAlias type="com.bit.pro.vo.CartVo" alias="cartVo"/>
+            <typeAlias type="com.bit.pro.vo.EventVo" alias="eventVo"/>
+            <typeAlias type="com.bit.pro.vo.JoinVo" alias="joinVo"/>
+            <typeAlias type="com.bit.pro.vo.LoginVo" alias="loginVo"/>
+            <typeAlias type="com.bit.pro.vo.MateVo" alias="mateVo"/>
+            <typeAlias type="com.bit.pro.vo.MyRecipeVo" alias="myRecipeVo"/>
+            <typeAlias type="com.bit.pro.vo.NoticeVo" alias="noticeVo"/>
+            <typeAlias type="com.bit.pro.vo.OrderVo" alias="oderVo"/>
+            <typeAlias type="com.bit.pro.vo.PhotoVo" alias="photoVo"/>
+            <typeAlias type="com.bit.pro.vo.QnaVo" alias="qnaVo"/>
+            <typeAlias type="com.bit.pro.vo.ReviewLikeVo" alias="reviewLikeVo"/>
+            <typeAlias type="com.bit.pro.vo.ReviewVo" alias="reviewVo"/>
+            <typeAlias type="com.bit.pro.vo.WishItemVo" alias="wishItemVo"/>
+        </typeAliases>
+    </configuration>
+
+

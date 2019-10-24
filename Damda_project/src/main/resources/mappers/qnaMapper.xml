@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.bit.pro.mappers.qnaMapper">
+<!-- select all qna data -->
+<select id="selectQnaListAll" resultType="qnaVo">
+	SELECT @RNUM :=@RNUM +1 AS ROWNUM, q.*
+	FROM
+	(							
+	SELECT qnanum,qnakind,qnasub,m_userid,qnapw,answerstatus,DATE_FORMAT(qnadate, '%Y-%m-%d') AS qnadate FROM main_qna  
+	) q,
+	(SELECT @RNUM:=0) TMP 
+	ORDER BY q.qnanum DESC, ROWNUM DESC LIMIT #{startpoint}, #{row}
+</select>
+
+<!-- select qnaList by qnakind -->
+<select id="selectQnaList" resultType="qnaVo">
+	SELECT @RNUM :=@RNUM +1 AS ROWNUM, q.*
+	FROM
+	(
+	SELECT qnanum,qnakind,qnasub,m_userid,qnapw,answerstatus,DATE_FORMAT(qnadate, '%Y-%m-%d') AS qnadate FROM main_qna
+	) q,
+	(SELECT @RNUM:=0) TMP 
+	WHERE qnakind = #{qnaKind}
+	ORDER BY q.qnanum DESC, ROWNUM DESC LIMIT #{startpoint}, #{row}
+</select>
+
+<!-- select MyqnaList -->
+<select id="selectMyQna" resultType="qnaVo">
+	SELECT @RNUM :=@RNUM +1 AS ROWNUM, q.*
+	FROM
+	(
+	SELECT qnanum,qnakind,qnasub,m_userid,qnapw,answerstatus,DATE_FORMAT(qnadate, '%Y-%m-%d') AS qnadate FROM main_qna
+	WHERE m_usernum=#{m_userNum}
+	) q,
+	(SELECT @RNUM:=0) TMP 
+	ORDER BY q.qnanum DESC, ROWNUM DESC LIMIT #{startpoint}, #{row}
+</select>
+
+<!-- insert qna by user  -->
+<insert id="insertQna" parameterType="qnaVo">
+	INSERT INTO MAIN_QNA (m_useremail,m_userid,m_usernum,qnasub,qnakind,qnacon,qnastyle,answernotice,qnapw)
+    VALUES 
+    (
+    (select useremail from userinfo where usernum=#{m_userNum})
+    ,#{m_userId},#{m_userNum},#{qnaSub}, #{qnaKind},#{qnaCon},#{qnaStyle},#{answerNotice},#{qnaPw}
+ 	)
+    <selectKey keyProperty="qnaNum" resultType="Integer" order="AFTER">
+        SELECT LAST_INSERT_ID()
+    </selectKey> 
+</insert>
+
+<!-- detail출력 -->
+<select id="selectQna" parameterType="Integer" resultType="qnaVo">
+	SELECT * FROM MAIN_QNA WHERE qnanum = #{qnaNum}
+</select>
+
+<!-- detail 파일출력 -->
+<select id="selectQnaFileList" parameterType="Integer" resultType="photoVo">
+	SELECT * FROM PHOTO where p_qnaNum=#{qnaNum}
+</select>
+
+<!-- update -->
+<update id="updateQna" parameterType="qnaVo">
+	UPDATE MAIN_QNA SET qnasub=#{qnaSub},qnakind=#{qnaKind}
+	, qnacon=#{qnaCon}, qnastyle=#{qnaStyle}, answernotice=#{answerNotice}
+	, qnapw=#{qnaPw} WHERE qnanum=#{qnaNum}
+</update>
+
+<!-- delete -->
+<delete id="deleteQna" parameterType="Integer">
+	DELETE FROM MAIN_QNA WHERE qnanum=#{qnaNum}
+</delete>
+
+<!-- select photopath to delete real file  -->
+<select id="getfilePath" parameterType="Integer" resultType="photoVo">
+	SELECT photopath FROM PHOTO WHERE p_qnanum = #{qnaNum} 
+</select>
+
+<!-- delete qnadata with phototable -->
+<delete id="deleteQnaList" parameterType="Integer">
+	DELETE FROM MAIN_QNA WHERE qnanum = #{qnaNum}
+</delete>
+
+<!-- insert answer ,select answer 관리자답변-->
+<update id="insertQnaAnswer" parameterType="qnaVo">
+	UPDATE MAIN_QNA SET answercon = #{answerCon},answerstatus='답변'  WHERE qnanum=#{qnaNum}
+</update>
+
+<!-- count alldata for paging -->
+<select id="selectAllCnt" resultType="int">
+	SELECT COUNT(*) FROM MAIN_QNA
+</select>
+
+<!-- count selected data for paging -->
+<select id="selectCnt" parameterType="String" resultType="int">
+ 	SELECT COUNT(*) FROM MAIN_QNA WHERE qnakind=#{qnaKind};
+</select>
+ 
+<!-- count selected myqna for paging -->
+<select id="selectMyQnaCnt" parameterType="Integer" resultType="int">
+ 	SELECT COUNT(*) FROM MAIN_QNA WHERE m_userNum=#{m_userNum};
+</select>
+
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bit.pro.mappers.cartMapper"> 
+ <!-- detail에서 장바구니 담기 회원/비회원-->
+ <insert id="insertCart" parameterType="cartVo">
+	insert into cart (c_usernum, c_itemnum, ea) values (#{c_userNum}, #{c_itemNum}, #{ea})
+ </insert>
+ 
+  <insert id="insertCart_noUser" parameterType="cartVo">
+	insert into cart (c_nousernum, c_itemnum, ea) values (#{c_nouserNum}, #{c_itemNum}, #{ea})
+ </insert>
+     
+<!-- 장바구니 출력 회원 -->   
+<select id="selectCart_user" parameterType="cartVo" resultType="cartJoinVo">
+	select c.c_usernum as usernum, c.cartnum as cartnum, c.c_itemnum as itemnum, i.itemname, i.itemprice,pi.photoname as itemphotoname, pi.photoctg as itemphotoctg, 
+	c.c_customnum as customnum, s.cstmprice as customprice, ps.photoname as customphotoname, ps.photoctg as  customphotoctg, s.cstmmatelist, c.ea from cart c
+		left outer join allitem i on c.c_itemnum = i.itemnum 
+		left outer join (select * from photo where photoctg2 = "thumbnail") pi on i.itemnum = pi.p_itemnum
+		left outer join custom s on c.c_customnum = s.cstmtnum
+		left outer join (select * from photo where photoctg2 = "thumbnail") ps on s.cstmtnum = ps.p_customnum
+	where c.c_usernum = #{c_userNum} order by c.cartnum desc
+ </select>
+<!-- 장바구니 출력 비회원 --> 
+  <select id="selectCart_noUser" parameterType="cartVo" resultType="cartJoinVo">
+	select c.c_usernum as usernum, c.cartnum as cartnum, c.c_itemnum as itemnum, i.itemname, i.itemprice,pi.photoname as itemphotoname, pi.photoctg as itemphotoctg, 
+	c.c_customnum as customnum, s.cstmprice as customprice, ps.photoname as customphotoname, ps.photoctg as  customphotoctg, s.cstmmatelist, c.ea from cart c
+		left outer join allitem i on c.c_itemnum = i.itemnum  
+		left outer join (select * from photo where photoctg2 = "thumbnail") pi on i.itemnum = pi.p_itemnum
+		left outer join custom s on c.c_customnum = s.cstmtnum
+		left outer join (select * from photo where photoctg2 = "thumbnail") ps on s.cstmtnum = ps.p_customnum
+	where c.c_nousernum = #{c_nouserNum} order by c.cartnum desc
+ </select>
+ 
+ <!-- 비회원에서 회원장바구니로 update 중복없을 때-->
+ <update id="noUser_updateCart" parameterType="cartVo">
+ 	update cart set c_usernum = #{c_userNum} where c_nousernum = #{c_nouserNum} and c_itemnum = #{c_itemNum}
+ </update>
+ 
+ <!-- 비회원에서 회원장바구니로 update 중복일 때-->
+ <update id="noUser_updateCart2" parameterType="cartVo">
+ 	update cart set ea = ea + #{ea} where c_usernum = #{c_userNum} and c_itemnum = #{c_itemNum}
+ </update>
+ 
+ <!-- 비회원에서 회원장바구니로 custom 중복없음. -->
+ <update id="noUser_updateCart3" parameterType="cartVo">
+ 	update cart set c_usernum = #{c_userNum} where c_nousernum = #{c_nouserNum} and c_customnum = #{c_customNum}
+ </update>
+ 
+ <!-- 중복검사후 비회원 남은 장바구니 지우기 -->
+ <delete id="noUser_deleteCart" >
+ 	delete from cart where c_nousernum = #{c_nouserNum} and c_itemnum = #{c_itemNum}   
+ </delete>
+ 
+ <!-- 회원장바구니로 이동후 비회원 정보 지우기 -->
+ <update id="User_updateCart" parameterType="cartVo">
+ 	update cart set c_nousernum='' where c_usernum = #{c_userNum} and c_itemnum = #{c_itemNum}  
+ </update>
+ 
+ <update id="User_updateCart2" parameterType="cartVo">
+ 	update cart set c_nousernum='' where c_usernum = #{c_userNum} and c_customnum = #{c_customNum}  
+ </update>
+ 
+ <!-- 회원 장바구니 수량 변경 -->
+ <update id="userUpdate_item" parameterType="cartVo">
+ 	update cart set ea = #{ea } where c_usernum = #{c_userNum} and c_itemnum = #{c_itemNum}
+ </update>
+ <update id="userUpdate_custom" parameterType="cartVo">
+ 	update cart set ea = #{ea } where c_usernum = #{c_userNum} and c_customnum = #{c_customNum}
+ </update>
+ 
+ <!-- 비회원 장바구니 수량 변경 -->
+ <update id="nouserUpdate_item" parameterType="cartVo">
+ 	update cart set ea = #{ea } where c_nousernum = #{c_nouserNum } and c_itemnum = #{c_itemNum}
+ </update>
+ <update id="nouserUpdate_custom" parameterType="cartVo">
+  	update cart set ea = #{ea } where c_nousernum = #{c_nouserNum } and c_customnum = #{c_customNum}
+ </update>
+ 
+ <!-- 회원 장바구니 삭제 -->
+ <delete id="userDelete_item" parameterType="cartVo">
+ 	delete from cart where c_usernum = #{c_userNum} and c_itemnum = #{c_itemNum }
+ </delete>
+ <delete id="userDelete_custom" parameterType="cartVo">
+ 	delete from cart where c_usernum = #{c_userNum} and c_customnum = #{c_customNum }
+ </delete>
+ 
+ <!-- 비회원 장바구니 삭제 -->
+ <delete id="nouserDelete_item" parameterType="cartVo">
+ 	delete from cart where c_nousernum = #{c_nouserNum} and c_itemnum = #{c_itemNum }
+ </delete>
+ <delete id="nouserDelete_custom" parameterType="cartVo">
+ 	delete from cart where c_nousernum = #{c_nouserNum} and c_customnum = #{c_customNum }
+ </delete>
+ 
+ <!-- 회원 장바구니 중복확인용 -->
+ <select id="user_compareCart" parameterType="cartVo" resultType="cartVo">
+	select c_customnum, c_itemnum, ea from cart where c_usernum = #{c_userNum }
+</select>
+
+ <!-- 비회원 장바구니 중복확인용 -->
+ <select id="nouser_compareCart" parameterType="cartVo" resultType="cartVo">
+	select c_customnum, c_itemnum, ea from cart where c_nousernum =  #{c_nouserNum }
+</select>
+
+<!-- 장바구니 중복시 수량 update -->
+<update id="user_eaUpdate"  parameterType="cartVo">
+	update cart set ea = ea + #{ea } where c_usernum = #{c_userNum } and c_itemnum = #{c_itemNum }
+</update>
+<update id="nouser_eaUpdate"  parameterType="cartVo">
+	update cart set ea = ea + #{ea } where c_nousernum = #{c_nouserNum } and c_itemnum = #{c_itemNum }
+</update>
+
+<!-- 마이레시피에서 장바구니 등록 -->
+<insert id="myrecipeInsert" parameterType="cartVo">
+	insert into cart(c_usernum, c_customnum, ea) values (${c_userNum}, ${c_customNum},1);
+</insert>
+
+<!-- /////////////////////////미현 시작//////////////////////////////////////// -->
+ <!-- 주문상세내역 출력 -->
+ <select id="mypageDetail" resultType="com.bit.pro.vo.OrderListVo">
+	SELECT * FROM (
+		SELECT @ROWNUM:=@ROWNUM+1 AS BBSNUM,A.* FROM (
+			SELECT O.ORDERLISTNUM,O.PRICE,O.O_ORDERNUM,I.ITEMNAME
+			,C.CSTMMATELIST,M.DELIVERSTATUS,P.PHOTOPATH
+			FROM ORDERLIST O
+			LEFT OUTER JOIN ALLITEM I ON O.O_ITEMNUM = I.ITEMNUM 
+			LEFT OUTER JOIN CUSTOM C ON O.O_CSTMTNUM = C.CSTMTNUM
+			LEFT OUTER JOIN ORDERMANAGE M ON O.O_ORDERNUM = M.M_ORDERNUM
+			LEFT OUTER JOIN (SELECT * FROM PHOTO WHERE PHOTOCTG2 = "thnumnail") P ON I.ITEMNUM = P.P_ITEMNUM
+			WHERE O.O_ORDERNUM = #{o_ordernum} ORDER BY O.ORDERLISTNUM ASC
+		) A,(SELECT @ROWNUM:=0) B ORDER BY BBSNUM ASC 
+	) Z LIMIT #{nowPage},#{scale}
+ </select>
+ <!-- notice 레코드갯수 -->
+ <select id="countArticle" resultType="int">
+ 	SELECT COUNT(*) FROM ORDERLIST
+ </select>
+ <!-- /////////////////////////미현 끝//////////////////////////////////////// -->
+ 
+</mapper>

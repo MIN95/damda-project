@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bit.pro.mappers.likeMapper">
+
+<!-- 좋아요 -->
+<insert id="reviewLike" parameterType="reviewLikeVo">
+	insert into review_like (like_usernum, like_status, like_reviewnum) values (#{like_userNum }, 1, #{like_reviewNum });
+</insert>
+
+<!-- 좋아요 취소 -->
+<delete id="likeCancel" parameterType="reviewLikeVo">
+	delete from review_like where like_usernum = #{like_userNum } and like_reviewnum = #{like_reviewNum }
+</delete>
+
+</mapper>

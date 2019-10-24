@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.bit.pro.mappers.joinMapper">
+ <select id="insertUser" >
+ 	INSERT INTO userinfo (USERID, USERPW, USERNAME, USERBIRTH, USERADDR1, USERADDR2, USERPOSTNUM, USERPHONE, USEREMAIL,CATEGORY,USERGRADE) VALUES (#{userid}, #{userpw}, #{username}, #{userbirth} , #{useraddr1}, #{useraddr2}, #{userpostnum}, #{userphone}, #{useremail},#{category},#{userGrade});
+ </select>
+ 
+ <select id="selectUser" resultType="JoinVo">
+ 	SELECT * FROM USERINFO WHERE USERID = #{userid}
+ </select>
+ 
+ <select id="checkId" resultType="Integer">
+ 	SELECT COUNT(USERID) FROM USERINFO WHERE USERID = #{userid};
+ </select>
+ 
+ <select id="updateUser">
+ 	update userinfo set username=#{username}, useraddr1=#{useraddr1}, useraddr2=#{useraddr2}, userpostnum=#{userpostnum}, useremail=#{useremail} where userid=#{userid}
+ </select>
+ 
+ <select id="checkPw" resultType="Integer">
+ 	SELECT COUNT(USERID) FROM USERINFO WHERE USERID=#{userid} AND USERPW = #{userpw};
+ </select>
+ 
+ 
+</mapper>

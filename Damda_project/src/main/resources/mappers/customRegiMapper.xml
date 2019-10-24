@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.bit.pro.mappers.customRegiMapper">
+ <select id="selectMateAll" resultType="com.bit.pro.vo.MateVo">
+ 	SELECT PHOTO.P_INGREDIENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.ORIGINALNAME , MATERIAL.* FROM PHOTO JOIN MATERIAL ON MATENUM=P_INGREDIENTNUM WHERE PHOTO.PHOTOCTG2="thumbnail" ORDER BY MATENUM DESC LIMIT #{startList}, #{listSize} 
+ 	<!-- 페이징을 위한 명령어 LIMT 첫번째row위치, 읽어올갯수 -->
+ </select>
+ <select id="selectMateAllCnt" resultType="int">
+ 	SELECT COUNT(*) AS LISTCOUNT FROM MATERIAL
+ </select>
+ <insert id="insertMate" parameterType="com.bit.pro.vo.MateVo">
+ 	INSERT INTO MATERIAL (MATENAME, MATEPRICE, MATECTG, SALESTATUS) VALUES (#{mateName},#{mateprice},#{matectg},#{salestatus})
+ </insert>
+ <select id="selectMateOne"  resultType="com.bit.pro.vo.MateVo" >
+ 	SELECT PHOTO.PHOTOCTG2, PHOTO.P_INGREDIENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.PHOTONUM, PHOTO.ORIGINALNAME, MATERIAL.* FROM PHOTO JOIN MATERIAL ON MATENUM=P_INGREDIENTNUM WHERE MATENUM=#{MATENUM}
+ </select>
+ <update id="updateMate" parameterType="com.bit.pro.vo.MateVo">
+ 	UPDATE MATERIAL SET MATENAME=#{mateName}, MATEPRICE=#{mateprice}, MATECTG=#{matectg},SALESTATUS=#{salestatus} WHERE MATENUM=#{matenum}  
+ </update>
+ <delete id="deleteMatePhoto">
+ 	DELETE FROM PHOTO WHERE P_INGREDIENTNUM=#{matenum}
+ </delete>
+ <delete id="deleteMate">
+ 	DELETE FROM MATERIAL WHERE MATENUM=#{matenum}
+ </delete>
+ 
+  <!-- 미현 시작 -->
+ <select id="customSelectThnumb" resultType="com.bit.pro.vo.MateVo">
+ 	SELECT M.*,P.PHOTOPATH,P.PHOTOCTG2 FROM 
+	MATERIAL M JOIN PHOTO P ON M.MATENUM = P.P_INGREDIENTNUM 
+	WHERE P.PHOTOCTG2 = "thnumbnail"
+ </select>
+ <select id="customSelectDetail" resultType="com.bit.pro.vo.MateVo">
+ 	SELECT M.*,P.PHOTOPATH,P.PHOTOCTG2 FROM 
+	MATERIAL M JOIN PHOTO P ON M.MATENUM = P.P_INGREDIENTNUM 
+	WHERE P.PHOTOCTG2 = "detail" AND P.P_INGREDIENTNUM = #{matenum}
+ </select>
+ <!-- 미현 끝 -->
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bit.pro.mappers.wishItemMapper"> 
+<!-- 리스트 출력 -->
+<select id="wishList" parameterType="wishItemVo" resultType="wishItemVo">
+	select * from wishitem w join allitem i on w.w_itemnum = i.itemnum join photo p on w.w_itemnum = p.p_itemnum where photoctg2='thumbnail' and w_usernum = #{w_userNum} order by wishnum desc limit #{startpoint}, #{row}
+</select>
+
+<delete id="deleteWish" parameterType="wishItemVo">
+	delete from wishitem where w_usernum = #{w_userNum}  and w_itemnum = #{w_itemNum} 
+</delete>
+
+<select id="wishCount" parameterType="wishItemVo" resultType="int">
+	select count(*) from wishitem where w_usernum = #{w_userNum} 
+</select>
+
+<!-- detail에서 중복확인용 -->
+<select id="compareWishList" parameterType="wishItemVo" resultType="wishItemVo">
+	select * from wishitem where w_usernum = #{w_userNum} 
+</select>
+
+<!-- detail에서 찜 등록 -->
+<insert id="insertWish" parameterType="wishItemVo">
+	insert into wishitem(w_usernum, w_itemnum) values (#{w_userNum}, #{w_itemNum});
+</insert>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bit.pro.mappers.photoMapper"> 
+<!-- 경민 -->
+<insert id="insertPhoto" parameterType="photoVo">
+	<selectKey keyProperty="p_itemNum" resultType="int" order="BEFORE">
+    	SELECT max(itemNum) AS p_itemNum FROM allitem
+	</selectKey>
+ 	 	INSERT INTO PHOTO (photoctg,photoctg2, photopath, photoname, originalname,p_itemnum)
+     	VALUES (#{photoCtg},#{photoCtg2},#{photoPath}, #{photoName}, #{originalName},#{p_itemNum})
+</insert>
+ 
+<delete id="deletePhotoOne" parameterType="photoVo">
+ 	DELETE FROM PHOTO WHERE p_itemnum=#{p_itemNum} AND photoCtg2=#{photoCtg2} AND photoName=#{existPhotoName}
+</delete>
+
+ 
+<insert id="updateNewPhoto" parameterType="photoVo">
+	INSERT INTO PHOTO (p_itemnum,photoctg,photoctg2,photopath, photoname, originalname)
+    VALUES (#{p_itemNum},#{photoCtg},#{photoCtg2},#{photoPath}, #{photoName}, #{originalName})
+</insert> 
+ 
+<insert id="insertQnaPhoto" parameterType="photoVo">
+	<selectKey keyProperty="p_qnaNum" resultType="int" order="BEFORE">
+    	SELECT max(qnanum) AS p_qnaNum FROM main_qna
+	</selectKey>
+	INSERT INTO PHOTO (p_qnanum,photoctg,photopath, photoname, originalname)
+    VALUES (#{p_qnaNum},#{photoCtg},#{photoPath}, #{photoName}, #{originalName})
+</insert>  
+
+<delete id="deleteQnaPhoto" parameterType="photoVo">
+ 	DELETE FROM PHOTO WHERE p_qnanum=#{p_qnaNum} AND PHOTOPATH=#{photoPath}
+</delete>
+<!-- 승은 -->
+<!-- 재료 등록 페이지 -->
+<insert id="insertMatePhoto" parameterType="photoVo">
+ 	<selectKey keyProperty="p_ingredientNum" resultType="int" order="BEFORE">
+ 		SELECT MAX(MATENUM) AS P_INGREDIENTNUM FROM MATERIAL
+ 	</selectKey>
+ 	 INSERT INTO PHOTO (PHOTOCTG, PHOTOCTG2, PHOTOPATH, PHOTONAME, ORIGINALNAME, P_INGREDIENTNUM) VALUES ('ingredient', #{photoCtg2}, #{photoPath}, #{photoName}, #{originalName}, #{p_ingredientNum})
+</insert>
+<update id="updateMatePhoto" parameterType="photoVo">
+ 	UPDATE PHOTO SET PHOTOCTG2=#{photoCtg2}, PHOTOPATH=#{photoPath}, PHOTONAME=#{photoName}, ORIGINALNAME=#{originalName} WHERE P_INGREDIENTNUM=#{p_ingredientNum} and PHOTONUM=#{photoNum}
+</update>
+
+<!-- 이벤트 등록 페이지 -->
+<insert id="insertEventPhoto" parameterType="photoVo">
+	<selectKey keyProperty="p_eventNum" resultType="int" order="BEFORE">
+		SELECT MAX(EVENTNUM) AS P_EVENTNUM FROM EVENT
+	</selectKey>
+	INSERT INTO PHOTO (PHOTOCTG, PHOTOCTG2, PHOTOPATH, PHOTONAME, ORIGINALNAME, P_EVENTNUM) VALUES('event', #{photoCtg2}, #{photoPath}, #{photoName}, #{originalName}, #{p_eventNum} )
+</insert>
+<update id="updateEventPhoto" parameterType="photoVo">
+	UPDATE PHOTO SET PHOTOPATH=#{photoPath}, PHOTOCTG2=#{photoCtg2}, PHOTONAME=#{photoName}, ORIGINALNAME=#{originalName} WHERE P_EVENTNUM=#{p_eventNum} AND PHOTONUM = #{photoNum}
+</update>
+ 
+ <!-- 미현 -->
+ <!-- notice photo -->
+ <insert id="noticePhotoInsert">
+ 	INSERT INTO PHOTO (PHOTOCTG, PHOTOPATH, PHOTONAME, ORIGINALNAME,P_NOTICENUM) VALUES ('7', #{photoPath}, #{photoName}, #{originalName}, #{p_noticenum})
+ </insert>
+ 
+
+    
+</mapper>

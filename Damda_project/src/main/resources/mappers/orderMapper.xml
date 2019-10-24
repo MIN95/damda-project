@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bit.pro.mappers.orderMapper">
+	
+	<select id="selectOrder" resultType="com.bit.pro.vo.OrderVo">
+		SELECT C.*,I.ITEMNAME,I.ITEMPRICE,I.ITEMCON,T.CSTMMATELIST,T.CSTMPRICE FROM CART C LEFT OUTER JOIN ALLITEM I ON C.C_ITEMNUM = I.ITEMNUM LEFT OUTER JOIN CUSTOM T ON C.C_CUSTOMNUM = T.CSTMTNUM WHERE C.C_USERNUM = #{c_usernum} AND C.CARTCHECK = '1' ORDER BY CARTNUM ASC
+	</select>
+	
+	<select id="nouserOrder" resultType="com.bit.pro.vo.OrderVo">
+		SELECT C.*,I.ITEMNAME,I.ITEMPRICE,I.ITEMCON,T.CSTMMATELIST,T.CSTMPRICE FROM CART C LEFT OUTER JOIN ALLITEM I ON C.C_ITEMNUM = I.ITEMNUM LEFT OUTER JOIN CUSTOM T ON C.C_CUSTOMNUM = T.CSTMTNUM WHERE C.C_NOUSERNUM = #{c_nousernum} AND C.CARTCHECK = '1' ORDER BY CARTNUM ASC
+	</select>
+	
+	<select id="selectAddr" resultType="com.bit.pro.vo.AddrVo">
+		select * from myaddr where usernum=#{usernum} order by addridx;
+	
+	</select>
+	
+	<select id="countAddr" resultType="int">
+		select count(*) from myaddr where usernum=#{usernum};
+	</select>
+	
+	<insert id="insertAddr">
+		insert into myaddr (USERNUM, USERPOSTNUM, USERADDR1, USERADDR2, ADDRNAME) VALUES (#{usernum}, #{userpostnum}, #{useraddr1}, #{useraddr2}, #{addrname});
+	</insert>
+	
+	<delete id="deleteAddr">
+		delete delete from myaddr where usernum=#{usernum} and idx=#{idx};
+	</delete>
+	
+</mapper> 
