@@ -15,7 +15,8 @@ import com.bit.pro.vo.PhotoVo;
 
 public interface MateService {
 	
-	List<MateVo> selectMateAll(pagination pagination, PhotoVo photoVo);
+	List<MateVo> selectMateCtgP(pagination pagination,PhotoVo photoVo, Model mode) throws Exception;
+	List<MateVo> selectMateSaleP(pagination pagination, PhotoVo photoVo, Model model) throws Exception;
 	
 	int insertMate(MateVo mateVo,PhotoVo photoVo, MultipartHttpServletRequest multi) throws IOException, Exception;
 	List<MateVo> selectMateOne(int matenum,PhotoVo photoVo, Model model);
@@ -24,10 +25,11 @@ public interface MateService {
 	
 	int deleteMate(int matenum);
 	
-	int selectMateAllCnt();
+	int selectMateAllCnt(MateVo mateVo, String matectg);
+	int selectMateSaleCnt(MateVo mateVo, int salestatus);
 	
 	int updateMate(int matenum,MateVo mateVo, PhotoVo photoVo, MultipartHttpServletRequest multi) throws Exception;
-
+	
 	
 	/******************* 미현시작 *****************************/
 	//custom select list

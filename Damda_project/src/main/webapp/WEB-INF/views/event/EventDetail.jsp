@@ -211,9 +211,14 @@
                <tr>
                   <td colspan="2" id="eventText" class="col-md-12 text-left">
                   	<div class="col-md-12 col-xs-12">
+                  		 <%if(session.getAttribute("user_ctg")!=null){
+		int user_ctg = (int)session.getAttribute("user_ctg");
+		if(user_ctg == 0 || user_ctg == 1) {
+		%>
                   		<div id="fileImg">
                   			<img src="${eventone[0].photoPath}" id="eventBImg" style="width:100%;"/>
                   		</div>
+                  		<%} } %>
                   		<div id="fileImg2">
                   			<img src="${eventone[1].photoPath }" id="eventCImg" style="width:100%;"/>
                   		</div>
@@ -222,7 +227,7 @@
                   	</div>
                   </td>
                </tr>
-              	<tr id="BannerImgBox">
+			<tr id="BannerImgBox">
 				  <th class="col-md-2 col-sm-2 col-xs-3">배너이미지</th>
 						<th class="col-md-10 col-sm-10 col-xs-9">
 				  			<span class="btn btn-default btn-file">이미지찾기<input type="file" class="img" id="eventBanner" name="file"/>
@@ -328,6 +333,7 @@
 </body>
 <script type="text/javascript">
  $(document).ready(function(){
+	 $('#BannerImgBox').hide();
 	if($('#eventBanner').val()==null){
 		$('#eventBanner').remove();
 		$('#BannerImgBox').hide();
@@ -347,6 +353,7 @@
 	 if(Cimg[2]==""){
 		    $('#eventCImg').hide();
 	 }
+	
 	 
 	 $('#submitbtn').on('click',function(){
 	   		var eventsub = $('#eventsub').val();

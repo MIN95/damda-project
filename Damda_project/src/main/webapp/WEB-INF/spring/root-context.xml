@@ -21,8 +21,8 @@
         <property name="url"  
             value="jdbc:mysql://127.0.0.1:3306/damda_schema?useSSL=false&amp;serverTimezone=UTC">
         </property>
-        <property name="username" value="damda"/>
-        <property name="password" value="mysql"/>
+        <property name="username" value="mydbname"/>
+        <property name="password" value="mydbpassword"/>
     </bean> 
 
 	<!-- mybatis SqlSessionFactoryBean -->
@@ -45,10 +45,10 @@
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 	
-	<!-- contigure uploadPath --> 
-	<bean class="java.lang.String" id="uploadPath">
-	 <constructor-arg value="C:\java\project\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Damda_project\resources\imgs" />
-	</bean>
+ 	<!-- contigure uploadPath -->  
+<!-- 	<bean class="java.lang.String" id="uploadPath"> -->
+<!-- 	 <constructor-arg value="C:\java\project\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Damda_project\resources\imgs" /> -->
+<!-- 	</bean> -->
 
 	<!-- Register bean -->
 	<context:component-scan base-package="com.bit.pro.dao"></context:component-scan>
@@ -61,7 +61,7 @@
    <bean id="mailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
       <property name="host" value="smtp.gmail.com" />	
       <property name="port" value="587" />
-      <property name="username" value="mymail" />
+      <property name="username" value="mymail@gmail.com" />
       <property name="password" value="mypassword" />
       <property name="defaultEncoding" value="UTF-8" />
           

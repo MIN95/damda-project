@@ -42,21 +42,31 @@ public class EventController {
 	@Resource
 	private EventService eventService;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String eventList(Model model
-			,@RequestParam(required=false,defaultValue="1")int page
-			,@RequestParam(required=false,defaultValue="1")int range,PhotoVo photoVo) throws SQLException{
+	@RequestMapping(value="/",method=RequestMethod.GET)
+	public String event() {
+		
+		return dir+"/EventList";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public List<EventVo> eventList(Model model
+			,@RequestParam(required=false,value="idx")int page
+			,@RequestParam(required=false,value="idx")int range,PhotoVo photoVo) throws SQLException{
 		//전체게시글수+메퍼추가안함
+		System.out.println("page===>"+page);
 	    int listCnt = eventService.selectEventCnt();
 	    System.out.println("listCnt====>"+listCnt);
 //		List<EventVo> eventlist = eventService.selectEventAll(model);
 		//pagination객체
 		pagination pagination = new pagination();
-		pagination.pageInfo(page, range, listCnt);
+		pagination.pageInfo2(page, range, listCnt);
 		model.addAttribute("paginaition", pagination);
+		
+		List<EventVo> eventlist = eventService.selectEventAll(pagination, photoVo);
 		model.addAttribute("eventlist",eventService.selectEventAll(pagination, photoVo));
 		System.out.println("이벤트 전부 출력>>>>>>"+eventService.selectEventAll(pagination, photoVo));
-		return dir+"/EventList";
+		return eventlist;
 	}
 	
 	@RequestMapping(value = "/input", method = RequestMethod.GET)

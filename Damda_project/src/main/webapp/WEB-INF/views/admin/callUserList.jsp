@@ -54,7 +54,7 @@
 	<ul class="btn-group pagination">
 	    <c:if test="${pageMaker.prev }">
     <li>
-        <a id="prevPage" style="cursor: pointer;"><i aria-label="Previous"></i></a>
+        <a id="prevPage" style="cursor: pointer;"><i aria-label="Previous"></i>&laquo;</a>
     </li>
     </c:if>
     <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx">
@@ -64,7 +64,7 @@
     </c:forEach>
     <c:if test="${pageMaker.next && pageMaker.endPage >0 }">
     <li>
-        <a id="nextPage" style="cursor: pointer;"><i aria-label="Next" ></i></a>
+        <a id="nextPage" style="cursor: pointer;"><i aria-label="Next"></i>&raquo;</a>
     </li>
     </c:if>
 	</ul> 

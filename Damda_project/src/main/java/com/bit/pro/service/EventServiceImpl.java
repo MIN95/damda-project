@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.bit.pro.dao.EventDao;
 import com.bit.pro.dao.PhotoDao;
 import com.bit.pro.util.UploadFileUtil;
+import com.bit.pro.util.UploadFileUtil2;
 import com.bit.pro.util.pagination;
 import com.bit.pro.vo.EventVo;
 import com.bit.pro.vo.PhotoVo;
@@ -60,7 +61,7 @@ public class EventServiceImpl implements EventService{
 			MultipartFile mfile = multi.getFile(uploadFile);
 			String originalName = mfile.getOriginalFilename();
 			if(originalName != null) {//첨부여부
-				fileName = UploadFileUtil.fileUpload(imgUploadPath, mfile.getOriginalFilename(), mfile.getBytes(),count,photoVo);
+				fileName = UploadFileUtil2.fileUpload(imgUploadPath, mfile.getOriginalFilename(), mfile.getBytes(),count);
 			}else {
 				fileName = upload+"fail/";
 			}
@@ -130,7 +131,7 @@ public class EventServiceImpl implements EventService{
 				String photoPath = null;
 				
 				if(mfile != null) {
-					fileName = UploadFileUtil.fileUpload(imgUploadPath, originalName, mfile.getBytes(), i,photoVo);
+					fileName = UploadFileUtil2.fileUpload(imgUploadPath, originalName, mfile.getBytes(), i);
 				}else {
 					fileName2=upload+"none.png";
 					System.out.println("오리지널이름없음");

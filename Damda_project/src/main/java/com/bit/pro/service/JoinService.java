@@ -1,5 +1,7 @@
 package com.bit.pro.service;
 
+import java.util.Map;
+
 import org.springframework.ui.Model;
 
 import com.bit.pro.vo.JoinVo;
@@ -16,5 +18,11 @@ public interface JoinService {
 	
 	//개인정보 수정(업데이트)
 	int updateUser(JoinVo bean) throws Exception;
+
+	int checkPw(Map<String, String> map) throws Exception;
+
+	int updatePw(Map<String, String> map) throws Exception;
+
+	
 
 }

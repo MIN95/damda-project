@@ -104,41 +104,25 @@
 				<th class="col-md-8 eventTH">이벤트</th>
 				<th class="col-md-4 eventTH">개최기간</th>
 			</thead>
-			<tbody >
+			<tbody ><!-- 
 				<c:forEach items="${eventlist}" var="eventlist">
-					<tr class="eventTR">
-						<td class="eventTD">
-							<div class="col-md-12 col-xs-12 eventIMG">
-								<a href="/event/detail/${eventlist.eventnum }"><img src="${eventlist.photoPath }" class="banner" alt="" /></a>
-							</div>
-						</td>
-						<td class="eventTD"><p class="when" id="eventdate" name="eventdate">${eventlist.eventdateSta}</br>~</br>${eventlist.eventdateEnd }</p></td>
-					</tr>
-				</c:forEach>			
+					
+				</c:forEach>	
+				-->		
 			</tbody>
 		</table>
 	</div>
 	<div class="row col-md-12 col-xs-12" id="pagination">
 	<!-- pagination{s} -->
-				<nav aria-label="Page navigation" id="pagination">
-					<ul class="pagination">
-						<c:if test="${pagination.prev}">
-							<li class="page-item">
-							<a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a>
-							</li>
-						</c:if>
-						<c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">
-							<li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> ">
-							<a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a>
-							</li>
-						</c:forEach>
-						<c:if test="${pagination.next}">
-							<li class="page-item">
-							<a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a>
-							</li>
-						</c:if>
-					</ul>
-				</nav>
+			<div id="paginationBox">
+					<nav aria-label="Page navigation">
+					  <ul class="pagination">
+					    <li value="1"><a href="#" >1</a></li>
+					    <li value="2"><a href="#" >2</a></li>
+					    <li value="3"><a href="#" >3</a></li>
+					  </ul>
+					</nav>
+			</div>
 	</div>	
 	<%if(session.getAttribute("user_ctg")!=null){
 		int user_ctg = (int)session.getAttribute("user_ctg");
@@ -163,29 +147,47 @@
 		if(user_ctg == 0 || user_ctg == 1){
 			$('#eventinputbtn').show();
 		}
+		var num=1;
+		var idx = num;
+		eventpaging(idx);
     })
-    function fn_prev(pate, range, rangeSize){
-        var page = ((range-2)*rangeSize)+1;
-        var range = range-1;
-        var url="/event";
-        url=url+"?page="+page;
-        url=url+"&range="+range;
-        location.href=url;
-    }
-    function fn_next(page, range, rangeSIze){
-        var page = parseInt((range*rangeSize))+1;
-        var range = parSeInt(range)+1;
-        var url="/event/";
-        url= url+"?page="+page;
-        url= url+"&range="+range;
-        location.href=url;
-     }
-    function fn_pagination(page, range, rangeSize, searchType, keyword){
-        var url="/event/";
-        url=url+"?page="+page;
-        url=url+"&range="+range;
-        location.href=url;
-        }
-    
+	
+	//ctg에 따른 페이징
+	$("li").click(function(){
+			$(".eventTR").remove();
+		 	var num = $(this).val();
+		 	if(num==0){
+				num=1;
+			}
+		 	idx=num;
+		 	eventpaging(idx);
+		});
+	//페이징
+	function eventpaging(idx){
+		var values = {};
+		$.ajax({
+			url:"/event/list",
+			type:"GET",
+			dataType:"json",
+			async:true,
+			data:{ 	"idx" :idx
+				},
+			error:function(){
+				alert("통신실패");
+				},
+			success:function(data){
+				console.log("성공"+data);
+				values = data;
+				var temp="";
+			    $.each(values, function(index,eventlist){
+			    	temp='<tr class="eventTR">'+
+			    	'<td class="eventTD"><div class="col-md-12 col-xs-12 eventIMG">'+
+			    	'<a href="/event/detail/'+eventlist.eventnum+'"><img src="'+eventlist.photoPath+'" class="banner" alt=""/></a></div></td>'+
+			    	'<td class="eventTd"><p class="when" id="eventdate" name="eventdate">'+eventlist.eventdateSta+'</br>~</br>'+eventlist.eventdateEnd+'</p></td></tr>';
+			    	$('#eventtable tbody').append(temp);
+				})
+			}
+		});
+	 }
     </script>
 </html>

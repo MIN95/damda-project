@@ -9,7 +9,7 @@
     <style type="text/css">
     	/*faqSubs start*/
     	#pgnameWrap {
-		 	border:thin solid rgb(200,200,200);
+		 	/* border:thin solid rgb(200,200,200); */
 		 	height: 45px;
 		 	width:125px;
 		 	margin: 0 auto;

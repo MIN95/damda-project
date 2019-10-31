@@ -131,7 +131,7 @@
                </div>
                <br />
          </div>
-         <form id="mateINPUT" enctype="multipart/form-data" action="/admin/" method="post">
+         <form id="mateINPUT" enctype="multipart/form-data" method="post">
          <div id="mateTab" class="col-md-12 col-sm-12 col-xs-12">
             <br /><br />
             <table class="table text-left table-bordered table-sm">

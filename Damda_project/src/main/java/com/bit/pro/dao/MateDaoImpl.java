@@ -21,10 +21,14 @@ public class MateDaoImpl implements MateDao{
 	private static final String NAMESPACE = "com.bit.pro.mappers.customRegiMapper";
 
 	@Override
-	public List<MateVo> selectMateAll(pagination pagination) {
-		return sqlMate.selectList(NAMESPACE+".selectMateAll",pagination);
+	public List<MateVo> selectMateCtgP(pagination pagination) {
+		return sqlMate.selectList(NAMESPACE+".selectMateCtgP",pagination);
 	}
 
+	@Override
+	public List<MateVo> selectMateSaleP(pagination pagination){
+		return sqlMate.selectList(NAMESPACE+".selectMateSaleP",pagination);		
+	}
 	@Override
 	public int insertMate(MateVo mateVo) {
 		return sqlMate.insert(NAMESPACE+".insertMate",mateVo);			
@@ -51,9 +55,14 @@ public class MateDaoImpl implements MateDao{
 	}
 	
 	@Override
-	public int selectMateAllCnt() {
-		return sqlMate.selectOne(NAMESPACE+".selectMateAllCnt");
+	public int selectMateAllCnt(String matectg) {
+		return sqlMate.selectOne(NAMESPACE+".selectMateAllCnt",matectg);
 	}
+	@Override
+	public int selectMateSaleCnt(int salestatus) {
+		return sqlMate.selectOne(NAMESPACE+".selectMateSaleCnt",salestatus);
+	}
+	
 	/******************* 미현시작 *****************************/
 	//custom select list
 	@Override

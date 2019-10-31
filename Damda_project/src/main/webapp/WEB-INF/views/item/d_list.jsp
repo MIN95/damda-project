@@ -11,7 +11,7 @@ $(document).ready(function() {
 	console.log(" >>>> d_list.jsp start");
 	reviewCon_sub();
 	table_content();
-	like_setting();
+	//like_setting();
 });
 
 //리뷰 테이블 클릭이벤트
@@ -22,7 +22,7 @@ function table_content() {
         $(this).parents(".custom-table").find(".fa-minus-circle").removeClass("fa-minus-circle");
         $(this).parents("tbody").find(".fa-plus-circle").addClass("fa-minus-circle");
     });
-}
+} 
 
 //review content -> sub 출력해오기
 function reviewCon_sub() {
@@ -43,9 +43,7 @@ function reviewCon_sub() {
 
 //페이징 이벤트
 function onClickPage(page) {
-	 //hidden val
-    var no = $('#reviewalign').val();
-    //console.log(" >>> reviewalign : " + reviewalign);
+	//hidden val
     var no = $('#no').val();
     //console.log(" >>> no : " + no);
     
@@ -67,6 +65,34 @@ function onClickPage(page) {
 //로그인페이지 이동
 function login(){
 	window.location.href="/login/";
+}
+
+function reviewView(num){
+	var reviewNum = num;
+    console.log(" >>> 조회수 올리기 reviewNum : " + reviewNum);
+
+	//hidden val
+    var no = $('#no').val();
+    console.log(" >>> no : " + no);
+    
+   //select val
+   var select_val = $('.reviewalign').val();
+   console.log('select value: '+select_val);
+   
+   var page = $('#page').val();
+   console.log(" >>> page : " + page);
+	
+	/* $.ajax({
+		url:"/item/reviewview?reviewnum="+reviewNum,
+		type:'get',
+		data:"",
+		success: function(data){
+        	//console.log('success');
+        	$('#review_div').load('/item/review?no='+no+'&align='+select_val+'&p='+page); 
+        }
+	}); */
+	
+	
 }
 
 /* function likeEvent(reviewNum){
@@ -127,42 +153,36 @@ function login(){
 
 
 </script>
-
-
+<input type="hidden" id="page" value="${p }"/>
 	    <table class="table custom-table">
 	        <thead>
 	            <tr>
 	                <th>번호</th>
-	                <th>제목</th>
+	                <th colspan="2">제목</th>
 	                <th>작성자</th>
 	                <th>작성일</th>
-	                <th colspan="2">좋아요</th>
-	                <!-- <th>　</th> -->
+	                <th>조회수</th>
 	            </tr>
 	        </thead>
 	        
 	        <c:forEach items="${reviewList}" var="reviewList" varStatus="status">
                 <c:set var="photoCtg" value="${reviewList.photoCtg }"/>
 		        <tbody>
-		            <tr>
+		            <tr onclick="reviewView(${reviewList.reviewNum });">
 		                <td>${reviewList.reviewNum }</td>
 		                <td class="${reviewList.reviewNum }">제목 </td>
+		                <c:if test="${not empty photoCtg}">
+		                <td><img src="/resources/icon/imgadd.png" class="clipImg"/></td>
+		                </c:if>
+		                <c:if test="${empty photoCtg}">
+		                <td>　</td>
+		                </c:if>
 		                <td>${reviewList.userName }</td>
 		                <td>${reviewList.date }</td>
 		                <td>${reviewList.recommend }</td>
-		                <td>
-		                	<a>
-		                	<%if(session.getAttribute("userNum")!=null){ %>
-		                		<span id="like${reviewList.reviewNum }" onclick="likeEvent(${reviewList.reviewNum });">♡</span>
-		                		<input type="text" id="likeColor_${reviewList.reviewNum }" class="likeColor" value="${reviewList.like_status }" readonly="readonly"/>
-		                	<%}else if(session.getAttribute("userNum")==null){ %>
-		                		<span data-toggle="modal" data-target="#loginModal" >♡</span>		                	
-		                	<%} %>
-		                	</a>
-		                </td>
 		            </tr>
 		            <tr class="toggler">
-		                <td colspan='6'>
+		                <td colspan='7'>
 		                <c:if test="${not empty photoCtg}">
 		                    <img src="/resources/imgs/${photoCtg}/${reviewList.photoName}" />
 		                </c:if>
@@ -209,26 +229,4 @@ function login(){
 		        <li><a onclick = "onClickPage(${totalpage });" aria-label="Next">&raquo;</a></li>
 		    </ul>
 	    </div>
-	    
-	 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">알림메세지</h4>
-                </div>
-                <div class="modal-body">
-                    <br /><br />
-                    회원전용 서비스 입니다.<br />
-                    로그인/회원가입 페이지로 이동하시겠습니까?
-                    <br /><br /><br />
-                </div>
-                <div class="modal-footer">
-                    <div class="m_btn_div">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="login();" >확인</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+

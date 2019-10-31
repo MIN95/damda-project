@@ -2,7 +2,7 @@ package com.bit.pro.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -11,6 +11,7 @@ import com.bit.pro.util.Criteria;
 import com.bit.pro.util.PageMaker;
 import com.bit.pro.vo.AllItemVo;
 import com.bit.pro.vo.LoginVo;
+import com.bit.pro.vo.OrderListVo;
 import com.bit.pro.vo.PhotoVo;
 
 @Transactional
@@ -47,8 +48,12 @@ public interface AdminService {
 	
 	//delete user(one or list)
 	int deleteUserList(List<Integer> deleteList) throws Exception;
-
-
-	
-
+	/****************************미현 시작**********************************/
+	//주문목록 레코드의 갯수 계산
+	int countArticle(String deliverstatus) throws Exception;
+	//주문목록 리스트 
+	List<OrderListVo> orderlistSelect(int nowPage,int scale,String deliverstatus, String ordernum) throws Exception;
+	//ajax deliverstatus update
+	int changeDeliver(String deliverstatus, String ordernum) throws Exception;
+	/****************************미현 시작**********************************/
 }

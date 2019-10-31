@@ -1,5 +1,7 @@
 package com.bit.pro.dao;
 
+import java.sql.SQLException;
+
 import com.bit.pro.vo.PhotoVo;
 
 public interface PhotoDao {
@@ -23,4 +25,8 @@ public interface PhotoDao {
 	int insertEventPhoto(PhotoVo photoVo) throws Exception;
 	int updateEventPhoto(PhotoVo photoVo) throws Exception;
 	
+	//수연 
+	//리뷰페이지
+	void reviewPhotoInsert(PhotoVo bean) throws SQLException;
+	void deleteReview(PhotoVo bean) throws SQLException;
 }

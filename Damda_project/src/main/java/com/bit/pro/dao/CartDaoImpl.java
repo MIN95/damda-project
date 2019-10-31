@@ -152,8 +152,33 @@ public class CartDaoImpl implements CartDao{
 		sqlSession.insert(NAMESPACE + ".myrecipeInsert", bean);
 	}
 
+	//주문페이지로 이동시
+	@Override
+	public void cartOrder(CartVo bean) throws SQLException {
+		sqlSession.update(NAMESPACE + ".cartOrder", bean);
+	}
+	
+	//주문 취소시 장바구니로 돌아올 때
+	@Override
+	public void cartOrder_noUser(CartVo bean) throws SQLException {
+		sqlSession.update(NAMESPACE + ".cartOrder_noUser", bean);
+	}
 	
 	/**********************미현시작********************************************************/
+	//주문내역 출력
+	@Override
+	public List<OrderListVo> mypage(int usernum, int nowPage, int scale) throws SQLException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("usernum", usernum);
+		map.put("nowPage", nowPage);
+		map.put("scale", scale);
+		return sqlSession.selectList(NAMESPACE + ".mypage", map);
+	}
+	//주문내역 레코드 개수
+	@Override
+	public int mypagecountArticle(int usernum) throws SQLException {
+		return sqlSession.selectOne(NAMESPACE + ".mypagecountArticle", usernum);
+	}
 	//주문상세내역 출력
 	@Override
 	public List<OrderListVo> mypageDetail(String o_ordernum,int nowPage, int scale) throws SQLException {
@@ -165,8 +190,22 @@ public class CartDaoImpl implements CartDao{
 	}
 	//notice 레코드 개수
 	@Override
-	public int countArticle() throws SQLException {
-		return sqlSession.selectOne(NAMESPACE + ".countArticle");
+	public int countArticle(String o_ordernum) throws SQLException {
+		return sqlSession.selectOne(NAMESPACE + ".countArticle", o_ordernum);
+	}	
+	//비회원일때 주문조회체크
+	@Override
+	public HashMap<String, Object> chknouser(Map<String, Object> chkmap) throws SQLException {
+		return sqlSession.selectOne(NAMESPACE + ".chknouser", chkmap);
+	}
+	//비회원 주문조회 디테일
+	@Override
+	public List<OrderListVo> nouserDetail(String o_ordernum, int nowPage, int scale) throws SQLException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("o_ordernum", o_ordernum);
+		map.put("nowPage", nowPage);
+		map.put("scale", scale);
+		return sqlSession.selectList(NAMESPACE + ".nouserDetail", map);
 	}
 	/**********************미현 끝********************************************************/
 }

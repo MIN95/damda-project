@@ -5,11 +5,13 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,103 +163,122 @@ public class LoginController {
 		}
 	}
 	
-	//=================================================================
+	@Resource
+	private JoinService joinService;
 	
-			@Resource
-			private JoinService joinService;
-			
-			//회원가입
-			@RequestMapping(value = "/join", method = RequestMethod.GET)
-			public String join() {
+	//회원가입
+	@RequestMapping(value = "/join", method = RequestMethod.GET)
+	public String join() {
 
-				return dir+"/join";
-			}
+		return dir+"/join";
+	}
+	
+	//ID중복확인
+	@RequestMapping(value = "checkId", method = { RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody int idChk(JoinVo bean) throws Exception {
+		return joinService.checkId(bean);
+	}
+	
+	//회원가입 완료시 보이는 화면
+	@RequestMapping(value = "/complite", method = RequestMethod.GET)
+	public String joinComplite() {
+		
+		return dir+"/joinComplite";
+	}
+		
+		
+	//주소찾기 팝업
+	@RequestMapping(value = "/popup")
+	public String popup(Locale locale, Model model) {
+	
+		return dir+"/findJuso";
+	}
+	
+	//회원가입 등록(DB넣음) 및 완료
+	@RequestMapping(value = "insertUser", method = RequestMethod.POST)
+	public ModelAndView joinComplite(@ModelAttribute JoinVo bean) throws Exception {
+		
+		System.out.println("view에서 넘어온 para"+bean.toString());
+		System.out.println(bean.getUseraddr1() + " "+bean.getUseraddr2());
+		JoinVo userInfo =joinService.insertUser(bean);
+		
+		if(userInfo!=null) {
 			
-			//ID중복확인
-			@RequestMapping(value = "/checkId", method = { RequestMethod.GET, RequestMethod.POST})
-			public @ResponseBody int idChk(JoinVo bean) throws Exception {
-				return joinService.checkId(bean);
-			}
+			//완료된 페이지로 간다
+			ModelAndView mav = new ModelAndView(dir+"/joinComplite");
+			mav.addObject("userInfo",userInfo);
 			
-			//회원가입 완료시 보이는 화면
-			@RequestMapping(value = "/complite", method = RequestMethod.GET)
-			public String joinComplite() {
-				
-				return dir+"/joinComplite";
-			}
-				
-				
-			//주소찾기 팝업
-			@RequestMapping(value = "/popup")
-			public String popup(Locale locale, Model model) {
-			
-				return dir+"/findJuso";
-			}
-			
-			//회원가입 등록(DB넣음) 및 완료
-			@RequestMapping(value = "insertUser", method = RequestMethod.POST)
-			public ModelAndView joinComplite(@ModelAttribute JoinVo bean) throws Exception {
-				
-				//관리자등록(일반회원과 가입정보 다를시 관리자카테고리와 등급 부여)
-				if(bean.getUseraddr1()==null) {
-					bean.setCategory(1);
-					bean.setUserGrade("staff");
-				}else {
-					bean.setCategory(2);
-					bean.setUserGrade("family");
-				}
-				JoinVo userInfo =joinService.insertUser(bean);
-				
-				if(userInfo!=null) {
+			return mav;
+		}else {
+			ModelAndView mav = new ModelAndView(dir+"/join");
+			return mav;
 					
-					//완료된 페이지로 간다
-					ModelAndView mav = new ModelAndView(dir+"/joinComplite");
-					mav.addObject("userInfo",userInfo);
-					
-					return mav;
-				}else {
-					ModelAndView mav = new ModelAndView(dir+"/join");
-					return mav;
-							
-				}
-			}
-			
-			
-			//로그인한 유저의 정보를 받아서 출력한다
-			@RequestMapping(value = "/edituser", method = RequestMethod.GET)
-			public ModelAndView edituser(HttpServletRequest req,HttpSession session) throws Exception {
-				session=req.getSession();
-				String userid = (String) session.getAttribute("userid");
-				JoinVo userInfo = joinService.userInfo(userid);
-				ModelAndView mav = new ModelAndView(dir+"/edituser");
-				mav.addObject("userInfo",userInfo);
+		}
+	}
+	
+	
+	//로그인한 유저의 정보를 받아서 출력한다
+	@RequestMapping(value = "/edituser", method = RequestMethod.GET)
+	public ModelAndView edituser(HttpServletRequest req,HttpSession session) throws Exception {
+		session=req.getSession();
+		String userid = (String) session.getAttribute("userid");
+		JoinVo userInfo = joinService.userInfo(userid);
+		ModelAndView mav = new ModelAndView(dir+"/edituser");
+		mav.addObject("userInfo",userInfo);
 
-				return mav; 
-			}
+		return mav; 
+	}
+	
+	
+	//유저 정보 수정
+	@RequestMapping(value = "updateUser", method = RequestMethod.POST)
+	public ModelAndView updateUser(@ModelAttribute JoinVo bean, HttpServletRequest req,HttpSession session) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		int result = joinService.updateUser(bean);
+		
+		session=req.getSession();
+		String userid = (String) session.getAttribute("userid");
+		JoinVo userInfo = joinService.userInfo(userid);
+		mav.addObject("userInfo",userInfo);
+		
+		
+		mav.setViewName("/login/edituser");
+		if(result>0) {
+			System.out.println("올바른 비밀번호 입력");
+			mav.addObject("incorrect", "맞음");
 			
+		}else {
+			System.out.println("잘못된 비밀번호 입력");
+			mav.addObject("incorrect", "incorrect");
 			
-			//유저 정보 수정
-			@RequestMapping(value = "updateUser", method = RequestMethod.POST)
-			public ModelAndView updateUser(@ModelAttribute JoinVo bean, HttpServletRequest req,HttpSession session) throws Exception {
+		}
+		return mav;
+	}
+			
+			/************************ 미현시작 ********************************/
+			//비회원주문조회 체크
+			@RequestMapping(value="nouserchk",method = RequestMethod.POST)
+			public ModelAndView nouserChk(@PathParam(value="nousername") String nousername,@PathParam(value="ordernum") String ordernum,@PathParam(value="orderpw") String orderpw) throws SQLException {
+				//비회원정보가 주문조회에 일치하는 지 확인
+				Map<String, Object> chkmap = new HashMap<String, Object>();
+				chkmap.put("nousername", nousername);
+				chkmap.put("ordernum", ordernum);
+				chkmap.put("orderpw", orderpw);
+				chkmap = cartService.chknouser(chkmap);
+				//ModelAndView에 담기
 				ModelAndView mav = new ModelAndView();
-				int result = joinService.updateUser(bean);
-				
-				session=req.getSession();
-				String userid = (String) session.getAttribute("userid");
-				JoinVo userInfo = joinService.userInfo(userid);
-				mav.addObject("userInfo",userInfo);
-				
-				
-				mav.setViewName("/login/edituser");
-				if(result>0) {
-					System.out.println("올바른 비밀번호 입력");
-					mav.addObject("incorrect", "맞음");
-					
+				//있음
+				if(chkmap != null) {
+					mav.setViewName("redirect:/mypage/nouser/"+ordernum);
+				//없음	
 				}else {
-					System.out.println("잘못된 비밀번호 입력");
-					mav.addObject("incorrect", "incorrect");
-					
+					mav.setViewName("login/login");
+					mav.addObject("failnouserchk", "failnouserchk");
 				}
 				return mav;
 			}
+			/************************ 미현 끝 ********************************/
+
+
+
 }

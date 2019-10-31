@@ -12,22 +12,115 @@
 	<select id="nouserOrder" resultType="com.bit.pro.vo.OrderVo">
 		SELECT C.*,I.ITEMNAME,I.ITEMPRICE,I.ITEMCON,T.CSTMMATELIST,T.CSTMPRICE FROM CART C LEFT OUTER JOIN ALLITEM I ON C.C_ITEMNUM = I.ITEMNUM LEFT OUTER JOIN CUSTOM T ON C.C_CUSTOMNUM = T.CSTMTNUM WHERE C.C_NOUSERNUM = #{c_nousernum} AND C.CARTCHECK = '1' ORDER BY CARTNUM ASC
 	</select>
-	
+		
 	<select id="selectAddr" resultType="com.bit.pro.vo.AddrVo">
-		select * from myaddr where usernum=#{usernum} order by addridx;
+		SELECT * FROM MYADDR WHERE USERNUM=#{usernum} ORDER BY ADDRIDX;
 	
 	</select>
 	
 	<select id="countAddr" resultType="int">
-		select count(*) from myaddr where usernum=#{usernum};
+		SELECT COUNT(*) FROM MYADDR WHERE USERNUM=#{usernum};
 	</select>
+	
+	<select id="selectOrderData" resultType="com.bit.pro.vo.OrderDataVo">
+		SELECT * FROM CARTORDER WHERE ORDERNUM=#{ordernum};
+	</select>
+	
+	<select id="selectCartItem" resultType="com.bit.pro.vo.CartVo">
+		select * from cart where cartcheck=1 and c_usernum=#{co_usernum};
+	</select>
+	
+	<select id="selectCartItemNouser" resultType="com.bit.pro.vo.CartVo">
+		select * from cart where cartcheck=1 and c_nousernum=#{co_nousernum};
+	</select>
+	
+		<!-- //////////////////미현 시작//////////////////// -->
+	<select id="countArticle" resultType="int">
+		SELECT COUNT(*) AS CNT FROM (
+			SELECT * FROM ORDERLIST OL 
+			JOIN ORDERMANAGE OM ON OL.O_ORDERNUM = OM.M_ORDERNUM
+			WHERE OM.DELIVERSTATUS LIKE "%" GROUP BY OL.O_ORDERNUM
+		)AS T
+	</select>
+	<select id="orderlistselect" resultType="com.bit.pro.vo.OrderListVo">
+		SELECT @ROWNUM:=@ROWNUM+1 AS ORDERLISTNUM,A.* FROM (
+			SELECT OL.O_ORDERNUM,UI.USERNAME
+			,CT.NOUSERNAME,CT.PRICE AS ALLPRICE,CT.RECEIVERNAME,CT.RECEIVERPHONE,CT.ORDERDATE
+			,CT.REFUNDACCOUNT,CT.REFUNDACCOWNER,CT.BANK
+			,GROUP_CONCAT(AL.ITEMNAME) AS ITEMNAME
+			,GROUP_CONCAT(CU.CSTMMATELIST,"||") AS CSTMMATELIST
+			,OM.DELIVERSTATUS
+			FROM ORDERLIST OL
+			LEFT OUTER JOIN CARTORDER CT ON OL.O_ORDERNUM = CT.ORDERNUM
+			LEFT OUTER JOIN USERINFO UI ON OL.O_USERNUM = UI.USERNUM
+			LEFT OUTER JOIN CUSTOM CU ON OL.O_CSTMTNUM = CU.CSTMTNUM
+			LEFT OUTER JOIN ALLITEM AL ON OL.O_ITEMNUM = AL.ITEMNUM
+			LEFT OUTER JOIN ORDERMANAGE OM ON OL.O_ORDERNUM = OM.M_ORDERNUM
+			WHERE OM.DELIVERSTATUS LIKE #{deliverstatus} AND OL.O_ORDERNUM LIKE CONCAT('%',#{ordernum},'%') 
+			GROUP BY OL.O_ORDERNUM ORDER BY CT.ORDERDATE ASC
+		) A,(SELECT @ROWNUM:=0) B ORDER BY ORDERLISTNUM DESC LIMIT #{nowPage},#{scale}
+	</select>
+	<!-- ajax deliverstatus update  -->
+	<update id="changeDeliver">
+		UPDATE ORDERMANAGE SET DELIVERSTATUS = #{deliverstatus} WHERE M_ORDERNUM = #{ordernum}
+	</update>
+	<!-- //////////////////미현 끝//////////////////// -->
+	
+	
+	<select id="selectUserbuy" resultType="int">
+   		select userbuy from userinfo where usernum=#{co_usernum}; 
+   </select>
+	
+	<insert id="insertOrderData" >
+		insert into cartorder (ordernum, co_usernum,ordertype,delivertype, price,orderdate,deliverdate,receivername,receiverphone,deliverpostnum,deliveraddr,co_couponnum,bank,refundaccowner,refundaccount) values
+		(#{ordernum}, #{co_usernum},#{ordertype},#{delivertype},#{price},curdate(),#{deliverdate},#{receivername},#{receiverphone},#{deliverpostnum},#{deliveraddr},#{co_couponnum},#{bank},#{refundaccowner},#{refundaccount});
+	</insert>
+	
+	<insert id="insertOrderNouser">
+		insert into cartorder (ordernum, co_nousernum,nousername, nouserphone, orderpw, ordertype,delivertype, price,orderdate,deliverdate,receivername,receiverphone,deliverpostnum,deliveraddr,co_couponnum,bank,refundaccowner,refundaccount) values
+		(#{ordernum}, #{co_nousernum},#{nousername},#{nouserphone},#{orderpw},#{ordertype},#{delivertype},#{price},curdate(),#{deliverdate},#{receivername},#{receiverphone},#{deliverpostnum},#{deliveraddr},#{co_couponnum},#{bank},#{refundaccowner},#{refundaccount});
+	
+	</insert>
+	
+	<insert id="insertOrderItem">
+		insert into orderlist (o_usernum, o_nousernum, o_ordernum, o_itemnum, o_ea) values (#{o_usernum},#{o_nousernum}, #{o_ordernum}, #{o_itemnum}, #{o_ea});
+	
+	</insert>
+	
+	<insert id="insertOrderCustum">
+		insert into orderlist (o_usernum, o_nousernum,o_ordernum, o_cstmtnum, o_ea) values (#{o_usernum},#{o_nousernum}, #{o_ordernum}, #{o_cstmtnum}, #{o_ea});
+	
+	</insert>
+	
 	
 	<insert id="insertAddr">
 		insert into myaddr (USERNUM, USERPOSTNUM, USERADDR1, USERADDR2, ADDRNAME) VALUES (#{usernum}, #{userpostnum}, #{useraddr1}, #{useraddr2}, #{addrname});
 	</insert>
 	
+	<insert id="insertOrderlist">
+		insert into ordermanage (m_ordernum, deliverstatus) values (#{ordernum}, 3); 
+	</insert>
+	
+	<update id="updateUserbuy">
+		update userinfo set userbuy=#{myuserbuy} where usernum=#{usernum} 
+	</update>
+	
+	<update id="updateGrade">
+		update userinfo set usergrade=#{grade} where usernum=#{usernum} 
+	</update>
+	
+	<update id="updateUseracc">
+		update userinfo set userbank=#{userbank}, useracc=#{useracc}, useraccowner=#{useraccowner} where usernum=#{usernum} 
+	</update>
+	
+	
 	<delete id="deleteAddr">
-		delete delete from myaddr where usernum=#{usernum} and idx=#{idx};
+		delete from myaddr where usernum=#{usernum} and addridx=#{idx};
 	</delete>
+	
+	<delete id="deleteCart">
+		delete from cart where cartcheck=1 and c_usernum=#{co_usernum};
+	</delete>
+	
 	
 </mapper> 

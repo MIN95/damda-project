@@ -21,7 +21,7 @@ public class CartVo {
 	//custom table 
 	private int cstmtNum;
 	private int cstmPrice;
-	private String cstmtMatelist;
+	private String cstmMatelist;
 	
 	//photo table
 	private int photoNum;
@@ -38,309 +38,258 @@ public class CartVo {
 	private int p_qnaNum;
 	private int p_customNum;
 	
+	//review
+	private int reviewnum;
 	
 	public CartVo() {}
-
 
 	public int getCartNum() {
 		return cartNum;
 	}
 
-
 	public void setCartNum(int cartNum) {
 		this.cartNum = cartNum;
 	}
-
 
 	public int getC_userNum() {
 		return c_userNum;
 	}
 
-
 	public void setC_userNum(int c_userNum) {
 		this.c_userNum = c_userNum;
 	}
-
 
 	public String getC_nouserNum() {
 		return c_nouserNum;
 	}
 
-
 	public void setC_nouserNum(String c_nouserNum) {
 		this.c_nouserNum = c_nouserNum;
 	}
-
 
 	public int getC_itemNum() {
 		return c_itemNum;
 	}
 
-
 	public void setC_itemNum(int c_itemNum) {
 		this.c_itemNum = c_itemNum;
 	}
-
 
 	public int getC_customNum() {
 		return c_customNum;
 	}
 
-
 	public void setC_customNum(int c_customNum) {
 		this.c_customNum = c_customNum;
 	}
-
 
 	public int getEa() {
 		return ea;
 	}
 
-
 	public void setEa(int ea) {
 		this.ea = ea;
 	}
-
 
 	public int getCartCheck() {
 		return cartCheck;
 	}
 
-
 	public void setCartCheck(int cartCheck) {
 		this.cartCheck = cartCheck;
 	}
-
 
 	public int getItemNum() {
 		return itemNum;
 	}
 
-
 	public void setItemNum(int itemNum) {
 		this.itemNum = itemNum;
 	}
-
 
 	public String getItemName() {
 		return itemName;
 	}
 
-
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
-
 
 	public int getItemPrice() {
 		return itemPrice;
 	}
 
-
 	public void setItemPrice(int itemPrice) {
 		this.itemPrice = itemPrice;
 	}
-
 
 	public int getCategory() {
 		return category;
 	}
 
-
 	public void setCategory(int category) {
 		this.category = category;
 	}
-
 
 	public String getItemCon() {
 		return itemCon;
 	}
 
-
 	public void setItemCon(String itemCon) {
 		this.itemCon = itemCon;
 	}
-
 
 	public int getItemStock() {
 		return itemStock;
 	}
 
-
 	public void setItemStock(int itemStock) {
 		this.itemStock = itemStock;
 	}
-
 
 	public int getItemSales() {
 		return itemSales;
 	}
 
-
 	public void setItemSales(int itemSales) {
 		this.itemSales = itemSales;
 	}
-
 
 	public int getCstmtNum() {
 		return cstmtNum;
 	}
 
-
 	public void setCstmtNum(int cstmtNum) {
 		this.cstmtNum = cstmtNum;
 	}
-
 
 	public int getCstmPrice() {
 		return cstmPrice;
 	}
 
-
 	public void setCstmPrice(int cstmPrice) {
 		this.cstmPrice = cstmPrice;
 	}
 
-
-	public String getCstmtMatelist() {
-		return cstmtMatelist;
+	public String getCstmMatelist() {
+		return cstmMatelist;
 	}
 
-
-	public void setCstmtMatelist(String cstmtMatelist) {
-		this.cstmtMatelist = cstmtMatelist;
+	public void setCstmMatelist(String cstmMatelist) {
+		this.cstmMatelist = cstmMatelist;
 	}
-
 
 	public int getPhotoNum() {
 		return photoNum;
 	}
 
-
 	public void setPhotoNum(int photoNum) {
 		this.photoNum = photoNum;
 	}
-
 
 	public String getPhotoCtg() {
 		return photoCtg;
 	}
 
-
 	public void setPhotoCtg(String photoCtg) {
 		this.photoCtg = photoCtg;
 	}
-
 
 	public String getPhotoCtg2() {
 		return photoCtg2;
 	}
 
-
 	public void setPhotoCtg2(String photoCtg2) {
 		this.photoCtg2 = photoCtg2;
 	}
-
 
 	public String getPhotoPath() {
 		return photoPath;
 	}
 
-
 	public void setPhotoPath(String photoPath) {
 		this.photoPath = photoPath;
 	}
-
 
 	public String getPhotoName() {
 		return photoName;
 	}
 
-
 	public void setPhotoName(String photoName) {
 		this.photoName = photoName;
 	}
-
 
 	public String getOriginalName() {
 		return originalName;
 	}
 
-
 	public void setOriginalName(String originalName) {
 		this.originalName = originalName;
 	}
-
 
 	public int getP_itemNum() {
 		return p_itemNum;
 	}
 
-
 	public void setP_itemNum(int p_itemNum) {
 		this.p_itemNum = p_itemNum;
 	}
-
 
 	public int getP_ingredientNum() {
 		return p_ingredientNum;
 	}
 
-
 	public void setP_ingredientNum(int p_ingredientNum) {
 		this.p_ingredientNum = p_ingredientNum;
 	}
-
 
 	public int getP_reviewNum() {
 		return p_reviewNum;
 	}
 
-
 	public void setP_reviewNum(int p_reviewNum) {
 		this.p_reviewNum = p_reviewNum;
 	}
-
 
 	public int getP_eventNum() {
 		return p_eventNum;
 	}
 
-
 	public void setP_eventNum(int p_eventNum) {
 		this.p_eventNum = p_eventNum;
 	}
-
 
 	public int getP_noticeNum() {
 		return p_noticeNum;
 	}
 
-
 	public void setP_noticeNum(int p_noticeNum) {
 		this.p_noticeNum = p_noticeNum;
 	}
-
 
 	public int getP_qnaNum() {
 		return p_qnaNum;
 	}
 
-
 	public void setP_qnaNum(int p_qnaNum) {
 		this.p_qnaNum = p_qnaNum;
 	}
-
 
 	public int getP_customNum() {
 		return p_customNum;
 	}
 
-
 	public void setP_customNum(int p_customNum) {
 		this.p_customNum = p_customNum;
 	}
 
+	public int getReviewnum() {
+		return reviewnum;
+	}
+
+	public void setReviewnum(int reviewnum) {
+		this.reviewnum = reviewnum;
+	}
 
 	@Override
 	public int hashCode() {
@@ -353,8 +302,8 @@ public class CartVo {
 		result = prime * result + cartCheck;
 		result = prime * result + cartNum;
 		result = prime * result + category;
+		result = prime * result + ((cstmMatelist == null) ? 0 : cstmMatelist.hashCode());
 		result = prime * result + cstmPrice;
-		result = prime * result + ((cstmtMatelist == null) ? 0 : cstmtMatelist.hashCode());
 		result = prime * result + cstmtNum;
 		result = prime * result + ea;
 		result = prime * result + ((itemCon == null) ? 0 : itemCon.hashCode());
@@ -376,9 +325,9 @@ public class CartVo {
 		result = prime * result + ((photoName == null) ? 0 : photoName.hashCode());
 		result = prime * result + photoNum;
 		result = prime * result + ((photoPath == null) ? 0 : photoPath.hashCode());
+		result = prime * result + reviewnum;
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -406,12 +355,12 @@ public class CartVo {
 			return false;
 		if (category != other.category)
 			return false;
-		if (cstmPrice != other.cstmPrice)
-			return false;
-		if (cstmtMatelist == null) {
-			if (other.cstmtMatelist != null)
+		if (cstmMatelist == null) {
+			if (other.cstmMatelist != null)
 				return false;
-		} else if (!cstmtMatelist.equals(other.cstmtMatelist))
+		} else if (!cstmMatelist.equals(other.cstmMatelist))
+			return false;
+		if (cstmPrice != other.cstmPrice)
 			return false;
 		if (cstmtNum != other.cstmtNum)
 			return false;
@@ -476,8 +425,66 @@ public class CartVo {
 				return false;
 		} else if (!photoPath.equals(other.photoPath))
 			return false;
+		if (reviewnum != other.reviewnum)
+			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "CartVo [cartNum=" + cartNum + ", c_userNum=" + c_userNum + ", c_nouserNum=" + c_nouserNum
+				+ ", c_itemNum=" + c_itemNum + ", c_customNum=" + c_customNum + ", ea=" + ea + ", cartCheck="
+				+ cartCheck + ", itemNum=" + itemNum + ", itemName=" + itemName + ", itemPrice=" + itemPrice
+				+ ", category=" + category + ", itemCon=" + itemCon + ", itemStock=" + itemStock + ", itemSales="
+				+ itemSales + ", cstmtNum=" + cstmtNum + ", cstmPrice=" + cstmPrice + ", cstmMatelist=" + cstmMatelist
+				+ ", photoNum=" + photoNum + ", photoCtg=" + photoCtg + ", photoCtg2=" + photoCtg2 + ", photoPath="
+				+ photoPath + ", photoName=" + photoName + ", originalName=" + originalName + ", p_itemNum=" + p_itemNum
+				+ ", p_ingredientNum=" + p_ingredientNum + ", p_reviewNum=" + p_reviewNum + ", p_eventNum=" + p_eventNum
+				+ ", p_noticeNum=" + p_noticeNum + ", p_qnaNum=" + p_qnaNum + ", p_customNum=" + p_customNum
+				+ ", reviewnum=" + reviewnum + "]";
+	}
+
+	public CartVo(int cartNum, int c_userNum, String c_nouserNum, int c_itemNum, int c_customNum, int ea, int cartCheck,
+			int itemNum, String itemName, int itemPrice, int category, String itemCon, int itemStock, int itemSales,
+			int cstmtNum, int cstmPrice, String cstmMatelist, int photoNum, String photoCtg, String photoCtg2,
+			String photoPath, String photoName, String originalName, int p_itemNum, int p_ingredientNum,
+			int p_reviewNum, int p_eventNum, int p_noticeNum, int p_qnaNum, int p_customNum, int reviewnum) {
+		super();
+		this.cartNum = cartNum;
+		this.c_userNum = c_userNum;
+		this.c_nouserNum = c_nouserNum;
+		this.c_itemNum = c_itemNum;
+		this.c_customNum = c_customNum;
+		this.ea = ea;
+		this.cartCheck = cartCheck;
+		this.itemNum = itemNum;
+		this.itemName = itemName;
+		this.itemPrice = itemPrice;
+		this.category = category;
+		this.itemCon = itemCon;
+		this.itemStock = itemStock;
+		this.itemSales = itemSales;
+		this.cstmtNum = cstmtNum;
+		this.cstmPrice = cstmPrice;
+		this.cstmMatelist = cstmMatelist;
+		this.photoNum = photoNum;
+		this.photoCtg = photoCtg;
+		this.photoCtg2 = photoCtg2;
+		this.photoPath = photoPath;
+		this.photoName = photoName;
+		this.originalName = originalName;
+		this.p_itemNum = p_itemNum;
+		this.p_ingredientNum = p_ingredientNum;
+		this.p_reviewNum = p_reviewNum;
+		this.p_eventNum = p_eventNum;
+		this.p_noticeNum = p_noticeNum;
+		this.p_qnaNum = p_qnaNum;
+		this.p_customNum = p_customNum;
+		this.reviewnum = reviewnum;
+	}
+
+
+	
 
 
 	

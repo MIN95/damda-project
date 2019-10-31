@@ -1,5 +1,7 @@
 package com.bit.pro.dao;
 
+import java.sql.SQLException;
+
 import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -14,32 +16,32 @@ public class PhotoDaoImpl implements PhotoDao {
 	private static final String NAMESPACE = "com.bit.pro.mappers.photoMapper";
 	
 	//°æ¹Î
-	//insert
-	@Override 
-	public int insertPhoto(PhotoVo photoVo) throws Exception {
-		return sqlSession.insert(NAMESPACE + ".insertPhoto",photoVo);
-	}
-	//delete
-	@Override
-	public int deletePhoto(PhotoVo photoVo) throws Exception {
-		return sqlSession.insert(NAMESPACE + ".deletePhotoOne",photoVo);
-	}
-	//update new photo
-	@Override
-	public int updateNewPhoto(PhotoVo photoVo) throws Exception {
-		return sqlSession.insert(NAMESPACE + ".updateNewPhoto",photoVo);
-	}
-	//qna
-	//insert qna photo
-	@Override
-	public int insertQnaPhoto(PhotoVo photoVo) throws Exception {
-		return sqlSession.insert(NAMESPACE+".insertQnaPhoto",photoVo);
-	}
-	//delete qna photo
-	@Override
-	public int deleteQnaPhoto(PhotoVo photoVo) throws Exception {
-		return sqlSession.insert(NAMESPACE+".deleteQnaPhoto",photoVo);
-	}
+		//insert
+		@Override 
+		public int insertPhoto(PhotoVo photoVo) throws Exception {
+			return sqlSession.insert(NAMESPACE + ".insertPhoto",photoVo);
+		}
+		//delete
+		@Override
+		public int deletePhoto(PhotoVo photoVo) throws Exception {
+			return sqlSession.insert(NAMESPACE + ".deletePhotoOne",photoVo);
+		}
+		//update new photo
+		@Override
+		public int updateNewPhoto(PhotoVo photoVo) throws Exception {
+			return sqlSession.insert(NAMESPACE + ".updateNewPhoto",photoVo);
+		}
+		//qna
+		//insert qna photo
+		@Override
+		public int insertQnaPhoto(PhotoVo photoVo) throws Exception {
+			return sqlSession.insert(NAMESPACE+".insertQnaPhoto",photoVo);
+		}
+		//delete qna photo
+		@Override
+		public int deleteQnaPhoto(PhotoVo photoVo) throws Exception {
+			return sqlSession.insert(NAMESPACE+".deleteQnaPhoto",photoVo);
+		}
 
 
 	//½ÂÀº
@@ -60,6 +62,19 @@ public class PhotoDaoImpl implements PhotoDao {
 	@Override
 	public int updateEventPhoto(PhotoVo photoVo) throws Exception {
 		return sqlSession.update(NAMESPACE+".updateEventPhoto",photoVo);
+	}
+	
+	
+	//¼ö¿¬
+	//¸®ºäµî·Ï
+	@Override
+	public void reviewPhotoInsert(PhotoVo bean) throws SQLException {
+		sqlSession.insert(NAMESPACE +".reviewPhotoInsert", bean);
+	}
+	//»èÁ¦
+	@Override
+	public void deleteReview(PhotoVo bean) throws SQLException {
+		sqlSession.delete(NAMESPACE +".deleteReview", bean);
 	}
 
 }

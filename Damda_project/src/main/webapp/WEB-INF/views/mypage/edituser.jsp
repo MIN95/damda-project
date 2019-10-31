@@ -38,6 +38,7 @@
 	
 	
 	$(document).ready(function(){
+		
 		$('#returnbtn').hide();
 		$('#editbtn').hide();
 		$('#pw').hide();
@@ -50,6 +51,9 @@
 		//수정버튼 누르기 전엔 form 보더 안보이게
 		$('input').removeClass('form-control').css('border-color','transparent').on("focus",function(){$(this).blur();});
 
+		//수정 버튼 누르기 전에 selectbank 보이지 않음
+		$('#selectbank').hide();
+		
 		$('#findAddr').on("click", function(){
 			findJuso();
 		});
@@ -61,7 +65,9 @@
 		
 		//잘못된 비밀번호 입력시 오류메세지
 		$('#incorrectPw').hide();
-		var incorrect = $('#incorrectPw').text();
+		var incorrect = $('#incorrectPw').text().trim();
+
+		
 		
 		if(incorrect == "incorrect"){
 			var myModal = $("#editErrModal");
@@ -69,7 +75,26 @@
 	  	    $("#editErrOk").click(function(){
 	  	  		myModal.modal("hide");
 	  	    });
-		};
+		}else if(incorrect == "correct"){
+			var myModal = $("#editErrModal");
+			$('#modalsub').text('회원정보 수정');
+			$('#modalcon').text('회원정보가 수정되었습니다.');
+  	  		myModal.modal("show").css('top', '35%');
+	  	    $("#editErrOk").click(function(){
+	  	  		myModal.modal("hide");
+	  	    });
+
+		}else if(incorrect == "editpw"){
+			var myModal = $("#editErrModal");
+			$('#modalsub').text('비밀번호 수정');
+			$('#modalcon').text('비밀번호가 수정되었습니다. 다시 로그인 해주세요.');
+  	  		myModal.modal("show").css('top', '35%');
+	  	    $("#editErrOk").click(function(){
+	  	  		myModal.modal("hide");
+	  	  		location.href="/login/";
+	  	    });
+
+		}
 
 		
 		//비밀번호 입력 후 확인을 마치면 일치 확인
@@ -185,6 +210,21 @@
 
 	//수정하기 버튼 눌렀을 때
 	function tryedit(){
+			$('#editpw').hide();
+			//bank값 설정
+			//회원정보에서 계좌이름 가져와서 세팅
+			var bankname=$('#bank').val();
+			$('#selectbank').val(bankname).prop("selected",true);
+			
+			//수정 버튼 누르기 전에 selectbank 보이고 input bank란 숨김
+			$('#selectbank').show();
+			$('#bank').hide();
+
+			$('#selectbank').change(function(){
+				var value = $(this).val();
+				$('#userbank').val(value);
+			});
+			
 			$('#tryeditbtn').hide();
 			$('#pw').show();
 			$('#findAddr').show();
@@ -315,6 +355,12 @@
 							   
 							 </div>
 					    </div>
+					    <div class="form-group" id="editpw">
+					    <label for="userpw" class="col-sm-2 control-label col-md-offset-2">비밀번호</label>
+					    <div class="col-sm-5 col-md-5 ">
+					    	<button type="button" class="btn btn-default" id="changepw" onclick="location.href='/mypage/foreditpw'">비밀번호 변경</button> 
+					    </div>
+					  </div>
 					  <div class="form-group" id="pw">
 					    <label for="userpw" class="col-sm-2 control-label col-md-offset-2">비밀번호</label>
 					    <div class="col-sm-5 col-md-5 ">
@@ -370,9 +416,44 @@
 					  </div>
 					  
 					  <div class="form-group">
+					    <label for="useracc" class="col-sm-2 control-label col-md-offset-2">환불계좌</label>
+					    <div class="col-sm-3 col-md-3">
+					    		  <input type="text" class="form-control" id="bank" name="bank" maxlength="10" value="${userInfo.userbank }" readonly="readonly">
+					    
+						      	<select class="form-control" name="selectbank" id="selectbank">
+									  <option value="">은행선택</option>
+									  <option value="국민은행">국민은행</option>
+									  <option value="카카오뱅크">카카오뱅크</option>
+									  <option value="우리은행">우리은행</option>
+									  <option value="SC제일은행">SC제일은행</option>
+									  <option value="농협">농협</option>
+									  <option value="하나은행">하나은행</option>
+									  <option value="신한은행">신한은행</option>
+									  <option value="기업은행">기업은행</option>
+									  <option value="우체국">우체국</option>
+									  <option value="케이뱅크">케이뱅크</option>
+								</select>
+								 <input type="hidden" class="form-control" id="userbank" name="userbank" placeholder="은행" value="${userInfo.userbank }">
+						   
+						    </div>
+					    <div class="col-sm-5 col-md-5">
+					      <input type="text" class="form-control" id="useracc" name="useracc" placeholder="계좌번호" maxlength="100" value="${userInfo.useracc }" readonly="readonly">
+					    </div>
+					  </div>
+					  
+					  <div class="form-group">
+					    <label for="useremail" class="col-sm-2 control-label col-md-offset-2">예금주</label>
+					    <div class="col-sm-5 col-md-5">
+					      <input type="text" class="form-control" id="useraccowner" name="useraccowner" placeholder="예금주" maxlength="100" value="${userInfo.useraccowner }" readonly="readonly">
+					    </div>
+					  </div>
+					  
+					  
+					  
+					  <div class="form-group">
 					    <div class="col-sm-offset-4 col-sm-4 col-xs-offset-4 col-xs-4 col-md-offset-4 col-md-4">
 					      <button type="button" class="btn btn-default tryeditbtn" id="tryeditbtn" onClick="tryedit();">수정하기</button>
-					      <button type="reset" class="btn btn-default" id="returnbtn" onclick="location.href='/login/edituser'">취소</button>
+					      <button type="reset" class="btn btn-default" id="returnbtn" onclick="location.href='/mypage/userinfo'">취소</button>
 					      <button type="submit" class="btn btn-default editbtn"id="editbtn">수정</button>
 					    </div>
 					  </div>
@@ -383,7 +464,7 @@
                 <!-- 내용 끝 -->
                 
             </div>
-
+<div>incore: ${incorrect}</div>
 <!-- 비밀번호 틀렸을 시 -->
     <div id="incorrectPw">${incorrect}</div>
     
@@ -393,9 +474,9 @@
 	        <div class="modal-content">
 	            <div class="modal-body text-center" id="confirmMessage">
 		            <br />
-		            <p style="color:darksalmon; font-size:16px;">비밀번호 오류.</p> 
+		            <p style="color:darksalmon; font-size:16px;" id="modalsub">비밀번호 오류.</p> 
 		            <br/>
-		            <p>비밀번호를 정확히 입력해주세요.</p>
+		            <p id="modalcon">비밀번호를 정확히 입력해주세요.</p>
 					<br />
 		            <div class="modal-footer">
 		                <button type="button" class="btn btn-default" id="editErrOk">확인</button>

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bit.pro.util.PageMaker;
 import com.bit.pro.vo.LoginVo;
 
 public interface LoginDao {
@@ -15,7 +14,7 @@ public interface LoginDao {
 	HashMap<String,Object> fnid(HashMap<String, Object> map) throws SQLException;
 	//비밀번호찾기
 	HashMap<String, Object> fnpw(HashMap<String, Object> map) throws SQLException;
-	
+
 	/*km*/
 	//관리자 or 회원 출력
 	List<LoginVo> selectUserListAll(LoginVo loginVo) throws SQLException;

@@ -9,7 +9,7 @@
  	<jsp:include page="/resources/template/head.jsp"/>
  	<style type="text/css">
  	#pgnameWrap {
-	 	border:thin solid rgb(200,200,200);
+	 	/* border:thin solid rgb(200,200,200); */
 	 	height: 45px;
 	 	width:125px;
 	 	margin: 0 auto;
@@ -38,6 +38,16 @@
  	#confirmMessage h4 {
  		font-size: 1.7rem; 
  	}
+ 	#noticeTab tbody a{
+ 		color:black;
+ 	}
+ 	#noticeTab tbody a:link {
+    	text-decoration: none;
+    	color: #363636;
+    }
+    #noticeTab tbody a:hover {
+    	color: #eee;
+    }
  	</style>
 </head>
 <body>

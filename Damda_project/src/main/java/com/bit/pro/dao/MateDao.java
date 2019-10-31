@@ -10,7 +10,8 @@ import com.bit.pro.vo.PhotoVo;
 
 public interface MateDao {
 	
-	List<MateVo> selectMateAll(pagination pagination);
+	List<MateVo> selectMateCtgP(pagination pagination) throws Exception;
+	List<MateVo> selectMateSaleP(pagination pagination) throws Exception;
 	
 	int insertMate(MateVo mateVo);
 	
@@ -21,7 +22,9 @@ public interface MateDao {
 	int deleteMatePhoto(int matenum);
 	int deleteMate(int matenum);
 	
-	int selectMateAllCnt();
+	int selectMateAllCnt(String matectg);
+	int selectMateSaleCnt(int salestatus);
+
 
 	/******************* 미현시작 *****************************/
 	//custom select list

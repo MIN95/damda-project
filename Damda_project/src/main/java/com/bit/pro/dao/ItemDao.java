@@ -7,6 +7,7 @@ import com.bit.pro.vo.AllItemVo;
 
 public interface ItemDao {
 	
+	//¼ö¿¬
 	//home
 	List<AllItemVo> selectHome(AllItemVo bean) throws Exception;
 	
@@ -27,6 +28,7 @@ public interface ItemDao {
 	//item-update
 	int updateItem(AllItemVo allitemVo) throws Exception; 
 	
+	//°æ¹Î
 	//select selectBox value-all,category,best
 	//all
 	List<AllItemVo> selectProductAll() throws Exception;

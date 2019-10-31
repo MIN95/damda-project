@@ -201,6 +201,12 @@
             background-color: darksalmon;
             color: white;
         }
+        
+        #content #empty_div{
+			height: 150px;
+			clear: both;
+		}
+        
 </style>
 
 
@@ -617,7 +623,7 @@ function compareCart() {
 				    </ul>
                 </div>
                 
-                
+                <div id="empty_div">　</div>
             </div>
 
 <!-- Modal start -->

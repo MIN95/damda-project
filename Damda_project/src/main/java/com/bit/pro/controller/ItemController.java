@@ -88,12 +88,7 @@ public class ItemController {
 		
 		//리뷰 세팅
 		reviewService.reviewCount(no, model);
-		if(session.getAttribute("userNum")!=null) {
-			int userNum = (int)session.getAttribute("userNum");
-			reviewService.selectList(no, p, "reviewnew", model, userNum);			
-		}else if(session.getAttribute("userNum")==null) {
-			reviewService.selectList(no, p, "reviewnew", model, 0);			
-		}
+		reviewService.selectList(no, p, "reviewnew", model);			
 		
 		//장바구니 중복값 확인용
 		if(session.getAttribute("userNum")!=null) {
@@ -163,36 +158,40 @@ public class ItemController {
 	@RequestMapping(value = "/review", method = RequestMethod.GET)
 	public String reviewNew(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value="align", defaultValue = "reviewnew") String align, @RequestParam(value="p", defaultValue = "0") int p) throws Exception {
 		int no = Integer.parseInt(request.getParameter("no"));
-		
-		if(session.getAttribute("userNum")!=null) {
-			int userNum = (int)session.getAttribute("userNum");
-			reviewService.selectList(no, p, align, model, userNum);			
-		}else if(session.getAttribute("userNum")==null) {
-			reviewService.selectList(no, p, align, model, 0);			
-		}
+		reviewService.selectList(no, p, align, model);			
 		
 		return dir+"/d_list";
 	}
-	
-	//좋아요
-	@RequestMapping(value = "/reviewlike", method = RequestMethod.POST)
-	public String reviewLike(HttpServletRequest request, HttpSession session) throws Exception {
-		int userNum =(int)session.getAttribute("userNum");
-		int reviewNum = Integer.parseInt(request.getParameter("reviewnum"));
-		
-		likeService.reviewLike(userNum, reviewNum);
-		return dir+"/d_list";		
-	}
-	
-	//좋아요 취소
-	@RequestMapping(value = "/likecancel", method = RequestMethod.POST)
-	public String likeCancel(HttpServletRequest request, HttpSession session) throws Exception {
-		int userNum =(int)session.getAttribute("userNum");
-		int reviewNum = Integer.parseInt(request.getParameter("reviewnum"));
 
-		likeService.likeCancel(userNum, reviewNum);
+	//리뷰 조회수
+	@RequestMapping(value = "/reviewview", method = RequestMethod.GET)
+	public String reviewView(Model model, HttpServletRequest request) throws Exception {
+		int reviewNum = Integer.parseInt(request.getParameter("reviewnum"));
+		
+		reviewService.reviewView(reviewNum);
+		
 		return dir+"/d_list";
 	}
+	
+	/*
+	 * //좋아요
+	 * 
+	 * @RequestMapping(value = "/reviewlike", method = RequestMethod.POST) public
+	 * String reviewLike(HttpServletRequest request, HttpSession session) throws
+	 * Exception { int userNum =(int)session.getAttribute("userNum"); int reviewNum
+	 * = Integer.parseInt(request.getParameter("reviewnum"));
+	 * 
+	 * likeService.reviewLike(userNum, reviewNum); return dir+"/d_list"; }
+	 * 
+	 * //좋아요 취소
+	 * 
+	 * @RequestMapping(value = "/likecancel", method = RequestMethod.POST) public
+	 * String likeCancel(HttpServletRequest request, HttpSession session) throws
+	 * Exception { int userNum =(int)session.getAttribute("userNum"); int reviewNum
+	 * = Integer.parseInt(request.getParameter("reviewnum"));
+	 * 
+	 * likeService.likeCancel(userNum, reviewNum); return dir+"/d_list"; }
+	 */
 	
 }
 

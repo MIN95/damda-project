@@ -118,26 +118,75 @@
 	insert into cart(c_usernum, c_customnum, ea) values (${c_userNum}, ${c_customNum},1);
 </insert>
 
+<!-- 주문으로 넘기기 cartcheck 1 -->
+<!-- 장바구니로 들어오면 모든 상품은 cartcheck 0 -->
+<update id="cartOrder">
+	update cart set cartcheck = #{cartCheck} where c_usernum = ${c_userNum}
+</update>
+
+<!-- 비회원일때 -->
+<update id="cartOrder_noUser">
+	update cart set cartcheck = #{cartCheck} where c_nousernum = #{c_nouserNum }
+</update>
+
+
 <!-- /////////////////////////미현 시작//////////////////////////////////////// -->
+ <!-- 주문내역 출력 -->
+ <select id="mypage" resultType="com.bit.pro.vo.OrderListVo">
+   SELECT OL.O_ORDERNUM,CO.PRICE AS ALLPRICE,CO.ORDERDATE,AL.ITEMNAME,OM.DELIVERSTATUS
+   ,PT.PHOTOPATH
+   FROM ORDERLIST OL
+   JOIN CARTORDER CO ON CO.ORDERNUM = OL.O_ORDERNUM
+   LEFT OUTER JOIN ALLITEM AL ON AL.ITEMNUM = OL.O_ITEMNUM
+   JOIN ORDERMANAGE OM ON OM.M_ORDERNUM = OL.O_ORDERNUM
+   LEFT OUTER JOIN PHOTO PT ON PT.P_CUSTOMNUM = OL.O_CSTMTNUM
+   OR PT.P_ITEMNUM = OL.O_ITEMNUM
+   WHERE OL.O_USERNUM = #{usernum} AND PT.PHOTOCTG2 = "thumbnail"
+   GROUP BY OL.O_ORDERNUM ORDER BY CO.ORDERDATE DESC
+   LIMIT #{nowPage},#{scale}
+ </select>
+ <!-- 주문내역 레코드 개수 -->
+ <select id="mypagecountArticle" resultType="int">
+    SELECT COUNT(*) AS CNT FROM (
+      SELECT * FROM ORDERLIST WHERE O_USERNUM= #{usernum}
+      GROUP BY O_ORDERNUM
+   )AS T
+ </select>
  <!-- 주문상세내역 출력 -->
  <select id="mypageDetail" resultType="com.bit.pro.vo.OrderListVo">
-	SELECT * FROM (
-		SELECT @ROWNUM:=@ROWNUM+1 AS BBSNUM,A.* FROM (
-			SELECT O.ORDERLISTNUM,O.PRICE,O.O_ORDERNUM,I.ITEMNAME
-			,C.CSTMMATELIST,M.DELIVERSTATUS,P.PHOTOPATH
-			FROM ORDERLIST O
-			LEFT OUTER JOIN ALLITEM I ON O.O_ITEMNUM = I.ITEMNUM 
-			LEFT OUTER JOIN CUSTOM C ON O.O_CSTMTNUM = C.CSTMTNUM
-			LEFT OUTER JOIN ORDERMANAGE M ON O.O_ORDERNUM = M.M_ORDERNUM
-			LEFT OUTER JOIN (SELECT * FROM PHOTO WHERE PHOTOCTG2 = "thnumnail") P ON I.ITEMNUM = P.P_ITEMNUM
-			WHERE O.O_ORDERNUM = #{o_ordernum} ORDER BY O.ORDERLISTNUM ASC
-		) A,(SELECT @ROWNUM:=0) B ORDER BY BBSNUM ASC 
-	) Z LIMIT #{nowPage},#{scale}
+   	SELECT OL.O_ORDERNUM,AL.ITEMNAME
+	,AL.ITEMPRICE,AL.ITEMNUM,CT.CSTMTNUM,CT.CSTMMATELIST,CT.CSTMPRICE,OM.DELIVERSTATUS,PT.PHOTOPATH,PT.PHOTOCTG2,RV.REVIEWNUM
+	FROM ORDERLIST OL
+	LEFT OUTER JOIN ALLITEM AL ON OL.O_ITEMNUM = AL.ITEMNUM
+	LEFT OUTER JOIN CUSTOM CT ON OL.O_CSTMTNUM = CT.CSTMTNUM
+	LEFT OUTER JOIN ORDERMANAGE OM ON OL.O_ORDERNUM = OM.M_ORDERNUM
+	LEFT OUTER JOIN PHOTO PT ON AL.ITEMNUM = PT.P_ITEMNUM
+	OR CT.CSTMTNUM = PT.P_CUSTOMNUM
+    LEFT OUTER JOIN REVIEW RV ON OL.O_ITEMNUM = RV.R_ITEMNUM
+    OR OL.O_CSTMTNUM = RV.R_CUSTOMNUM
+	WHERE OL.O_ORDERNUM = #{o_ordernum} AND PT.PHOTOCTG2 = "thumbnail"
+	ORDER BY OL.ORDERLISTNUM ASC LIMIT #{nowPage},#{scale}
  </select>
- <!-- notice 레코드갯수 -->
+ <!-- 주문상세내역 레코드개수 -->
  <select id="countArticle" resultType="int">
- 	SELECT COUNT(*) FROM ORDERLIST
+    SELECT COUNT(*) FROM ORDERLIST WHERE O_ORDERNUM = #{o_ordernum}
+ </select>
+ <!-- 비회원 체크 -->
+ <select id="chknouser" parameterType="map" resultType="map">
+    SELECT * FROM CARTORDER WHERE NOUSERNAME=#{nousername} AND ORDERPW=#{orderpw} AND ORDERNUM=#{ordernum}
+ </select>
+ <!-- 비회원 주문조회 디테일 -->
+ <select id="nouserDetail" resultType="com.bit.pro.vo.OrderListVo">
+    SELECT OL.O_ORDERNUM,AL.ITEMNAME
+	,AL.ITEMPRICE,AL.ITEMNUM,CT.CSTMTNUM,CT.CSTMMATELIST,CT.CSTMPRICE,OM.DELIVERSTATUS,PT.PHOTOPATH
+	FROM ORDERLIST OL
+	LEFT OUTER JOIN ALLITEM AL ON OL.O_ITEMNUM = AL.ITEMNUM
+	LEFT OUTER JOIN CUSTOM CT ON OL.O_CSTMTNUM = CT.CSTMTNUM
+	LEFT OUTER JOIN ORDERMANAGE OM ON OL.O_ORDERNUM = OM.M_ORDERNUM
+	LEFT OUTER JOIN PHOTO PT ON AL.ITEMNUM = PT.P_ITEMNUM
+	OR CT.CSTMTNUM = PT.P_CUSTOMNUM
+	WHERE OL.O_ORDERNUM = #{o_ordernum} AND PT.PHOTOCTG2 = "thumbnail"
+	ORDER BY OL.ORDERLISTNUM ASC LIMIT #{nowPage},#{scale}
  </select>
  <!-- /////////////////////////미현 끝//////////////////////////////////////// -->
- 
 </mapper>

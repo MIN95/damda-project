@@ -209,6 +209,12 @@
             background-color: darksalmon;
             color: white;
         }
+        
+        #content #empty_div{
+			height: 150px;
+			clear: both;
+		}
+        
 </style>
 
 
@@ -570,11 +576,11 @@ function select_delete() {
                                 <label for="${List.mr_customNum }"></label>
                             </td>
                             <td>
-                                <a href="#"><img src="/resources/imgs/${List.photoCtg }/${List.photoName }" /></a>
+                                <a href="#"><img src="${List.photoPath }" /></a>
                             </td>
                             <td>
                                 <a href="#"><input type="text" name="itemname" id="itemname${List.mr_customNum }" value="[custom]샐러드 No.${List.mr_customNum }" readonly /></a>
-                                <span>${List.cstmtMatelist }</span>
+                                <span>${List.cstmMatelist }</span>
                                 <p class="itemprice_${List.mr_customNum }">원</p>
                                 <input type="hidden" class="itemprice" id="itemprice_${List.mr_customNum }" value="${List.cstmPrice }" readonly />
                             </td>
@@ -624,6 +630,8 @@ function select_delete() {
 				        <li><a href = "/mypage/myrecipe?p=${totalpage }" aria-label="Next">&raquo;</a></li>
 				    </ul>
                 </div>
+                
+                <div id="empty_div">　</div>
             </div>
 <!-- Modal start -->
     <div class="modal fade" id="allCartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

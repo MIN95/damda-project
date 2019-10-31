@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bit.pro.mappers.orderListMapper"> 
+<!-- 리뷰 출력용 -->
+<select id="reviewItem" parameterType="orderListVo" resultType="orderListVo">
+	select * from orderlist o join photo p on o.o_itemnum = p.p_itemnum join allitem i on o.o_itemnum = i.itemnum where o_ordernum = #{o_ordernum} and o_usernum = #{o_usernum} and photoctg2 ='thumbnail' and o_itemnum = #{o_itemnum}
+</select>
+
+<select id="reviewCustom" parameterType="orderListVo" resultType="orderListVo">
+	select * from orderlist o join photo p on o.o_cstmtnum = p.p_customnum join custom c on o.o_cstmtnum = c.cstmtnum where o_ordernum = #{o_ordernum} and o_usernum = #{o_usernum} and photoctg2 ='thumbnail' and o_cstmtnum = #{o_cstmtnum}
+</select>
+
+</mapper>

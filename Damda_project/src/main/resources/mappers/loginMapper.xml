@@ -22,30 +22,31 @@
  <select id="fnpwnoem" parameterType="map" resultType="map">
  	SELECT username,userid,userpw FROM USERINFO WHERE USERNAME = #{username} AND USERPHONE = #{userphone}
  </select>
-<!--  km -->
+ 
+ <!--  km -->
 <!-- 카테고리따라 데이터 출력 -->
 <select id="selectUserListAll" parameterType="loginVo" resultType="loginVo">
-	SELECT * FROM USERINFO WHERE CATEGORY = #{category} order by usernum desc limit #{startpoint}, #{row}
+   SELECT * FROM USERINFO WHERE CATEGORY = #{category} order by usernum desc limit #{startpoint}, #{row}
 </select>
 
 <!-- 회원등급에 따라 데이터 출력 -->
 <select id="selectUserList" parameterType="loginVo" resultType="loginVo">
-	SELECT * FROM USERINFO WHERE CATEGORY = 2 AND USERGRADE = #{userGrade} order by usernum desc limit #{startpoint}, #{row}
+   SELECT * FROM USERINFO WHERE CATEGORY = 2 AND USERGRADE = #{userGrade} order by usernum desc limit #{startpoint}, #{row}
 </select>
 
 <!-- 관리자 or 회원의 수 체크 -->
 <select id="selectUserCntAll" parameterType="int" resultType="int">
-	SELECT COUNT(*) FROM USERINFO WHERE CATEGORY = #{category} 
+   SELECT COUNT(*) FROM USERINFO WHERE CATEGORY = #{category} 
 </select>
 
 <!-- 회원 등급에따라 데이터 수 체크 -->
 <select id="selectUserCnt" parameterType="String" resultType="int">
-	SELECT COUNT(*) FROM USERINFO WHERE CATEGORY = 2 AND USERGRADE = #{userGrade} 
+   SELECT COUNT(*) FROM USERINFO WHERE CATEGORY = 2 AND USERGRADE = #{userGrade} 
 </select>
 
 <!-- userNum 받아서 회원삭제 -->
 <delete id="deleteUserList" parameterType="int" >
-	DELETE FROM userinfo WHERE usernum=#{userNum}
+   DELETE FROM userinfo WHERE usernum=#{userNum}
 </delete>
 
  </mapper>

@@ -43,6 +43,7 @@
                         <li><a href="/item/list?item=best">베스트</a></li>
                         <li><a href="/custom/">커스텀</a></li>
                         <li><a href="/event/">이벤트</a></li>
+                        <li><a href="/review/">리뷰</a></li>
                         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">고객센터<span class="caret"></span></a>
                             <ul class="dropdown-menu menu_control" role="menu">
                                 <li><a href="/notice/">공지사항</a></li>
@@ -90,12 +91,10 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">관리자페이지 <span class="caret"></span></a>
                             <ul class="dropdown-menu menu_control" role="menu">
-                                <li><a href="#">주문관리</a></li>
+                                <li><a href="/admin/orderlist">주문관리</a></li>
                                 <li><a href="/admin/">상품관리</a></li>
                                 <li><a href="/admin/usermanage">회원관리</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">리뷰관리</a></li> 
-                                <li><a href="#">쿠폰관리</a></li>
+                                <li><a href="/admin/review">리뷰관리</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/notice/">공지사항</a></li>
                                 <li><a href="/qna/">문의사항</a></li>
@@ -107,18 +106,16 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">마스터페이지 <span class="caret"></span></a>
                             <ul class="dropdown-menu menu_control" role="menu">
-                                <li><a href="#">주문관리</a></li>
+                                <li><a href="/admin/orderlist">주문관리</a></li>
                                 <li><a href="/admin/">상품관리</a></li>
                                 <li><a href="/admin/usermanage">회원관리</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">리뷰관리</a></li>
-                                <li><a href="#">쿠폰관리</a></li>
+                                <li><a href="/admin/review">리뷰관리</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/notice/">공지사항</a></li>
                                 <li><a href="/qna/">문의사항</a></li>
                                 <li><a href="/event/">이벤트</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">관리자등록</a></li>
+                                <li><a href="/admin/adminregister">관리자등록</a></li>
                             </ul>
                         </li>
                         <%} %>

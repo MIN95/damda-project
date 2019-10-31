@@ -127,6 +127,11 @@
         	border-bottom: 2px solid;
         }
         
+		#content #empty_div{
+			height: 150px;
+			clear: both;
+		}
+        
     </style>
 	<script type="text/javascript">
 	 	$(document).ready(function() {
@@ -198,6 +203,8 @@
 	<div id="select">
 		<jsp:include page="list.jsp"/>
 	</div>
+	
+	<div id="empty_div">　</div>
 <!-- content end -->
 <jsp:include page="/resources/template/footer.jsp"/>
 </body>

@@ -65,6 +65,7 @@
             height: 22px;
             margin: 0px;
             text-align: center;
+            cursor: default;
         }
         
         #content .content_header button:nth-child(1) {
@@ -187,11 +188,13 @@
         }
 
         #content .content_review table tr th:nth-child(5) {
-            width: 5%;
-            text-align: left;
+            width: 10%;
         }
 
-        #content .content_review table tr td:nth-child(6) {
+        #content .content_review table tr td:nth-child(3) {
+            width: 5%;
+        }
+        #content .content_review table tr td:nth-child(7) {
             width: 5%;
         }
         
@@ -225,10 +228,16 @@
             display: table-row;
         }
 
+		#content .content_review table .clipImg{
+			width: 15px;
+		}
         #content .list_div{
         	margin-bottom: 50px;
         }
-
+  		#content .list_div p{
+  			font-size: 12px;
+  			color: black;
+  		}
         #content .pagination>li>a {
             color: black;
         }
@@ -306,6 +315,12 @@
             background-color: darksalmon;
             color: white;
         }
+        
+        #content #empty_div{
+			height: 150px;
+			clear: both;
+		}
+        
 	</style>
     <script type="text/javascript">
     
@@ -314,7 +329,7 @@
         grid();
 
         //테이블 내용 클릭시 보였다 안보이기
-        table_content();
+        //table_content();
 
       	//합계 계산
         ea();
@@ -502,18 +517,7 @@
 	        }
 		});
     }  
-
-
-  	//리뷰 테이블 클릭이벤트
-    function table_content() {
-        $("tbody tr").click(function() {
-            $(this).parents(".custom-table").find(".toggler1").removeClass("toggler1");
-            $(this).parents("tbody").find(".toggler").addClass("toggler1");
-            $(this).parents(".custom-table").find(".fa-minus-circle").removeClass("fa-minus-circle");
-            $(this).parents("tbody").find(".fa-plus-circle").addClass("fa-minus-circle");
-        });
-    }
-
+    
   	//모달에서 버튼 클릭이벤트
     function item_modal(){
 
@@ -694,6 +698,7 @@
 <input type="hidden" id="no" value="${no }"/>
 <input type="hidden" id="userNum" value="<%=session.getAttribute("userNum")%>"/>
 
+
 <div id="cartList_div">
 	<c:forEach items="${cartList }" var="cartList">
 		<input type="hidden" id="itemNum${cartList.c_itemNum }" value="${cartList.c_itemNum }" class="itemNum">
@@ -742,17 +747,25 @@
             <input type="hidden" name="totalPrice" id="totalPrice"/>
             
 	        <div class="btn_div">
+	        	<c:set var="itemStock" value="${List.itemStock }"/>
+	          	<c:if test="${itemStock != 0 }">
 	          	<%//회원일 때
 	          	if(session.getAttribute("user_ctg")!=null){ %>
-	          	<button type="button" class="btn btn-lg addCart" data-toggle="modal" data-target="#cartModal1" id="cart_btn">
+	          	<button type="button" class="btn btn-lg addCart" data-toggle="modal" data-target="#cartModal1">
 	                &nbsp;&nbsp;&nbsp;<img src="/resources/icon/cart.png" />장바구니 담기 &nbsp;&nbsp;</button>
-	            <button type="button" class="btn btn-lg addWish" data-toggle="modal" data-target="#jjimModal1" id="jjim_btn"><img src="/resources/icon/jjim.png" />찜&nbsp;</button>
+	            <button type="button" class="btn btn-lg addWish" data-toggle="modal" data-target="#jjimModal1"><img src="/resources/icon/jjim.png" />찜&nbsp;</button>
 	            <%}//비회원일 때
 	          	else {%>
-	            <button type="button" class="btn btn-lg addCart" data-toggle="modal" data-target="#Nouser_cartModal" id="cart_btn_noUser">
+	            <button type="button" class="btn btn-lg addCart" data-toggle="modal" data-target="#Nouser_cartModal">
 	                &nbsp;&nbsp;&nbsp;<img src="/resources/icon/cart.png" />장바구니 담기 &nbsp;&nbsp;</button>
-	            <button type="button" class="btn btn-lg" data-toggle="modal" data-target="#userModal" id="jjim_btn_noUser"><img src="/resources/icon/jjim.png" />찜&nbsp;</button>
+	            <button type="button" class="btn btn-lg" data-toggle="modal" data-target="#userModal"><img src="/resources/icon/jjim.png" />찜&nbsp;</button>
 	            <%} %>
+	          	</c:if>
+	          	<c:if test="${itemStock == 0 }">
+		          	<button type="button" class="btn btn-lg addCart" data-toggle="modal" data-target="#itemStockModal">
+	                &nbsp;&nbsp;&nbsp;<img src="/resources/icon/cart.png" />장바구니 담기 &nbsp;&nbsp;</button>
+		            <button type="button" class="btn btn-lg addWish" data-toggle="modal" data-target="#itemStockModal"><img src="/resources/icon/jjim.png" />찜&nbsp;</button>      	
+	          	</c:if>
 	        </div>
 	    </div>
 	</div>
@@ -802,38 +815,103 @@
 	</div>
 	
 	<!--delivery-->
-	<div class="col-md-offset-2 col-md-8 col-sm-12 content_delivery" id="list_val1" class="list_div">
+	<div class="col-md-offset-2 col-md-8 col-sm-12 content_delivery list_div" id="list_val1">
 	    <h4 class="engfont">DELIVERY</h4>
-	    <p>
-	        배송관련 안내사항내용적어요
-	    </p>
+	      <p>
+                <span style="color:#f00"><b>※ 필독 ※ 주문 전 아래 공지사항을 확인후 주문 부탁드립니다.</b></span><br/><br/>
+                [국내 일반 배송]<br/>
+배송업체 : 우체국택배<br/>
+배송비용 : 2,500원 / 실결제 금액 50,000원 이상 시 무료배송 <br/>
+배송기간 : 1일 ~ 3일<br/><br/>
+
+주문시 유의사항<br/>
+- 이벤트(세일)기간내 주문의 경우에는 기본 배송일 이상 소요되며, 이벤트 종료 이후 순차 배송됩니다.<br/>
+- 공급처 사정으로 인하여 지연 및 품절이 발생될 수 있습니다. <br/>
+- '주문폭주', '인기상품'의 경우 기본 배송기간 이상 소요됩니다.<br/>
+- 기본 배송기간 이상 소요되는 상품이거나, 품절된 상품은 개별 연락 드리겠습니다.<br/><br/>
+
+[해외배송]<br/>
+1. 주문서 작성 : 주문서 작성 시 해외배송 여부에 "예"로 체크<br/>
+2. 문의 게시판 : 주문서 넣은 후 문의 게시판에 받아보실 해외 주소, 연락처 기재<br/>
+3. 배송비 측정 : 지역과 무게 확인 후 해외배송비 측정하여 답변<br/>
+4. 상품 준비 및 배송 : 결제가 완료되면 상품이 준비되는 대로 발송<br/><br/>
+
+[통관과 관세]<br/>
+담다는 EMS 우체국 배송을 사용하고 있으며 한국에서 직접 배송하고 있습니다.<br/>
+국가 세관의 규정에 따르면, 배송 과정에서 나라별로 관세가 발생할 수 있으며 관세는 고객님 부담입니다.<br/>
+상세 문의사항은 EMS 우체국 고객센터 1588-1300을 이용해주시거나 거주하시는 지역 우체국에 문의바랍니다.<br/>
+반송 과정에서 발생되는 모든 비용 (반품 배송비, 통관비용 및 관세)은 구매자가 부담하며 환불 시 차감됩니다.
+            </p>
 	
 	</div>
 	<!--delivery end-->
 	
 	
 	<!--change-->
-	<div class="col-md-offset-2 col-md-8 col-sm-12 content_change" id="list_val2" class="list_div">
+	<div class="col-md-offset-2 col-md-8 col-sm-12 content_change list_div" id="list_val2">
 	    <h4 class="engfont">CHANGE</h4>
-	    <p>
-	        교환 반품 안내사항내용적어요
-	    </p>
+	  <p>
+                [교환∙반품시 유의사항]<br/>
+단순 변심의 경우 수령일로부터 7일 이내까지 교환∙반품이 가능합니다(교환∙반품비 고객님 부담).<br/>
+상품 하자, 오배송의 경우 수령일로부터 1주일 이내, 그 사실을 알 수 있었던 날로부터 7일 이내까지 교환∙반품이 가능합니다(교환∙반품비 무료(담다 부담)). <br/>
+네이버페이 결제주문은 동일상품/동일옵션 교환만 가능합니다.<br/><br/>
+
+단, 다음의 경우에는 교환∙반품 가능기간에도 불구하고 거절될 수 있습니다. <br/>
+- 고객님의 책임 있는 사유로 제품이 멸실 또는 훼손된 경우<br/>
+- 고객님의 사용 또는 일부 소비에 의하여 제품의 가치가 현저히 감소한 경우<br/>
+- 시간의 경과에 의하여 재판매가 곤란할 정도로 제품의 가치가 현저히 감소한 경우<br/>
+- 고객님의 주문에 따라 개별적으로 생산되는 제품의 경우<br/><br/>
+
+[교환∙반품 방법] <br/>
+*동봉된 교환∙반품 카드를 참조하세요<br/><br/>
+
+교환∙반품 가능기간 이내에 “스타일난다 게시판 또는 고객센터 접수” 후 “교환∙반품 신청서”와 함께 아래 반품 주소로 보내주셔야 합니다<br/>
+(미접수, 신청서 미동봉시 별도의 확인 시간이 소요될 수 있습니다). <br/><br/>
+
+보내주실 때 바코드가 붙어있는 폴리백에 넣어 받아보신 그대로 포장 후 우체국 택배를 이용하여 착불로 보내주세요. <br/>
+교환∙반품 배송비는 단순 변심의 경우 고객님 부담, 상품 하자 및 오배송의 경우 난다 부담입니다. 배송비를 입금하시는 경우 꼭 주문자 성함으로 입금해 주시기 바랍니다.<br/><br/> 
+
+반품 주소 : 인천광역시 계양구 계산 4동 계양 우체국 사서함 1117호 ㈜담다<br/>
+타택배 반품주소 : 인천광역시 연수구 송도동 10-79 스타일난다 물류센터<br/>
+(반품 배송비 고객 선불부담)<br/>
+타 택배 이용시 일반 반품주소(사서함 1117호)를 이용하시면 재반송되며 반송 택배비 역시 고객님 부담이니 이 부분 꼭 참고 바랍니다. <br/><br/>
+
+교환 및 반품 접수, 상품문의처 : 0502-707-8888
+            </p>
 	</div>
 	<!--change end-->
 	
 	
 	<!--refund-->
-	<div class="col-md-offset-2 col-md-8 col-sm-12 content_refund" id="list_val3" class="list_div">
+	<div class="col-md-offset-2 col-md-8 col-sm-12 content_refund list_div" id="list_val3">
 	    <h4 class="engfont">REFUND</h4>
 	    <p>
-	        취소 환불 안내사항내용적어요
-	    </p>
+                [취소 안내]<br/>
+입금 전 취소, 배송 전 취소 모두 마이페이지에서 고객님이 직접 취소가 가능합니다. <br/>
+금액 취소 처리 건이 있으시면 고객센터나 문의 게시판에 꼭 남겨주세요.<br/><br/>
+                
+[카드 취소]<br/>
+카드 부분 취소불가 <br/>
+- 부분배송 받아보시는 상품 금액만큼을 따로 재결제 혹은 입금해주시면 카드 전체 취소 처리해드립니다. <br/>
+- 가맹점을 통해 취소가 되므로 처리 시일은 최대 7일 정도 소요됩니다. <br/><br/>
+
+(카드사 프로모션할인결제)<br/>
+- 구매하신 상품중 일부만 취소하시는 경우 상품금액만 따로 재결제 혹은 입금해주시면 카드전체취소 처리해드립니다. <br/>
+- 가맹점을 통해 취소되므로 처리시일은 최대 7일정도 소요됩니다.<br/><br/>
+
+[환불]<br/>
+환불은 요청하신 날로부터 1~2일 후 계좌로 환불됩니다.<br/><br/>
+
+[휴대폰 취소]<br/>
+- 휴대폰은 당월 취소만 가능합니다, <br/>
+- 부분취소는 불가하여 일부구매하는 상품금액을 입금해주시거나 개인결제창으로 재결제해주시면 휴대폰 전체취소로 처리가능합니다.
+            </p>
 	</div>
 	<!--refund end-->
 	
 	
 	<!--review-->
-	<div class="col-md-offset-2 col-md-8 col-sm-12 content_review" id="list_val4" class="list_div">
+	<div class="col-md-offset-2 col-md-8 col-sm-12 content_review list_div" id="list_val4">
 		<h4 class="engfont">REVIEW</h4>
 	    <ul class="col-md-10">
 	        <li>
@@ -852,6 +930,8 @@
 	    </div>
 	</div>
 	<!--review end-->
+	
+	<div id="empty_div">　</div>
 	
 <!-- Modal start -->
  <!-- cartModal -->
@@ -1032,6 +1112,29 @@
                     <div class="m_btn_div">
                         <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cartModal2" data-dismiss="modal" id="compareOk">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <div class="modal fade" id="itemStockModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">알림메세지</h4>
+                </div>
+                <div class="modal-body">
+                    <br /><br />
+                    준비된 재고가 모두 소진되었습니다. <br />
+                    빠른시일내에 준비하겠습니다.
+                    <br /><br /><br />
+                </div>
+                <div class="modal-footer">
+                    <div class="m_btn_div">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                     </div>
                 </div>
             </div>

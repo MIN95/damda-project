@@ -42,16 +42,16 @@
     display: block;
    }
     #mateTab {
-    width:100%;
+    width:80%;
     }
    #mateTab .picSize img{
-   width: 100%;
+   width: 80%;
    height: 100%;
    cursor: pointer;
    }
    #imgTd{
-   	width:300px;
-   	height:100px;
+   	width:80%;
+   	height:100%;
    }
    #mateTab select {
    width:100%;
@@ -126,7 +126,6 @@
        $('select').hide();
        $('#vegeSelect').hide();
        $('#toppingSelect').hide();
-       resized2();
       if($('#mateImgde').val()==null){
 		$('#mateImgde').remove();
           }
@@ -216,7 +215,6 @@ function ctgChange(e){
 	    $('#customSelect').removeAttr("name").attr({name : "matectg"});
 		}
 }
-
  </script>
 </head>
 <body>
@@ -235,14 +233,14 @@ function ctgChange(e){
          </div>
          <form id="Edit" enctype="multipart/form-data" method="post">
          <input type="hidden" name="method" value="put" id="method"/>
-         <div id="mateTab" class="col-md-12 col-sm-12 col-xs-12">
+         <div id="mateTab" class="col-md-offset-1 col-md-8 col-sm-offset-2 col-sm-8 col-xs-12">
             <br /><br />
             <table class="table text-left table-bordered table-sm">
             <!-- <p id="${mateone[0].mateName}"></p> -->
 				<thead> 
 					<tr>
 						<td id="imgTd" rowspan="6">
-							<div class="picSize" class="form-group " style="width:200px">
+							<div class="picSize" class="form-group " style="width:100%px">
                               	<img class="inputImg" id="thImg" name="photoPath" src="${mateone[0].photoPath }"/>
                              	<div class="d-flex justify-content-center ImgBtn">
 							      <span class="btn btn-default btn-file">

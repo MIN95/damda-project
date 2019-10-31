@@ -307,11 +307,17 @@
 	    showMonthAfterYear: true,
 	    changeMonth: true,
 	    changeYear: true,
-	    yearSuffix: '년'
+	    yearSuffix: '년',
+	    beforeShowDay: noBefore
 	  });
 	  var currentDate = new Date();  
 	  $("#datepicker, #datepicker2").datepicker("setDate",currentDate);
 	  var eventdate = $('#datepicker').val()+"~"+$('#datepicker2').val();
 	});
+	 function noBefore(date){ 
+	   if (date < new Date()) 
+	       return [false]; 
+	   return [true]; 
+	}
  </script>
 </html>

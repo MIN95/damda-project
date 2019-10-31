@@ -14,7 +14,8 @@
             <typeAlias type="com.bit.pro.vo.MateVo" alias="mateVo"/>
             <typeAlias type="com.bit.pro.vo.MyRecipeVo" alias="myRecipeVo"/>
             <typeAlias type="com.bit.pro.vo.NoticeVo" alias="noticeVo"/>
-            <typeAlias type="com.bit.pro.vo.OrderVo" alias="oderVo"/>
+            <typeAlias type="com.bit.pro.vo.OrderVo" alias="orderVo"/>
+            <typeAlias type="com.bit.pro.vo.OrderListVo" alias="orderListVo"/>
             <typeAlias type="com.bit.pro.vo.PhotoVo" alias="photoVo"/>
             <typeAlias type="com.bit.pro.vo.QnaVo" alias="qnaVo"/>
             <typeAlias type="com.bit.pro.vo.ReviewLikeVo" alias="reviewLikeVo"/>
@@ -22,5 +23,4 @@
             <typeAlias type="com.bit.pro.vo.WishItemVo" alias="wishItemVo"/>
         </typeAliases>
     </configuration>
-
 

@@ -2,16 +2,13 @@ package com.bit.pro.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.bit.pro.dao.MateDao;
 import com.bit.pro.dao.PhotoDao;
-import com.bit.pro.util.UploadFileUtil;
+import com.bit.pro.util.UploadFileUtil2;
 import com.bit.pro.util.pagination;
 import com.bit.pro.vo.MateVo;
 import com.bit.pro.vo.PhotoVo;
@@ -40,18 +37,28 @@ public class MateServiceImpl implements MateService{
 	private PhotoDao photoDao;
 	
 	@Override
-	public List<MateVo> selectMateAll(pagination pagination, PhotoVo photoVo) {
-		return mateDao.selectMateAll(pagination);
+	public List<MateVo> selectMateCtgP(pagination pagination, PhotoVo photoVo,Model model) throws Exception{
+		List<MateVo> pagelist = new ArrayList<MateVo>();
+		pagelist =mateDao.selectMateCtgP(pagination);
+		
+		return pagelist;
 	}
-
+	
+	@Override
+	public List<MateVo> selectMateSaleP(pagination pagination, PhotoVo photoVo, Model model) throws Exception{
+		List<MateVo> pagelist2 = new ArrayList<MateVo>();
+		pagelist2 = mateDao.selectMateSaleP(pagination);
+		return pagelist2;
+	}	
+	
 	@Autowired
 	ServletContext servletContext;
 		
 	@Override
 	public int insertMate(MateVo mateVo, PhotoVo photoVo, MultipartHttpServletRequest multi) throws IOException, Exception {
-		String upload = servletContext.getRealPath("/resources/ingredient/");
+		String upload = servletContext.getRealPath("/resources/ingredientnum/");
 		String imgUploadPath = upload; //서버저장
-		String imgUploadPath2 = "/resources/ingredient/"; //DB저장
+		String imgUploadPath2 = "/resources/ingredientnum/"; //DB저장
 		int sqlResult=0;
 		int count=0;
 		sqlResult = mateDao.insertMate(mateVo);	//자료넣고
@@ -63,7 +70,7 @@ public class MateServiceImpl implements MateService{
 			String fileName = null;
 			String originalName = mfile.getOriginalFilename();
 			if(originalName != null) {//첨부여부
-				fileName = UploadFileUtil.fileUpload(imgUploadPath, mfile.getOriginalFilename(), mfile.getBytes(),count,photoVo);
+				fileName = UploadFileUtil2.fileUpload(imgUploadPath, mfile.getOriginalFilename(), mfile.getBytes(),count);
 			}else {
 				fileName = upload+"fail/";
 			}
@@ -72,7 +79,7 @@ public class MateServiceImpl implements MateService{
 			String photoPath2 = null;//db넣기용
 			if(count==0) {
 				System.out.println("썸네일 이름"+fileName);
-				photoCtg2 = "thumbnail";
+				photoCtg2 = "thnumbnail";
 			}else if(count==1) {
 				System.out.println("디테일 이름"+fileName);
 				photoCtg2 = "detail";
@@ -94,6 +101,7 @@ public class MateServiceImpl implements MateService{
 	@Override
 	public List<MateVo> selectMateOne(int matenum, PhotoVo photoVo, Model model){
 		List<MateVo> list = mateDao.selectMateOne(matenum);
+		System.out.println("list>>>>"+list);
 		return list;
 	}
 	
@@ -108,9 +116,9 @@ public class MateServiceImpl implements MateService{
 		
 		photoVo.setP_ingredientNum(num);
 		
-		String upload = servletContext.getRealPath("/resources/ingredient/");
+		String upload = servletContext.getRealPath("/resources/ingredientnum/");
 		String imgUploadPath = upload;
-		String imgUploadPath2 = "/resources/ingredient/";//DB용!
+		String imgUploadPath2 = "/resources/ingredientnum/";//DB용!
 		String fileName = null;
 		String fileName2 = null;
 		
@@ -130,14 +138,14 @@ public class MateServiceImpl implements MateService{
 			String photoCtg2 = null;
 			
 			if(mfile != null) {
-				fileName = UploadFileUtil.fileUpload(imgUploadPath, originalName, mfile.getBytes(), i,photoVo);
+				fileName = UploadFileUtil2.fileUpload(imgUploadPath, originalName, mfile.getBytes(), i);
 			}else {
 				fileName2 = upload+"_none.png";
 				System.out.println("오리지널이름없어==>"+fileName2);
 			}
 			if(i==0) {
 				photoVo.setPhotoNum(pnum1);
-				photoCtg2 = "thumbnail";
+				photoCtg2 = "thnumbnail";
 				photoVo.setPhotoCtg2(photoCtg2);
 				System.out.println("썸네일 새 이름==>"+fileName);
 				photoPath = imgUploadPath2 +fileName;
@@ -193,9 +201,12 @@ public class MateServiceImpl implements MateService{
 	}
 	
 	@Override
-	public int selectMateAllCnt() {
-		
-		return mateDao.selectMateAllCnt();
+	public int selectMateAllCnt(MateVo mateVo, String matectg) {
+		return mateDao.selectMateAllCnt(matectg);
+	}
+	@Override
+	public int selectMateSaleCnt(MateVo mateVo, int salestatus) {
+		return mateDao.selectMateSaleCnt(salestatus);
 	}
 	
 	/******************* 미현시작 *****************************/

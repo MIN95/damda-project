@@ -1,8 +1,13 @@
 package com.bit.pro.controller;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
@@ -23,8 +28,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bit.pro.service.JoinService;
 import com.bit.pro.service.OrderService;
 import com.bit.pro.vo.AddrVo;
+import com.bit.pro.vo.CartVo;
 import com.bit.pro.vo.JoinVo;
+import com.bit.pro.vo.LoginVo;
+import com.bit.pro.vo.OrderDataVo;
+import com.bit.pro.vo.OrderDetailVo;
 import com.bit.pro.vo.OrderVo;
+import com.mysql.cj.ParseInfo;
 
 import net.sf.json.JSONArray;
 
@@ -114,8 +124,141 @@ public class OrderController {
 		return mav;
 	}
 	
+	//주문완료시 데이터를 담는 기능
+	@RequestMapping(value = "orderdata", method = RequestMethod.POST)
+	public ModelAndView orderdata(HttpSession session, @ModelAttribute OrderDataVo bean, @RequestParam String useraddr1, @RequestParam String useraddr2, @RequestParam String nouserphone, @RequestParam String receiverphone ) throws Exception {
+		
+		//주문번호 생성해서 넣어줌(날짜+시간)
+		Date today = new Date();
+		SimpleDateFormat day = new SimpleDateFormat("yyMMdd");
+		SimpleDateFormat hour = new SimpleDateFormat("HHmmss");
+		String ordernum= "DAMDA"+day.format(today)+"_"+hour.format(today);
+		
+		bean.setOrdernum(ordernum);
+	
+		//주소 addr1+addr2해서 넣어줌
+		String addr = useraddr1+" "+useraddr2;
+		bean.setDeliveraddr(addr);
+		String co_nousernum;
+		int co_usernum;		
+		//orderdate, price(총 가격) 히든으로 order페이지에 설정해준다 받아옴
+		
+		//회원/비회원 정보 넣어줌
+		String isuser = (String) session.getAttribute("userid");
+		if(isuser==null) {
+			//비회원
+			co_nousernum = session.getId();
+			bean.setCo_nousernum(co_nousernum);
+			nouserphone = nouserphone.replace("-", "");
+			bean.setNouserphone(nouserphone);
+			
+		}else {
+			//회원
+			co_usernum= (int) session.getAttribute("userNum");	
+			bean.setCo_usernum(co_usernum);
+			
+		}
+		
+
+		//전화번호 - 제외하고 숫자로
+		receiverphone = receiverphone.replace("-", "");
+		bean.setReceiverphone(receiverphone);
+		
+		
+		System.out.println(bean.toString());
+		OrderDataVo orderInfo = orderService.insertOrderData(bean);
+		
+		
+		//selectorder에 있는 아이템들이 주문번호와 함께 orderlist 테이블로 저장된다
+		//List<OrderDetailVo>에 cart의 cartnum순서대로 입력
+	
+		//OrderDataVo, insert
+		List<OrderVo> selectOrder;
+		if(orderInfo!=null) {
+			if(isuser==null) {
+				//비회원
+				co_nousernum = session.getId();
+				List<CartVo> noworder= orderService.selectCartItemNouser(co_nousernum);
+				int result=orderService.insertOrderItemNouser(co_nousernum, ordernum, noworder);
+				selectOrder= orderService.selectOrderNouser(co_nousernum);
+			}
+			else {
+				//회원
+				co_usernum = (int) session.getAttribute("userNum");	
+				//카트에 담긴 아이템 구함
+				List<CartVo> noworder= orderService.selectCartItem(co_usernum);
+				
+				int result=orderService.insertOrderItem(co_usernum, ordernum, noworder);
+				 selectOrder= orderService.selectOrder(co_usernum);
+				 
+				//카트에 담긴 cartcheck=1 삭제
+				int result2 = orderService.deleteCart(co_usernum);
+				
+				//주문금액 누적 / 현재 주문금액
+				int adduserbuy = bean.getPrice();
+				orderService.addUserbuy(co_usernum, adduserbuy);
+				
+				//회원 환불계좌 정보 변경
+				String userbank=bean.getBank();
+				String useraccowner=bean.getRefundaccowner();
+				String useracc = bean.getRefundaccount();
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("usernum", Integer.toString(co_usernum));
+				map.put("userbank", userbank);
+				map.put("useraccowner", useraccowner);
+				map.put("useracc", useracc);
+				orderService.updateUseracc(map);
+				
+				
+				
+			}
+			
+
+			//ordermanage에도 함께 정보를 보내줘야함
+			//결제방법에 따라 기본 배송상태 다르게 넣어줘야함
+			int ordertype = bean.getOrdertype(); 
+			
+			int result = orderService.insertOrderlist(ordernum, ordertype);
+			if(result >0) {System.out.println("관리자 주문목록 전송");}
+				
+			
+			//완료된 페이지로 간다
+			ModelAndView mav = new ModelAndView(dir+"/orderList");
+			
+			mav.addObject("ordernum",ordernum);
+			mav.addObject("selectOrder", selectOrder);
+			mav.addObject("orderInfo",orderInfo);
+			
+			
+			
+			
+			return mav;
+		}else {
+			System.out.println("컨트롤러 실패");
+			return null;
+					
+		}
+		
+		
+		//--------------------------------
+		
+		
+		
+		
+		
+		
+		//개수만큼 상품개수를 감소시켜준다
+		
+		
+	}
+	
+	
+	//주문완료시 이동하는 페이지
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String orderList() {
+	public String orderList(HttpSession session, Model model) throws Exception {
+		
+				
+		//OrderDateVo와 카트에 담겼었던 아이템을 가져와서 뿌려줌
 		
 		return dir+"/orderList";
 	}
@@ -171,6 +314,13 @@ public class OrderController {
 	public String popup(Locale locale, Model model) {
 	
 		return dir+"/findJuso";
+	}
+	
+	//주소찾기 팝업
+	@RequestMapping(value = "/myorder")
+	public String myorder(Locale locale, Model model) {
+	
+		return dir+"/myOrder";
 	}
 	
 	

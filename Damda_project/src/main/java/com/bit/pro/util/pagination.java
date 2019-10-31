@@ -2,7 +2,8 @@ package com.bit.pro.util;
 
 public class pagination {
 	
-	private int listSize=5;
+	private int listSize=20;
+	private int listSize_event = 3;
 	private int rangeSize=10;
 	private int page;
 	private int range;
@@ -12,7 +13,9 @@ public class pagination {
 	private int startList;
 	private int endPage;
 	private boolean prev;
-	private boolean next;
+	private boolean next;	
+	private String matectg;
+	private int salestatus;
 	
 	public int getRangeSize() {
 
@@ -131,6 +134,19 @@ public class pagination {
 		this.listSize = listSize;
 
 	}
+	public int getListSize_event() {
+
+		return listSize_event;
+
+	}
+
+
+
+	public void setListSize_event(int listSize_event) {
+
+		this.listSize_event = listSize_event;
+
+	}
 
 	
 
@@ -153,20 +169,29 @@ public class pagination {
 		return startList;
 
 	}
+	public String getMatectg() {
+		return matectg;
+	}
+		
+	public int getSalestatus() {
+		return salestatus;
+	}
 	
-	public void pageInfo(int page, int range, int listCnt) {
+	public void pageInfo(int page, int range, int listCnt,String matectg) {
+		this.matectg = matectg;
 		//현재페이지, 현재페이지범위, 게시물 총 갯수
 		this.page = page;
 		this.range = range;
 		this.listCnt = listCnt;
 		//전체 페이지수 
-		this.pageCnt = (int) Math.ceil(listCnt/listSize);
+		this.pageCnt = (int) Math.ceil((double)listCnt/listSize);
 		//시작 페이지
-		this.startPage = (range - 1) * rangeSize + 1 ;
+		this.startPage = (range - 1) * rangeSize + 1;
 		//끝 페이지
 		this.endPage = range * rangeSize;
     	//게시판 시작번호
 		this.startList = (page - 1) * listSize;
+		
 		//이전 버튼 상태
 		this.prev = range == 1 ? false : true;
 		//다음 버튼 상태
@@ -175,7 +200,57 @@ public class pagination {
 			this.endPage = this.pageCnt;
 			this.next = false;
 		}
-
+		System.out.println(page+"/"+range+"/"+listCnt+"/"+pageCnt+"/"+startPage+"/"+endPage+"/"+startList+"/"+listSize);
+	}
+	
+	public void pageInfo2(int page, int range, int listCnt) {
+		//현재페이지, 현재페이지범위, 게시물 총 갯수
+		this.page = page;
+		this.range = range;
+		this.listCnt = listCnt;
+		//전체 페이지수 
+		this.pageCnt = (int) Math.ceil((double)listCnt/listSize_event);
+		//시작 페이지
+		this.startPage = (range - 1) * rangeSize + 1 ;
+		//끝 페이지
+		this.endPage = range * rangeSize;
+    	//게시판 시작번호
+		this.startList = (page - 1) * listSize_event;
+		//이전 버튼 상태
+		this.prev = range == 1 ? false : true;
+		//다음 버튼 상태
+		this.next = endPage > pageCnt ? false : true;
+		if (this.endPage > this.pageCnt) {
+			this.endPage = this.pageCnt;
+			this.next = false;
+		}
+		System.out.println(page+"/"+range+"/"+listCnt+"/"+pageCnt+"/"+startPage+"/"+endPage+"/"+startList+"/"+listSize_event);
+	}
+	
+	public void pageInfo3(int page, int range, int listCnt,int salestatus) {
+		this.salestatus = salestatus;
+		//현재페이지, 현재페이지범위, 게시물 총 갯수
+		this.page = page;
+		this.range = range;
+		this.listCnt = listCnt;
+		//전체 페이지수 
+		this.pageCnt = (int) Math.ceil((double)listCnt/listSize);
+		//시작 페이지
+		this.startPage = (range - 1) * rangeSize + 1;
+		//끝 페이지
+		this.endPage = range * rangeSize;
+    	//게시판 시작번호
+		this.startList = (page - 1) * listSize;
+		
+		//이전 버튼 상태
+		this.prev = range == 1 ? false : true;
+		//다음 버튼 상태
+		this.next = endPage > pageCnt ? false : true;
+		if (this.endPage > this.pageCnt) {
+			this.endPage = this.pageCnt;
+			this.next = false;
+		}
+		System.out.println(page+"/"+range+"/"+listCnt+"/"+pageCnt+"/"+startPage+"/"+endPage+"/"+startList+"/"+listSize);
 	}
 
 }

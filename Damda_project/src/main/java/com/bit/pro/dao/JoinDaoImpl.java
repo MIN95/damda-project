@@ -1,6 +1,7 @@
 package com.bit.pro.dao;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -52,6 +53,18 @@ public class JoinDaoImpl implements JoinDao {
 	public int checkPw(JoinVo bean) throws Exception {
 		
 		return sqlSession.selectOne(NAMESPACE+".checkPw",bean);
+	}
+	
+	@Override
+	public int checkPwEdit(Map<String, String> map) throws Exception {
+		
+		return sqlSession.selectOne(NAMESPACE+".checkPwEdit",map);
+	}
+	
+	@Override
+	public int updatePw(Map<String, String> map) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.update(NAMESPACE+".updatePw",map);
 	}
 
 	

@@ -1,5 +1,7 @@
 package com.bit.pro.service;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.inject.Inject;
 
@@ -64,5 +66,23 @@ public class JoinServiceImpl implements JoinService{
 		}
 		return result;
 	}
+	
+	@Override
+	public int checkPw(Map<String, String> map) throws Exception {
+		int result = joinDao.checkPwEdit(map);
+		if(result >0) {System.out.println("옳은 비밀번호");}
+		
+		return result;
+		
+	}
+	
+	@Override
+	public int updatePw(Map<String, String> map) throws Exception {
+		int result = joinDao.updatePw(map);
+		
+		return result;
+	}
+
+	
 
 }

@@ -1,7 +1,9 @@
 package com.bit.pro.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.bit.pro.vo.CartJoinVo;
 import com.bit.pro.vo.CartVo;
@@ -59,10 +61,25 @@ public interface CartDao {
 	//커스텀등록
 	void myrecipeInsert(CartVo bean) throws SQLException;
 	
+	//회원 카트 주문페이지 이동,취소
+	void cartOrder(CartVo bean) throws SQLException;
+	
+	//비회원 카트 주문페이지 이동,취소
+	void cartOrder_noUser(CartVo bean) throws SQLException;
+	
 	/******************미현시작************************************************************/
+	//주문내역 출력
+	List<OrderListVo> mypage(int usernum, int nowPage, int scale) throws SQLException;
+	//주문 레코드 개수
+	int mypagecountArticle(int usernum) throws SQLException;
 	//주문상세내역 출력
 	List<OrderListVo> mypageDetail(String o_ordernum,int nowPage, int scale) throws SQLException;
-	//notice 레코드 개수
-	int countArticle() throws SQLException;
+	//주문상세내역 레코드 개수
+	int countArticle(String o_ordernum) throws SQLException;
+	//비회원일때 주문조회체크
+	HashMap<String, Object> chknouser(Map<String, Object> chkmap) throws SQLException;
+	//비회원 주문조회 디테일
+	List<OrderListVo> nouserDetail(String o_ordernum, int nowPage, int scale) throws SQLException;
 	/******************미현끝************************************************************/
+
 }

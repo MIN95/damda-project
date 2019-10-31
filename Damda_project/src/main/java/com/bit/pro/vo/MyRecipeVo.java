@@ -10,7 +10,7 @@ public class MyRecipeVo {
 	//custom table 
 	private int cstmtNum;
 	private int cstmPrice;
-	private String cstmtMatelist;
+	private String cstmMatelist;
 	
 	
 	//photo table
@@ -76,12 +76,12 @@ public class MyRecipeVo {
 		this.cstmPrice = cstmPrice;
 	}
 
-	public String getCstmtMatelist() {
-		return cstmtMatelist;
+	public String getCstmMatelist() {
+		return cstmMatelist;
 	}
 
-	public void setCstmtMatelist(String cstmtMatelist) {
-		this.cstmtMatelist = cstmtMatelist;
+	public void setCstmMatelist(String cstmMatelist) {
+		this.cstmMatelist = cstmMatelist;
 	}
 
 	public int getPhotoNum() {
@@ -212,107 +212,33 @@ public class MyRecipeVo {
 		this.row = row;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + cstmPrice;
-		result = prime * result + ((cstmtMatelist == null) ? 0 : cstmtMatelist.hashCode());
-		result = prime * result + cstmtNum;
-		result = prime * result + mr_customNum;
-		result = prime * result + mr_userNum;
-		result = prime * result + ((originalName == null) ? 0 : originalName.hashCode());
-		result = prime * result + p;
-		result = prime * result + p_customNum;
-		result = prime * result + p_eventNum;
-		result = prime * result + p_ingredientNum;
-		result = prime * result + p_itemNum;
-		result = prime * result + p_noticeNum;
-		result = prime * result + p_qnaNum;
-		result = prime * result + p_reviewNum;
-		result = prime * result + ((photoCtg == null) ? 0 : photoCtg.hashCode());
-		result = prime * result + ((photoCtg2 == null) ? 0 : photoCtg2.hashCode());
-		result = prime * result + ((photoName == null) ? 0 : photoName.hashCode());
-		result = prime * result + photoNum;
-		result = prime * result + ((photoPath == null) ? 0 : photoPath.hashCode());
-		result = prime * result + recipeNum;
-		result = prime * result + row;
-		result = prime * result + startpoint;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MyRecipeVo other = (MyRecipeVo) obj;
-		if (cstmPrice != other.cstmPrice)
-			return false;
-		if (cstmtMatelist == null) {
-			if (other.cstmtMatelist != null)
-				return false;
-		} else if (!cstmtMatelist.equals(other.cstmtMatelist))
-			return false;
-		if (cstmtNum != other.cstmtNum)
-			return false;
-		if (mr_customNum != other.mr_customNum)
-			return false;
-		if (mr_userNum != other.mr_userNum)
-			return false;
-		if (originalName == null) {
-			if (other.originalName != null)
-				return false;
-		} else if (!originalName.equals(other.originalName))
-			return false;
-		if (p != other.p)
-			return false;
-		if (p_customNum != other.p_customNum)
-			return false;
-		if (p_eventNum != other.p_eventNum)
-			return false;
-		if (p_ingredientNum != other.p_ingredientNum)
-			return false;
-		if (p_itemNum != other.p_itemNum)
-			return false;
-		if (p_noticeNum != other.p_noticeNum)
-			return false;
-		if (p_qnaNum != other.p_qnaNum)
-			return false;
-		if (p_reviewNum != other.p_reviewNum)
-			return false;
-		if (photoCtg == null) {
-			if (other.photoCtg != null)
-				return false;
-		} else if (!photoCtg.equals(other.photoCtg))
-			return false;
-		if (photoCtg2 == null) {
-			if (other.photoCtg2 != null)
-				return false;
-		} else if (!photoCtg2.equals(other.photoCtg2))
-			return false;
-		if (photoName == null) {
-			if (other.photoName != null)
-				return false;
-		} else if (!photoName.equals(other.photoName))
-			return false;
-		if (photoNum != other.photoNum)
-			return false;
-		if (photoPath == null) {
-			if (other.photoPath != null)
-				return false;
-		} else if (!photoPath.equals(other.photoPath))
-			return false;
-		if (recipeNum != other.recipeNum)
-			return false;
-		if (row != other.row)
-			return false;
-		if (startpoint != other.startpoint)
-			return false;
-		return true;
+	public MyRecipeVo(int recipeNum, int mr_customNum, int mr_userNum, int cstmtNum, int cstmPrice, String cstmMatelist,
+			int photoNum, String photoCtg, String photoCtg2, String photoPath, String photoName, String originalName,
+			int p_itemNum, int p_ingredientNum, int p_reviewNum, int p_eventNum, int p_noticeNum, int p_qnaNum,
+			int p_customNum, int p, int startpoint, int row) {
+		super();
+		this.recipeNum = recipeNum;
+		this.mr_customNum = mr_customNum;
+		this.mr_userNum = mr_userNum;
+		this.cstmtNum = cstmtNum;
+		this.cstmPrice = cstmPrice;
+		this.cstmMatelist = cstmMatelist;
+		this.photoNum = photoNum;
+		this.photoCtg = photoCtg;
+		this.photoCtg2 = photoCtg2;
+		this.photoPath = photoPath;
+		this.photoName = photoName;
+		this.originalName = originalName;
+		this.p_itemNum = p_itemNum;
+		this.p_ingredientNum = p_ingredientNum;
+		this.p_reviewNum = p_reviewNum;
+		this.p_eventNum = p_eventNum;
+		this.p_noticeNum = p_noticeNum;
+		this.p_qnaNum = p_qnaNum;
+		this.p_customNum = p_customNum;
+		this.p = p;
+		this.startpoint = startpoint;
+		this.row = row;
 	}
 
 	

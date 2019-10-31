@@ -4,24 +4,29 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.bit.pro.dao.ItemDao;
 import com.bit.pro.dao.LoginDao;
+import com.bit.pro.dao.OrderDao;
 import com.bit.pro.dao.PhotoDao;
 import com.bit.pro.util.Criteria;
 import com.bit.pro.util.PageMaker;
 import com.bit.pro.util.UploadFileUtil;
 import com.bit.pro.vo.AllItemVo;
 import com.bit.pro.vo.LoginVo;
+import com.bit.pro.vo.OrderListVo;
 import com.bit.pro.vo.PhotoVo;
 
 
@@ -39,6 +44,11 @@ public class AdminServiceImpl implements AdminService {
    @Resource(name="loginDao")
    private LoginDao loginDao;
    
+   /****** 미현 시작 ******/
+   @Resource(name="orderDao")
+   private OrderDao orderDao;
+   /****** 미현 끝 ******/
+
    @Autowired 
    ServletContext servletContext;
    
@@ -346,5 +356,24 @@ public class AdminServiceImpl implements AdminService {
 	}
 	return sqlResult;	
 	}
+	
+	/****************************미현 시작**********************************/
+	//주문목록 레코드의 갯수 계산
+	@Override
+	public int countArticle(String deliverstatus) throws Exception{
+		return orderDao.countArticle(deliverstatus);
+	}
+	//주문 목록 리스트
+	@Override
+	public List<OrderListVo> orderlistSelect(int nowPage,int scale,String deliverstatus,String ordernum) throws Exception {
+		return orderDao.orderlistSelect(nowPage,scale,deliverstatus,ordernum);
+	}
+	//ajax deliverstatus update
+	@Override
+	public int changeDeliver(String deliverstatus,String ordernum) throws Exception {
+		return orderDao.changeDeliver(deliverstatus,ordernum);
+	}
+	/****************************미현 끝**********************************/
+	
 }
       

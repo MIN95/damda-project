@@ -23,7 +23,7 @@
 
         #content .table_div h2+p+p {
             font-size: 14px;
-            text-aling:center;
+            text-align:center;
             margin: 30px auto 20px auto;
             display: block;
         }
@@ -371,7 +371,7 @@
 		<div class="col-md-offset-2 col-md-8 table_div">
 		    <h2>주문내역</h2>
 		    <p>감사합니다. 주문이 완료되었습니다.</p>
-		    <p>주문번호 : 15712213</p>
+		    <p>주문번호 : ${orderInfo.ordernum }</p>
 		    <table class="table">
 		        <thead>
 		            <tr>
@@ -383,58 +383,65 @@
 		            </tr>
 		        </thead>
 		        <tbody>
+		         <c:forEach items="${selectOrder }" var="selectOrder">
 		            <tr>
 		                <td class="img_td">
 		                    <img alt="cartimg" src="/resources/imgs/s01.jpg" class="cartimg" />
 		                </td>
 		                <td colspan="2" class="info_td">
-		                    <strong>상품이름</strong>
-		                    <p>상품 옵션/선택정보</p>
+		                  <c:if test="${selectOrder.itemname != null}">
+							<strong>${selectOrder.itemname }</strong>
+		                    <p>${selectOrder.itemcon }</p>
+		                  </c:if>
+		                  <c:if test="${selectOrder.cstmmatelist != null}">
+					  		<strong>커스텀 샐러드</strong>
+					  		<p>${selectOrder.cstmmatelist }</p>
+					  	   </c:if>
 		                </td>
 		               <td class="price_td">
-		              	 <p>1</p>
+		              	 <p>${selectOrder.ea }</p>
 		               </td>
 		                <td class="price_td">
-		                    <p class="itemno1">6000원</p>
-		                </td>
+		                    <c:if test="${selectOrder.itemname != null}">
+						<p class="itemno1">${selectOrder.itemprice * selectOrder.ea}원</p>
+						<c:set var="col_sum" value="${col_sum + (selectOrder.itemprice * selectOrder.ea)}"></c:set>
+						  </c:if>
+						  <c:if test="${selectOrder.cstmmatelist != null }">
+						  	<p class="itemno1">${selectOrder.cstmprice * selectOrder.ea}원</p>
+						  	<c:set var="col_sum2" value="${col_sum2 + (selectOrder.cstmprice * selectOrder.ea)}"></c:set>
+						  </c:if>
+					  </td>
 		            </tr>
-		             <tr>
-		                <td class="img_td">
-		                    <img alt="cartimg" src="/resources/imgs/s02.jpg" class="cartimg" />
-		                </td>
-		                <td colspan="2" class="info_td">
-		                    <strong>상품이름</strong>
-		                    <p>상품 옵션/선택정보</p>
-		                </td>
-		               <td class="price_td">
-		              	 <p>1</p>
-		               </td>
-		                <td class="price_td">
-		                    <p class="itemno1">6000원</p>
-		                </td>
-		            </tr>
-		             <tr>
-		                <td class="img_td">
-		                    <img alt="cartimg" src="/resources/imgs/s03.jpg" class="cartimg" />
-		                </td>
-		                <td colspan="2" class="info_td">
-		                    <strong>상품이름</strong>
-		                    <p>상품 옵션/선택정보</p>
-		                </td>
-		               <td class="price_td">
-		              	 <p>1</p>
-		               </td>
-		                <td class="price_td">
-		                    <p class="itemno1">6000원</p>
-		                </td>
-		            </tr>
-		           
+		        </c:forEach>
 		        </tbody>
+		        
 		    </table>
-		
+		    
+		    <%--
+		    <div class="orderInfo">
+		    <p>비회원</p>
+		     <p>:${orderInfo.co_nousernum }</p>
+		    <p>:${orderInfo.nousername }</p>
+		    <p>:${orderInfo.nouserphone }</p>
+		    
+		    <p>회원번호:${orderInfo.co_usernum }</p>
+		    <p>배송선택:${orderInfo.ordertype }</p>
+		    <p>결제금액:${orderInfo.price }</p>
+		    <p>주문날짜:${orderInfo.orderdate }</p>
+		    <p>배송날짜:${orderInfo.deliverdate }</p>
+		    <p>수령자이름:${orderInfo.receivername }</p>
+		    <p>수령자연락처:${orderInfo.receiverphone }</p>
+		    <p>우편번호:${orderInfo.deliverpostnum }</p>
+		    <p>수령주소:${orderInfo.deliveraddr }</p>
+		    <p>쿠폰번호:${orderInfo.co_couponnum }</p>
+		    <p>환불은행:${orderInfo.bank }</p>
+		    <p>계좌예금주:${orderInfo.refundaccowner }</p>
+		    <p>계좌번호:${orderInfo.refundaccount }</p>
+		    </div>
+		    --%>
 		
 		    <div class="btn_div">
-		        <button type="button" class="btn">메인으로 이동</button>
+		        <button type="button" class="btn" onclick="location.href='/'">메인으로 이동</button>
 		        
 		    </div>
 		</div>

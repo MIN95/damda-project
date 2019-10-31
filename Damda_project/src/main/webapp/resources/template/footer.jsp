@@ -97,9 +97,9 @@
                 <%}else if(user_ctg == 2){ %>
                 <li><a href="/mypage/">마이페이지</a></li>
                 <%}else if(user_ctg == 1){ %>
-               	<li><a href="#">관리자페이지</a></li>
+               	<li><a href="/admin/orderlist">관리자페이지</a></li>
                	<%}else if(user_ctg == 0){ %>
-                <li><a href="#">마스터페이지</a></li>
+                <li><a href="/admin/orderlist">마스터페이지</a></li>
                 <%}%>
                 <li><a href="/mypage/cart">장바구니<img src="/resources/icon/cart.png" class="carticon"></a></li>
             </ul>

@@ -6,13 +6,13 @@
     <jsp:include page="/resources/template/head.jsp"/>
     <script type="text/javascript" src="/resources/js/fullpage.js" ></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
     <style type="text/css">
     #fullpage{
     z-index:-9;
@@ -70,12 +70,12 @@
 	#title2{
 		transform: translateY(-50%);
 		position: relative;
-		top:20%;
+		top:15%;
 		margin-top:0 auto;
 	}
 	#introtextbox1{
-		margin-top:20%;		
-		width:80%;
+		margin-top:15%;		
+		width:75%;
 		height:200px;
 		padding:10% auto;
 		border:5px double white;
@@ -92,12 +92,12 @@
 	#title3{
 		transform: translateY(-50%);
 		position: relative;
-		top:20%;
+		top:15%;
 		margin-top:0 auto;
 	}
 	#introtextbox2{
-		margin-top:20%;		
-		width:80%;
+		margin-top:15%;		
+		width:75%;
 		height:200px;
 		padding:10% auto;
 		border:5px double white;
@@ -125,7 +125,8 @@
 		margin-bottom:2%;
 	  }
 	  #textbox{
-		margin:40% auto;
+		margin:20% auto;
+		margin-bottom:3%;
 	  }
 	  #howtobox{
 	  	margin-top:30%;
@@ -134,7 +135,6 @@
 	  #introtext{
 		margin-top:0%;
 		width:100%;
-		margin-bottom:30%;
 	 }
 	  #introtextbox1{
 	  	margin-top:2%;		
@@ -150,22 +150,63 @@
 	  	width:100%;
 	  }
 	}
+	.moveB{
+		width:97%;
+		height:35px;
+		font-size:20px;
+		border:1px solid white;
+		color:white;
+		font-weight:bold;
+		background-color:salmon;
+	}
+	#moveBTN{
+		display:flex;
+	}
+	#moveItem{
+		width:33%;
+		top:20px;
+        left:20px;
+	}
+	#movesalad{
+		width:33%;
+		top:350px;
+		left:15px;
+	}
+	#movecustom{
+		width:33%;
+		top:500px;
+		left:15px;
+	}
     </style>
     <script type="text/javascript">
-    
+  //adding the action to the button
+    $(document).on('click', '#moveItem', function(){
+     	location.href="/intro/map";
+    });
+    $(document).on('click', '#movesalad', function(){
+     	location.href="/item/list?item=salad";
+    });
+    $(document).on('click', '#movecustom', function(){
+     	location.href="/custom/";
+    });
  </script>
 </head>
 <body>
     <!-- ***********************************header start*********************************** -->
    <jsp:include page="/resources/template/header_custom.jsp"/>
    <!-- ***********************************content start*********************************** -->
+   <div class="moveBTN">
+   <button class="moveb" type="button" id="moveItem"> 매장 찾아보기! </button>
+   <button class="moveB" type="button" id="movesalad"> 샐러드 구매하러 가기! </button>
+   <button class="moveB" type="button" id="movecustom"> 커스텀 샐러드 만들러가기! </button>
+   </div>
    <div id="fullpage">
 	<div class="section " id="section0">
 		<h1 id="title">Dam da.</h1>
 		<div class="container" id="textbox">
-			<div class="col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
+			<div class="col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1" id="introtext11">
 				<img src="/resources/imgs/introtext.png" alt="" id="introtext">
-			</div>			
+			</div>	
 		</div>
 	</div>
 	<div class="section" id="section1">
@@ -175,6 +216,7 @@
 					<h2 class="text">1. 원하는 샐러드를 장바구니에 담기</h3>
 					<h2 class="text">2. 장바구니 내역 결제</h3>
 					<h2 class="text">3. 받을 날짜와 시간입력하고 배송신청!</h3>
+					
 				</div>	
 			</div>
 	</div>
@@ -185,7 +227,8 @@
 					<h2 class="text">1. 나만의 샐러드에 넣을 재료 선택</h3>
 					<h2 class="text">2. 장바구니에 담고 나의 레시피로도 저장!</h3>
 					<h2 class="text">3. 받을 날짜와 시간입력하고 배송신청!</h3>
-				</div>			
+					
+				</div>	
 			</div>
 	</div>
 </div>

@@ -10,11 +10,69 @@
 </select> 
 -->
  <select id="selectList" parameterType="reviewVo" resultType="reviewVo">
-	select * from review join userinfo on review.r_usernum = userinfo.usernum left join photo on photo.p_reviewnum = review.reviewnum  where review.r_itemnum = #{r_itemNum} order by ${itemalign} limit #{startpoint}, #{row} 
+	select * from review join userinfo on review.r_usernum = userinfo.usernum left join photo on photo.p_reviewnum = review.reviewnum  where review.itemtype = 1 and review.r_itemnum = #{r_itemNum} order by ${itemalign} limit #{startpoint}, #{row} 
 </select> 
 
 <select id="reviewCount" parameterType="reviewVo" resultType="int">
 	select count(*) from review where r_itemnum=#{r_itemNum};
 </select>
+
+<!-- 마이페이지 리뷰 작성시 완제품일때 itemtype = 1-->
+<insert id="insertItemReview" parameterType="reviewVo">
+	insert into review (r_usernum, r_itemnum, reviewcon, date, itemtype) values (#{r_userNum}, #{r_itemNum}, #{reviewCon} ,now(),1)
+</insert>
+
+<!-- 마이페이지 리뷰 작성시 커스텀일때 itemtype = 2-->
+<insert id="insertCustomReview" parameterType="reviewVo">
+	insert into review (r_usernum, r_customnum, reviewcon, date, itemtype) VALUES (#{r_userNum}, #{r_customNum}, #{reviewCon}, now(), 2)
+</insert>
+
+<select id="maxReviewNum" resultType="int">
+	select max(reviewnum) from review
+</select>
+
+<!-- 관리자페이지 리뷰  allitem List -->
+<select id="adminReviewItem" parameterType="reviewVo" resultType="reviewVo">
+	select * from review r left outer join allitem i on r.r_itemnum = i.itemnum left outer join photo p on r.reviewnum = p.p_reviewnum join userinfo u on r.r_usernum = u.usernum where itemtype = 1 order by ${itemalign} desc limit #{startpoint}, #{row} 
+</select>
+
+<!-- 커스텀출력 -->
+<select id="adminReviewCustom" parameterType="reviewVo" resultType="reviewVo">
+	select * from review r left outer join photo p on r.reviewnum = p.p_reviewnum left outer join userinfo u on r.r_usernum = u.usernum where itemtype = 2 order by ${itemalign} desc limit #{startpoint}, #{row} 
+</select>
+
+<select id="adminReviewCount" parameterType="reviewVo" resultType="int">
+	select count(*) from review where itemtype = #{itemType}
+</select>
+
+<delete id="deleteReview"  parameterType="reviewVo">
+	delete from review where reviewnum = #{reviewNum}
+</delete>
+
+<update id="bestCheck" parameterType="reviewVo">
+	update review set adminselect = #{adminSelect} where reviewnum = #{reviewNum}
+</update>
+
+<!-- best photo review -->
+<select id="bestReviewImg" parameterType="reviewVo" resultType="reviewVo">
+	select * from review r join photo p on r.reviewnum = p.p_reviewnum join userinfo i on r.r_usernum = i.usernum where adminselect = 1 order by recommend desc limit #{startpoint}, #{row} 
+</select>
+
+<!-- 커스텀 리뷰 -->
+<select id="customReview">
+	select * from review r join userinfo i on r.r_usernum = i.usernum left outer join photo p on r.reviewnum = p.p_reviewnum where itemtype = 2 order by ${itemalign} desc limit #{startpoint}, #{row} 
+</select>
+
+<!-- 조회수 -->
+<update id="reviewView" parameterType="reviewVo">
+	update review set recommend = recommend +1 where reviewnum = #{reviewNum }
+</update>
+
+<!-- ///////////////미현시작///////////////// -->
+<select id="mypagereview" resultType="reviewVo">
+	SELECT * FROM REVIEW RV JOIN ORDERLIST OL ON RV.R_ITEMNUM = OL.O_ITEMNUM
+	WHERE OL.O_ORDERNUM = #{o_ordernum}
+</select>
+<!-- ///////////////미현시작///////////////// -->
 
 </mapper>

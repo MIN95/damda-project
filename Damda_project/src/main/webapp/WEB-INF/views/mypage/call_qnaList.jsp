@@ -102,7 +102,7 @@
     }
     #confirmMessage h4 {
     font-size: 1.7rem; 
-    } 
+    }
     #content .pagination>li>a {
     color: black;
     }
@@ -138,11 +138,6 @@
                      </tr>
                   </thead> 
                   <tbody id="qnaTbody">
-                  <tr id="qnaNone" style="display: none">
-                  	<td colspan="6">
-	            		<p style="margin-top: 30px">문의내역이 존재하지 않습니다</p>
-                  	</td>
-            	  </tr>
                   </tbody>
                </table>
                </div>
@@ -352,13 +347,7 @@
 	  		    	myModal.modal("hide"); 
 	  			}); 
    	  	      }
-   			});
-			if($(".ajaxTr").text()==""){
-				$("#qnaNone").show();
-			}else {
-				$("#qnaNone").hide();
-			}
-        	
+   			});		
      	}
 </script>
 </html>

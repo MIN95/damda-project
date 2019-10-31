@@ -240,14 +240,15 @@ margin-top: 10px;s
 				<option value="all">전체</option>
 				<option value="main">고기/햄/생선</option>
 				<option value="side">과일/치즈</option>
-				<option value="side">견과류</option>
+				<option value="side2">견과류</option>
 			</select>
 		</div>
 		<div id="itemTable">
 			<table class="table item">
 				<thead>
 					<tr>
-						<th><input type="checkbox" id="all_chk1" /> <label for="all_chk1"></label></th>
+						<th><input type="checkbox" id="all_chk1" /> <label
+							for="all_chk1"></label></th>
 						<th>상품번호</th>
 						<th>이미지</th>
 						<th>상품명</th>
@@ -261,7 +262,8 @@ margin-top: 10px;s
 				</thead>
 				<tbody>
 					<tr id="lastTr">
-						<td><input type="checkbox" id="all_chk2" /> <label for="all_chk2"></label></td>
+						<td><input type="checkbox" id="all_chk2" /> <label
+							for="all_chk2"></label></td>
 						<td colspan="9" id="btn_div1" class="btn_div">
 							<p>전체선택(n/all)</p>
 							<button type="button" class="delete_btn">선택상품 삭제</button>
@@ -291,7 +293,7 @@ margin-top: 10px;s
 				</div>
 			</div>
 		</div>
-<!-- ------------------------------------------------------------------------------------------------------- -->
+		<!-- ------------------------------------------------------------------------------------------------------- -->
 		<jsp:include page="/WEB-INF/views/admin/matelist.jsp" />
 		<div class="addbtn_div">
 			<button type="button" onclick="location.href='itemregi'"
@@ -300,7 +302,7 @@ margin-top: 10px;s
 				class="add_btn">커스텀재료등록</button>
 		</div>
 	</div>
-<!-- -----------------------------------------------------end----------------------------------------------- -->
+	<!--end-->
 	<jsp:include page="/resources/template/footer.jsp" />
 </body>
 <script type="text/javascript">
@@ -315,15 +317,17 @@ margin-top: 10px;s
 		});
 		//완제품일때 아이템리스트 불러오기
 		if (selected == "item") {
-			page=1;
 			var selectVal = $('.selectitem').val();
+			var page = 1;
 			itemPagingBtn(selectVal, page);
 			itemPagingList(selectVal, page);
 		}
+
 		all_check();
 		price_setting();
 		check_info();
 		ctg_setting();
+
 	});
 	//품절
 	function none_stock(num) {
@@ -463,20 +467,16 @@ margin-top: 10px;s
 			frontPrice = price.substring(0, length - 6);
 			middlePrice1 = price.substring(length - 6, length - 3);
 			backPrice = price.substring(length - 3, length);
-			totalPrice = frontPrice + ',' + middlePrice1 + ',' + backPrice
-					+ '원';
-
+			totalPrice = frontPrice + ',' + middlePrice1 + ',' + backPrice + '원';
+			
 			//1,000,000,000원 ~100,000,000,000단위
 		} else if (length > 9 && length <= 12) {
 			frontPrice = price.substring(length - 12, length - 9);
 			middlePrice1 = price.substring(length - 9, length - 6);
 			middlePrice2 = price.substring(length - 6, length - 3);
 			backPrice = price.substring(length - 3, length);
-			totalPrice = frontPrice + ',' + middlePrice1 + ',' + middlePrice2
-					+ ',' + backPrice + '원';
-
+			totalPrice = frontPrice + ',' + middlePrice1 + ',' + middlePrice2 + ',' + backPrice + '원';
 		}
-
 		return totalPrice;
 	}
 
@@ -509,7 +509,10 @@ margin-top: 10px;s
 			} else if (custom_val == "all") {
 				$('.topping').hide();
 				$('.vegetable').hide();
-			}
+			} else if(custom_val =="source"){
+	               $('.topping').hide();
+	                $('.vegetable').hide();
+	       	}
 		}
 	}
 
@@ -520,7 +523,6 @@ margin-top: 10px;s
 		for (var i = 1; i < length; i++) {
 			ctg(i);
 		}
-
 		//커스텀테이블
 		var lastNum = $('input[class=matenum]:last-child').val();//23
 		var length2 = $('.custom tbody tr').length;
@@ -529,7 +531,6 @@ margin-top: 10px;s
 				ctg2(i);
 				custom_status(i);
 			}
-
 		}
 	}
 
@@ -551,7 +552,6 @@ margin-top: 10px;s
 			ctg = "음료";
 		}
 		$(p_class).html(ctg);
-
 	}
 
 	//커스텀 카테고리 DB값가져오기
@@ -561,10 +561,8 @@ margin-top: 10px;s
 		var input_id = '#customCtg' + num;
 		var ctg_val = $(input_id).val();//2-1
 		var c_ctg = ctg_val.split('-');//2,1
-
 		//문자열
 		var ctg = "";
-
 		//class는 p영역
 		var p_class = '.customCtg' + num;
 
@@ -590,38 +588,28 @@ margin-top: 10px;s
 			ctg = "소스";
 		}
 		$(p_class).html(ctg);
-
 	}
-
 	//커스텀 판매상태
 	function custom_status(num) {
 		var num = num;
-
 		//input의 val값구하기
 		var input_id = '#customstatus' + num;
 		var ctg_val = $(input_id).val();
-
 		//문자열
 		var ctg = "";
-
 		//class는 p영역
 		var p_class = '.customstatus' + num;
-
 		if (ctg_val == 0) {
 			ctg = "판매중";
 		} else if (ctg_val == 1) {
 			ctg = "판매중지";
 		}
-
 		$(p_class).text(ctg);
-
 		var p_val = $(p_class).text();
-
 		if (p_val == "판매중지") {
 			$(p_class).css('color', 'red');
 		}
 	}
-
 	//////////////////////////////////////////////////////////////////////////////////경민
 	//send selectbox value
 	$('.selectitem').on('change', function() {
@@ -629,7 +617,6 @@ margin-top: 10px;s
 		sendSelectVal(selectVal);
 		itemPagingBtn(selectVal, 1);
 	});
-
 	//ajax로 selectbox item데이터 가져오기
 	function sendSelectVal(selectVal) {
 		$('.ajaxTr').remove();
@@ -647,56 +634,18 @@ margin-top: 10px;s
 						values = data;
 						var selectList = "";
 							$.each(
-										values,
-										function(index, List) {
+									values,
+									function(index, List) {
 											selectList = '<tr class="ajaxTr">'
-											selectList += '<td><input type="checkbox" name="chk" id="itemNum'
-													+ (index + 1)
-													+ '" /><label for="itemNum'
-													+ (index + 1)
-													+ '"></label></td>'
-											selectList += '<td><a href="/item/detail?no='
-													+ List.itemNum
-													+ '"><input type="text" name="itemNum" id="itemNum" class="itemNum" value="'+List.itemNum+'" style="cursor:pointer" readonly /></a></td>'
-											selectList += '<td><a href="/item/detail?no='
-													+ List.itemNum
-													+ '"><img src="/resources/imgs/'+List.photoCtg+'/'+List.photoName+'" /></a></td>'
-											selectList += '<td><a href="/item/detail?no='
-													+ List.itemNum
-													+ '"> <input  type="text" name="itemName" id="itemName" value="'+List.itemName+'" style="cursor:pointer" readonly /></a></td>'
-											selectList += '<td><p class="itemprice'
-													+ (index + 1)
-													+ '">'
-													+ List.itemPrice
-													+ '원</p><input type="text" name="itemprice'
-													+ (index + 1)
-													+ '" id="itemprice'
-													+ (index + 1)
-													+ '" value="'
-													+ List.itemPrice
-													+ '" readonly hidden /></td>'
+											selectList += '<td><input type="checkbox" name="chk" id="itemNum'+ (index + 1)+ '" /><label for="itemNum'+ (index + 1)+ '"></label></td>'
+											selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"><input type="text" name="itemNum" id="itemNum" class="itemNum" value="'+List.itemNum+'" style="cursor:pointer" readonly /></a></td>'
+											selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"><img src="/resources/imgs/'+List.photoCtg+'/'+List.photoName+'" /></a></td>'
+											selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"> <input  type="text" name="itemName" id="itemName" value="'+List.itemName+'" style="cursor:pointer" readonly /></a></td>'
+											selectList += '<td><p class="itemprice'+ (index + 1)+ '">'+ List.itemPrice+ '원</p><input type="text" name="itemprice'+ (index + 1)+ '" id="itemprice'+ (index + 1)+ '" value="'+ List.itemPrice+ '" readonly hidden /></td>'
 											selectList += '<td><input type="text" name="itemStatus" id="itemStatus" value="판매중" readonly /></td>'
-											selectList += '<td><p class="itemStock'
-													+ (index + 1)
-													+ '">'
-													+ List.itemStock
-													+ '</p><input type="text" name="itemStock" id="itemStock'
-													+ (index + 1)
-													+ '" value="'
-													+ List.itemStock
-													+ '" readonly hidden /></td>'
+											selectList += '<td><p class="itemStock'+ (index + 1)+ '">'+ List.itemStock+ '</p><input type="text" name="itemStock" id="itemStock'+ (index + 1)+ '" value="'+ List.itemStock+ '" readonly hidden /></td>'
 											selectList += '<td> <input type="text" name="itemSales" id="itemSales" value="'+List.itemSales+'" readonly /></td>'
-											selectList += '<td><p class="itemCtg'
-													+ (index + 1)
-													+ '">'
-													+ List.category
-													+ '</p><input type="text" name="itemCtg'
-													+ (index + 1)
-													+ '" id="itemCtg'
-													+ (index + 1)
-													+ '" value="'
-													+ List.category
-													+ '" readonly hidden /></td>'
+											selectList += '<td><p class="itemCtg'+ (index + 1)+ '">'+ List.category+ '</p><input type="text" name="itemCtg'+ (index + 1)+ '" id="itemCtg'+ (index + 1)+ '" value="'+ List.category+ '" readonly hidden /></td>'
 											selectList += '<td><button type="button" class="update_btn">수정</button></td>'
 											selectList += '</tr>';
 
@@ -705,13 +654,9 @@ margin-top: 10px;s
 
 										})
 						all_check();
-
 						price_setting();
-
 						check_info();
-
 						ctg_setting();
-
 					},
 					error : function(xhr, status, error) {
 						console.log("에러발생");
@@ -725,11 +670,9 @@ margin-top: 10px;s
 			'click',
 			'.update_btn',
 			function() {
-				forUpdate = $(this).closest("tr").children('td').eq(1)
-						.children().children().val();
+				forUpdate = $(this).closest("tr").children('td').eq(1).children().children().val();
 				location.href = "/admin/itemupdate?no=" + forUpdate;
 			});
-
 	//선택삭제
 	var myModal = $("#confirmModal");
 	var itemCheckList = new Array();
@@ -743,16 +686,13 @@ margin-top: 10px;s
 						function() {
 							var checkVal = $(this).prop("checked");
 							if (checkVal == true) {
-								chkItemNum = $(this).closest("td").next()
-										.children().children().val();
+								chkItemNum = $(this).closest("td").next().children().children().val();
 								itemCheckList.push(chkItemNum);
 							}
 						});
-
 				if (itemCheckList != "") {
 					myModal.modal("show").css('top', '35%');
-					$("#confirmMessage p").text(
-							itemCheckList.length + "개의 상품을 삭제 하시겠습니까?");
+					$("#confirmMessage p").text(itemCheckList.length + "개의 상품을 삭제 하시겠습니까?");
 					//ajax로 글 지우는 코드
 					$("#confirmOk").click(function() {
 						myModal.modal("hide");
@@ -801,8 +741,7 @@ margin-top: 10px;s
 							function() {
 								var checkVal = $(this).prop("checked");
 								if (checkVal == true) {
-									chkItemNum = $(this).closest("td").next()
-											.children().children().val();
+									chkItemNum = $(this).closest("td").next().children().children().val();
 									itemCheckList.push(chkItemNum);
 								}
 							});
@@ -832,7 +771,6 @@ margin-top: 10px;s
 							error : function(xhr, status, error) {
 								console.log("에러발생");
 							}
-
 						});
 					});
 					$("#confirmCancel").click(function() {
@@ -853,52 +791,44 @@ margin-top: 10px;s
 	function itemPagingBtn(selectVal, page) {
 		$('#itemPage_div').remove();
 		var pageMaker = {};
-		var idx = 1;
+		var idx = 0;
 		var sendData = {
 			"selectVal" : selectVal,
 			"page" : page
 		};
 		$.ajax({
-			type : "GET",
-			url : "/admin/pagingBtn",
-			data : sendData,
-			dataType : "JSON",
-			success : function(data) {
-				pageMaker = data;
-				var selectList = ""
-				var startPage = pageMaker.startPage;
-				var endPage = pageMaker.endPage;
-				$("#itemTable")
-						.append(
-								'<div id="itemPage_div" class="row col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12 text-center"><ul id="itemPaging" class="pagination"></ul></div>');
-				if (pageMaker.prev == true) {
-					$("#itemPaging")
-							.append(
-									'<li><a style="cursor:pointer" class="hidden_btn" aria-label="Previous">&laquo;</a><input type="text" value="'
-											+ (pageMaker.startPage - 1)
-											+ '" hidden /></li>');
-				}
-				for (; startPage <= endPage; startPage++) {
-					selectList = '<li>'
-					selectList += '<a class="hidden_btn" style="cursor:pointer">'
-							+ idx
-							+ '<input type="text" value="'+idx+'" hidden /></a>'
-					selectList += '</li>';
-					$("#itemPaging").append(selectList);
-					idx++;
-				}
-				if (pageMaker.next && pageMaker.endPage > 0) {
-					$("#itemPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Next">&raquo;</a><input type="text" value="'+ (pageMaker.endPage + 1)+ '" hidden /></li>');
-				}
-				all_check();
-				price_setting();
-				check_info();
-				ctg_setting();
-			},
-			error : function(xhr, status, error) {
-				console.log("에러발생");
-			}
-		});
+					type : "GET",
+					url : "/admin/pagingBtn",
+					data : sendData,
+					dataType : "JSON",
+					success : function(data) {
+						pageMaker = data;
+						var selectList = ""
+						var startPage = pageMaker.startPage;
+						var endPage = pageMaker.endPage;
+						$("#itemTable").append('<div id="itemPage_div" class="row col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12 text-center"><ul id="itemPaging" class="pagination"></ul></div>');
+						if (pageMaker.prev == true) {
+							$("#itemPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Previous">&laquo;<input type="text" value="'+ (pageMaker.startPage - 1)+ '" hidden /></a></li>');
+						}
+						for (; startPage <= endPage; startPage++) {
+							selectList = '<li>'
+							selectList += '<a class="hidden_btn" style="cursor:pointer">'+ (pageMaker.startPage+idx) + '<input type="text" value="'+ (pageMaker.startPage+idx) +'" hidden /></a>'
+							selectList += '</li>';
+							$("#itemPaging").append(selectList);
+							idx++;
+						}
+						if (pageMaker.next && pageMaker.endPage > 0) {
+							$("#itemPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Next">&raquo;<input type="text" value="'+ (pageMaker.endPage + 1) + '" hidden /></a></li>');
+						}
+						all_check();
+						price_setting();
+						check_info();
+						ctg_setting();
+					},
+					error : function(xhr, status, error) {
+						console.log("에러발생");
+					}
+				});
 	}
 
 	//페이징 처리
@@ -910,38 +840,38 @@ margin-top: 10px;s
 			"page" : page
 		};
 		$.ajax({
-				type : "GET",
-				url : "/admin/pagingList",
-				data : sendData,
-				dataType : "JSON",
-				success : function(data) {
-					values = data;
-					var selectList = ""
-					$.each(values,
-							function(index, List) {
-								selectList = '<tr class="ajaxTr">'
-								selectList += '<td><input type="checkbox" name="chk" id="itemNum'+ (index + 1)+ '" /><label for="itemNum'+ (index + 1)+ '"></label></td>'
-								selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"><input type="text" name="itemNum" id="itemNum" class="itemNum" value="'+List.itemNum+'" style="cursor:pointer" readonly /></a></td>'
-								selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"><img src="/resources/imgs/'+List.photoCtg+'/'+List.photoName+'" /></a></td>'
-								selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"> <input  type="text" name="itemName" id="itemName" value="'+List.itemName+'" style="cursor:pointer" readonly /></a></td>'
-								selectList += '<td><p class="itemprice'+ (index + 1)+ '">'+ List.itemPrice+ '원</p><input type="text" name="itemprice'+ (index + 1)+ '" id="itemprice'+ (index + 1)+ '" value="'+ List.itemPrice+ '" readonly hidden /></td>'
-								selectList += '<td><input type="text" name="itemStatus" id="itemStatus" value="판매중" readonly /></td>'
-								selectList += '<td><p class="itemStock'+ (index + 1)+ '">'+ List.itemStock+ '</p><input type="text" name="itemStock" id="itemStock'+ (index + 1)+ '" value="'+ List.itemStock+ '" readonly hidden /></td>'
-								selectList += '<td> <input type="text" name="itemSales" id="itemSales" value="'+List.itemSales+'" readonly /></td>'
-								selectList += '<td><p class="itemCtg'+ (index + 1)+ '">'+ List.category+ '</p><input type="text" name="itemCtg'+ (index + 1)+ '" id="itemCtg'+ (index + 1)+ '" value="'+ List.category+ '" readonly hidden /></td>'
-								selectList += '<td><button type="button" class="update_btn">수정</button></td>'
-								selectList += '</tr>';
-								$("#itemTable tbody #lastTr")
-										.before(selectList);
-							})
-							all_check();
-							price_setting();
-							check_info();
-							ctg_setting();
-				},
-				error : function(xhr, status, error) {
-					console.log("에러발생");
-				}
+					type : "GET",
+					url : "/admin/pagingList",
+					data : sendData,
+					dataType : "JSON",
+					success : function(data) {
+						values = data;
+						var selectList = ""
+						$.each(values,
+								function(index, List) {
+									selectList = '<tr class="ajaxTr">'
+									selectList += '<td><input type="checkbox" name="chk" id="itemNum'+ (index + 1)+ '" /><label for="itemNum'+ (index + 1)+ '"></label></td>'
+									selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"><input type="text" name="itemNum" id="itemNum" class="itemNum" value="'+List.itemNum+'" style="cursor:pointer" readonly /></a></td>'
+									selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"><img src="/resources/imgs/'+List.photoCtg+'/'+List.photoName+'" /></a></td>'
+									selectList += '<td><a href="/item/detail?no='+ List.itemNum+ '"> <input  type="text" name="itemName" id="itemName" value="'+List.itemName+'" style="cursor:pointer" readonly /></a></td>'
+									selectList += '<td><p class="itemprice'+ (index + 1)+ '">'+ List.itemPrice+ '원</p><input type="text" name="itemprice'+ (index + 1)+ '" id="itemprice'+ (index + 1)+ '" value="'+ List.itemPrice+ '" readonly hidden /></td>'
+									selectList += '<td><input type="text" name="itemStatus" id="itemStatus" value="판매중" readonly /></td>'
+									selectList += '<td><p class="itemStock'+ (index + 1)+ '">'+ List.itemStock+ '</p><input type="text" name="itemStock" id="itemStock'+ (index + 1)+ '" value="'+ List.itemStock+ '" readonly hidden /></td>'
+									selectList += '<td> <input type="text" name="itemSales" id="itemSales" value="'+List.itemSales+'" readonly /></td>'
+									selectList += '<td><p class="itemCtg'+ (index + 1)+ '">'+ List.category+ '</p><input type="text" name="itemCtg'+ (index + 1)+ '" id="itemCtg'+ (index + 1)+ '" value="'+ List.category+ '" readonly hidden /></td>'
+									selectList += '<td><button type="button" class="update_btn">수정</button></td>'
+									selectList += '</tr>';
+									$("#itemTable tbody #lastTr").before(selectList);
+								})
+				all_check();
+				price_setting();
+				check_info();
+				ctg_setting();
+
+			},
+			error : function(xhr, status, error) {
+				console.log("에러발생");
+			}
 		});
 	}
 </script>

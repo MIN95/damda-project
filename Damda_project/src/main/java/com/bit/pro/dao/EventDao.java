@@ -11,7 +11,7 @@ import com.bit.pro.vo.EventVo;
 
 public interface EventDao {
 
-	List<EventVo> selectEventAll(pagination pagination) throws SQLException;
+	List<EventVo> selectEventAll(pagination pagination);
 
 	int insertEvent(EventVo eventVo) throws SQLException;
 	

@@ -42,11 +42,10 @@
 	     showMonthAfterYear: true,
 	     changeMonth: true,
 	     changeYear: true,
-	     yearSuffix: '년', 
-	     yearRange: 'c-80',
+	     yearSuffix: '년'
 	   });
 	 });
-
+  
 	
 	
 	$(document).ready(function(){
@@ -63,6 +62,14 @@
 		//비밀번호 입력 후 확인을 마치면 일치 확인
 		$('#userpw').focus(function(){
 			$('#userpwchk').blur(function(){
+	
+				passwordCheck();
+	
+			});
+		});
+
+		$('#userpwchk').focus(function(){
+			$('#userpw').blur(function(){
 	
 				passwordCheck();
 	
@@ -142,8 +149,12 @@
 
 		if(userPw!=userPwChk){
 			$('#pwchk').text('비밀번호가 일치하지 않습니다.');
+			$('#pwchk').css('color','red');
+			$('#joinbtn').attr('disabled',true);
 		}else {
 			$('#pwchk').text('비밀번호가 일치합니다.');
+			$('#pwchk').css('color','green');
+			$('#joinbtn').attr('disabled',false);
 		}
 		
 	};
@@ -306,7 +317,7 @@
 					  <div class="form-group">
 					    <label for="userbirth" class="col-sm-2 control-label col-md-offset-2">생년월일</label>
 					    <div class="col-sm-5 col-md-5">
-					      <input type="text" class="form-control" id="userbirth" name="userbirth" maxlength="10">
+					      <input type="text" class="form-control" id="userbirth" name="userbirth" maxlength="10" required>
 						     
 					    </div>
 					  </div>
@@ -329,7 +340,7 @@
 						</div>
 					<div class="form-group">
 							<div class="col-sm-5 col-md-5 col-sm-offset-2 col-md-offset-4">
-								<input type="text" class="form-control" id="useraddr1" name="useraddr1" placeholder="주소">
+								<input type="text" class="form-control" id="useraddr1" name="useraddr1" placeholder="주소" required>
 							</div>
 					</div>
 					<div class="form-group"> 	
@@ -341,7 +352,7 @@
 					   <div class="form-group">
 					    <label for="useremail" class="col-sm-2 control-label col-md-offset-2">e-mail</label>
 					    <div class="col-sm-5 col-md-5">
-					      <input type="email" class="form-control" id="useremail" name="useremail" placeholder="e-mail" maxlength="100">
+					      <input type="email" class="form-control" id="useremail" name="useremail" placeholder="e-mail" maxlength="100" required>
 					    </div>
 					  </div>
 					  

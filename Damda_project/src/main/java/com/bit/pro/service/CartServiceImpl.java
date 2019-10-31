@@ -1,7 +1,9 @@
 package com.bit.pro.service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -285,17 +287,55 @@ public class CartServiceImpl implements CartService{
 		cartDao.myrecipeInsert(bean);
 	}
 
+	//주문페이지 이동
+	@Override
+	public void cartOrder(int cartCheck, int userNum) throws SQLException {
+		CartVo bean = new CartVo();
+		bean.setCartCheck(cartCheck);
+		bean.setC_userNum(userNum);
+
+		cartDao.cartOrder(bean);
+	}
 	
+	//주문 취소후 장바구니로 돌아왔을때 대비
+	@Override
+	public void cartOrder_noUser(int cartCheck, String nouserNum) throws SQLException {
+		CartVo bean = new CartVo();
+		bean.setCartCheck(cartCheck);
+		bean.setC_nouserNum(nouserNum);
+		
+		cartDao.cartOrder_noUser(bean);
+	}
 	/**********************미현시작*********************************************************/
-	//주문상세내역 출력
+	//주문내역 출력
+	@Override
+	public List<OrderListVo> mypage(int usernum, int nowPage, int scale) throws SQLException {
+		return cartDao.mypage(usernum,nowPage,scale);
+	}
+	//주문내역 개수
+	@Override
+	public int mypagecountArticle(int usernum) throws SQLException{
+		return cartDao.mypagecountArticle(usernum);
+	}
+	//주문디테일 출력
 	@Override
 	public List<OrderListVo> mypageDetail(String o_ordernum,int nowPage, int scale) throws SQLException {
 		return cartDao.mypageDetail(o_ordernum, nowPage, scale);
 	}
-	//주문 레코드 갯수
+	//주문디테일 갯수
 	@Override
-	public int countArticle() throws SQLException {
-		return cartDao.countArticle();
+	public int countArticle(String o_ordernum) throws SQLException {
+		return cartDao.countArticle(o_ordernum);
+	}
+	//비회원일때 주문조회체크
+	@Override
+	public HashMap<String, Object> chknouser(Map<String, Object> chkmap) throws SQLException {
+		return cartDao.chknouser(chkmap);
+	}
+	//비회원 주문조회 디테일
+	@Override
+	public List<OrderListVo> nouserDetail(String o_ordernum, int nowPage, int scale) throws SQLException {
+		return cartDao.nouserDetail(o_ordernum,nowPage,scale);
 	}
 	/**********************미현끝*********************************************************/
 }

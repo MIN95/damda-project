@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-    <jsp:include page="/resources/template/head.jsp"/>
+<meta charset="UTF-8">
+<jsp:include page="/resources/template/head.jsp"/>
     <style type="text/css">
     #pgname-wrap {
-	    border:thin solid rgb(200,200,200);
+	    /* border:thin solid rgb(200,200,200); */
 	    height: 45px;
 	    width:125px;
 	    margin: 0 auto;
@@ -16,107 +17,77 @@
 	    margin: 0px;
 	    padding: 7px;
     }
-    #notice-tab th {
-    	text-align: center;
+    #listselects>select{
+    	float:left;
     }
-    #del-btn {
+    #wtdeliverstauts{
+    	margin:0px 12px 0px 0px;
+    }
+    /* table start */
+    #liketh>div {
+    	border-top: 2px solid darksalmon;
+    }
+    #notice-tab #liketh {
+    	font-weight: bold;
+    }
+    #notice-tab #liketh>div {
+    	line-height: 45px;
+    	height: 45px;
+    	border-bottom: 1px solid rgb(200,200,200);
+    }
+    #notice-tab .liketd>div{
+    	line-height: 45px;
+    	height: 45px;
+    	border-top: 1px solid rgb(200,200,200);
     	cursor: pointer;
     }
-    #pg-btn #pg-back {
+    #notice-tab .listleft {
+    	text-align: left;
+    }
+    #notice-tab .listright {
+    	text-align: right;
+    }
+    #notice-tab .listdetail {
     	display: none;
     }
-    [name=del-check],#del-check-all {
-		width: 20px; 
-		height: 20px;
+    #notice-tab .listdetail>div {
+    	border-top: 1px solid rgb(200,200,200);
     }
-    #confirmMessage h4 {
-    	font-size: 1.7rem; 
+    #notice-tab .listdetail>div>div {
+    	margin:10px 0px 10px 15px;
+    	text-align: left;
     }
-    /*아이템*/
-    .itemList{
-    	cursor: pointer;
+    .listdetail>div>div>span{
+    	clear:both;
+    	padding:0;
+		color:darksalmon;
+		display: inline-block;
+		float: left;
     }
-    /*아이템 디테일*/
-    .itemDetail{
-    	display:none;
-    	text-align:left;
+    .listdetail>div>div>p{
+		float: left;
     }
-    .itemDetail>td>div{
-    	margin:10px 0px 10px 30px;
+    .listdetail>div>div>p2{
+		float: left;
     }
+    /* table end */
+    /* paging start */
+    .pagination {
+            margin-bottom: 50px;
+    }
+    .pagination>li>a {
+        color: black;
+    }
+    .pagination>li>a:hover {
+        font-weight: bold;
+	}
+	/* paging end */
     </style>
-    <script type="text/javascript">
-    	$(document).ready(function(){
-			resized2();
-			//관리자계정으로들어왔을 때(같은 jsp&다른 주소)
-			//세션잡아서 json으로 만들어서 ajax로 보내서 세션따라 보여줄요소 결정(삭제버튼,체크상자)
-			//user view
-          	var lastTh = $('table thead tr th:nth-child(6)');
-			var lastTd = $('table tbody tr td:nth-child(6)');
-          	lastTh.hide();
-          	lastTd.hide();
-       		//admin view
-          	/* lastTh.show();
-          	lastTd.show(); */
-      		/* if() */   
-       		//글 삭제시 전체 선택&해제(관리자)
-       		$('#del-check-all').click( function() {
-           		$( 'table tbody tr td:last-child [name=del-check]' ).prop( 'checked', this.checked );
-         	});
-       
-       		//전체삭제&삭제 버튼 클릭
-       		$('#del-btn').click(function(){
-         		var myModal = $("#confirmModal");
-             	myModal.modal("show").css('top', '35%');
-            	$("#confirmOk").click(function(){
-               		console.log('체크한 글 비동기로 지우기');/********************************************글삭제로직  */
-            	});
-            	$("#confirmCancel").click(function(){
-                	myModal.modal("hide");
-            	});
-       		});
-       
-       		//페이징 앞으로가기&뒤로가기 생기는 시점
-       		//공지사항 리스트 10개씩 보여줄 것
-       		//첫번째 페이지에선 뒤로가기버튼 hidden
-       		//맨 마지막 페이지로 갔을때 앞으로가기버튼 hidden
-       		var backBtn = $('#pg-btn li:nth-child(2)').text();
-       		var lastNum = $('table tbody tr:nth-child(10) td:nth-child(1)').text();
-       		if(backBtn != '1'){
-          		$('#pg-back').css('display','block');
-       		}
-       		if(lastNum == '1'){
-          		$('#pg-forth').css('display','none');
-       		}
-
-       		//눌렀을때 상세보이게
-       		$('.itemList').click(function(){
-				$('.itemDetail').slideUp(10);
-				if(!$(this).next().is(":visible")){
-					$(this).next().slideDown();
-				}
-           	});
-       		
-    	});//document.ready function end**************************************************************    
-
-    	//창크기 514px보다 작아졌을 때 폰트크기 고정(테이블 안부셔지게)
-    	$(window).resize(function() {
-        	resized2();
-    	});
-    	function resized2() {
-        	var windowWidth = $(window).width();
-           	if(windowWidth < 540) {
-       			$('#notice-tab').css('font-size','12px');
-           	}else{
-           		$('#notice-tab').css('font-size','14px');
-           	}
-    	}
-    </script>
 </head>
 <body>
-	<!-- ***********************************header start*********************************** -->
-	<jsp:include page="/resources/template/header.jsp"/>
-	<!-- ***********************************content start*********************************** -->
+<!-- ***********************************header start*********************************** -->
+<jsp:include page="/resources/template/header.jsp"/>
+<!-- ***********************************content start*********************************** -->
 	<div class="container-fluid text-center">
 	  <div id="content" class="row">
 		<div class="col-md-offset-1 col-md-10">
@@ -128,135 +99,309 @@
 			<br />
 		  </div>
 		  <div id="notice-tab" class="col-md-12 col-sm-12 col-xs-12">
-			<br /><br />
-			<table class="table text-center">
-			  <thead>
-				<tr>
-				  <th scope="col">No</th>
-		 		  <th scope="col">주문자명</th>
-		 		  <th scope="col">주문번호</th>
-		 		  <th scope="col">배송상태</th>
-		 		  <th>
-		 		  	<input type="checkbox" id="del-check-all" class="custom-control-input"/>
-		 		  </th>
-				</tr>
-			  </thead>
-			  <tbody>
-			  	<tr class="itemList">
-			  	  <td>4</td>
-			  	  <td>강미현</td>
-			  	  <td>20190822-04</td>
-			  	  <td>배송준비</td>
-			  	  <td>
-			  	  	<input type="checkbox" name="del-check" class="custom-control-input"/>
-			  	  </td>
-				</tr>
-				<!-- 4번 상세 -->
-			  	<tr class="itemDetail">
-			  	  <td colspan="5">
-			  	  	<div>
-				  	  	주문자명  : 강미현 <br/>
-				  	  	주문상품  : 연어샐러드 <br/>
-				  	  	상품 가격 : 8,000원 <br/>
-				  	  	주문 날짜 : 2019-08-22 <br/>
-			  	  	</div>
-			  	  </td>
-				</tr>
-				<tr class="itemList">
-                  <td>3</td>
-                  <td>이승은</td>
-                  <td>20190822-03</td>
-                  <td>배송준비</td>
-                  <td>
-                  	<input type="checkbox" name="del-check" class="custom-control-input"/>
-                  </td>
-                </tr>
-				<!-- 3번 상세 -->
-			  	<tr class="itemDetail">
-			  	  <td colspan="5">
-			  	  	<div>
-				  	  	주문자명  : 이승은 <br/>
-				  	  	주문상품  : 연어샐러드 <br/>
-				  	  	상품 가격 : 8,000원 <br/>
-				  	  	주문 날짜 : 2019-08-22 <br/>
-			  	  	</div>
-			  	  </td>
-				</tr>
-				<tr class="itemList">
-                  <td>2</td>
-                  <td>김경민</td>
-                  <td>20190822-02</td>
-                  <td>배송완료</td>
-                  <td>
-                  	<input type="checkbox" name="del-check" class="custom-control-input"/>
-                  </td>
-                </tr>
-				<!-- 2번 상세 -->
-			  	<tr class="itemDetail">
-			  	  <td colspan="5">
-			  	  	<div>
-				  	  	주문자명  : 김경민 <br/>
-				  	  	주문상품  : 연어샐러드 <br/>
-				  	  	상품 가격 : 8,000원 <br/>
-				  	  	주문 날짜 : 2019-08-22 <br/>
-			  	  	</div>
-			  	  </td>
-				</tr>
-				<tr class="itemList">
-                  <td>1</td>
-                  <td>박수연</td>
-                  <td>20190822-01</td>
-                  <td>배송완료</td>
-                  <td>
-                  	<input type="checkbox" name="del-check" class="custom-control-input"/>
-                  </td>
-                </tr>
-				<!-- 1번 상세 -->
-			  	<tr class="itemDetail">
-			  	  <td colspan="5">
-			  	  	<div>
-				  	  	주문자명  : 박수연 <br/>
-				  	  	주문상품  : 연어샐러드 <br/>
-				  	  	상품 가격 : 8,000원 <br/>
-				  	  	주문 날짜 : 2019-08-22 <br/>
-			  	  	</div>
-			  	  </td>
-				</tr>
-              </tbody>
-			</table>
-		  </div>
-		  <div class="col-md-12 col-sm-12 col-xs-12 text-right">
-			<a id="del-btn" class="btn btn-default">삭제</a>
+			<br />
+			<div class="row">
+				<div class="col-md-3 col-md-offset-1 col-xs-3 col-sm-3" id="listselects">
+					<select id="wtdeliverstauts" name="wtdeliverstauts" onchange="wtdeliver(this.value)">
+						<option value="%">배송상태</option>
+						<option value="1">입금대기중</option>
+						<option value="2">입금완료</option>
+						<option value="3">주문완료</option>
+						<option value="4">배송중</option>
+						<option value="5">배송완료</option>
+						<option value="6">환불대기중</option>
+						<option value="7">환불완료</option>
+					</select>
+				</div>
 			</div>
-            <div class="col-md-12 col-sm-12 col-xs-12"> 
-               <ul id="pg-btn" class="pagination">
-                  <li id="pg-back"><a href="#"></a></li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li id="pg-forth"><a href="#">></a></li>
-               </ul>
-            </div>
-         </div>
+			<br />
+			<div class="row" id="foreachprev">
+				<div class="col-md-10 col-md-offset-1" id="liketh">
+					<div class="col-md-1 col-sm-2 col-xs-2 listleft">No</div>
+					<div class="col-md-5 col-sm-4 col-xs-3">주문자명</div>
+					<div class="col-md-4 col-sm-4 col-xs-4">주문번호</div>
+					<div class="col-md-2 col-sm-2 col-xs-3 listright">배송상태</div>
+				</div>
+			</div>
+			<!-- 1 -->
+			<div class="orderlistforEach">
+			<c:forEach items="${map.adorderList }" var="adorderList" varStatus="status">
+			  <div class="row">
+				<div class="col-md-10 col-md-offset-1 liketd td-${status.count }" onclick="liketd(${status.count})">
+					<div class="col-md-1 col-sm-2 col-xs-2 listleft">${adorderList.orderlistnum }</div>
+					<c:if test="${adorderList.username != null }">
+					  <div class="col-md-5 col-sm-4 col-xs-3">${adorderList.username }</div>
+					</c:if>
+					<c:if test="${adorderList.username == null}">
+					  <div class="col-md-5 col-sm-4 col-xs-3">${adorderList.nousername }</div>
+					</c:if>
+					<div class="col-md-4 col-sm-4 col-xs-4">${adorderList.o_ordernum }</div>
+					<div class="col-md-2 col-sm-2 col-xs-3 listright">
+					  <select class="changedeliver" name="changedeliver">
+						<option value="0">배송상태</option>
+						<option value="1" <c:if test="${adorderList.deliverstatus==1}"> selected </c:if>>입금대기중</option>
+						<option value="2" <c:if test="${adorderList.deliverstatus==2}"> selected </c:if>>입금완료</option>
+						<option value="3" <c:if test="${adorderList.deliverstatus==3}"> selected </c:if>>주문완료</option>
+						<option value="4" <c:if test="${adorderList.deliverstatus==4}"> selected </c:if>>배송중</option>
+						<option value="5" <c:if test="${adorderList.deliverstatus==5}"> selected </c:if>>배송완료</option>
+						<option value="6" <c:if test="${adorderList.deliverstatus==6}"> selected </c:if>>환불대기중</option>
+						<option value="7" <c:if test="${adorderList.deliverstatus==7}"> selected </c:if>>환불완료</option>
+					  </select>
+					</div>
+				</div>
+				<div class="col-md-10 col-md-offset-1 listdetail">
+				  <div>
+				  	<fmt:formatNumber value="${adorderList.allprice }" pattern="#,###" var="allprice"/>
+					<div>
+						<span>수령자〉</span>
+						<p class="userid">${adorderList.receivername }</p>
+						<br/>
+						<span>핸드폰〉</span>
+						<p class="receiverphone">${adorderList.receiverphone }</p>
+						<br/>
+						<c:if test="${adorderList.itemName != null }">
+				  	  	  <span>샐러드〉</span>
+				  	  	  <p class="itemname">${adorderList.itemName }</p>
+				  	  	</c:if>
+				  	  	<c:if test="${adorderList.cstmMatelist != null}">
+				  	  	  <span>커스텀〉</span>
+				  	  	  <p2 class="customname">${adorderList.cstmMatelist }</p2>
+				  	  	  <br/><br/>
+				  	  	</c:if>
+				  	  	<span>합계가격〉</span>
+				  	  	<p class="allprice">${allprice }원</p>
+				  	  	<br/>
+				  	  	<span>주문날짜〉</span> 
+				  	  	<p class="orderdate">${adorderList.orderdate }</p> 
+				  	  	<br/>
+				  	  	<span>환불계좌〉</span> 
+				  	  	<p class="refundaccount">${adorderList.bank}: ${adorderList.refundaccount }</p> 
+				  	  	<br/>
+				  	  	<span>계좌주〉</span> 
+				  	  	<p class="refundaccowner">${adorderList.refundaccowner}</p> 
+				  	  	<br/>
+			  	  	</div>
+			  	  </div>
+				</div>
+			  </div>
+			</c:forEach>
+			</div>
+			<div id="beforelist"></div>
+		  </div>
+        </div>
       </div>
+      <br />
+      <div class="row"></div>
+      <div class="row">
+        <form action="/admin/orderlist" method="GET">
+          <div class="col-md-2 col-md-offset-8 col-sm-4 col-sm-offset-8 col-xs-5 col-xs-offset-7" id="kang">
+       	  	<div class="input-group" id="listsearch">
+              <input type="text" class="form-control" placeholder="Search" name="searchnum">
+              <div class="input-group-btn">
+              	<button class="btn btn-default" type="submit">검색</button>
+              </div>
+          	</div>
+ 	      </div>
+        </form>
+   	  </div>
+   	  <br />
+      <!-- 페이징 시작 -->
+      <div id="listpaging">
+		<ul class="pagination">
+	  	  <c:if test="${map.noticePager.curPage > 1 }">
+  	  		<li>
+ 	  		  <a href="javascript:list('${map.noticePager.curPage - 1 }')" aria-label="Previous">
+	  	  		<span aria-hidden="true">&laquo;</span>
+	  	 	  </a>
+  	  		</li>
+  		  </c:if>
+  		  <c:forEach var="num" begin="${map.noticePager.blockBegin }" end="${map.noticePager.blockEnd }">
+  	  		<c:choose>
+  	  		  <c:when test="${num == map.noticePager.curPage }">
+  	  	  		<li><a>${num }</a></li>
+  	  		  </c:when>
+  	  		<c:otherwise>
+  	  	  	  <li><a href="javascript:list('${num }')">${num }</a></li>
+  	  		</c:otherwise>
+  	  	  </c:choose>
+  		</c:forEach>
+  		<c:if test="${map.noticePager.curPage < map.noticePager.totPage }">
+  	  	  <li>
+	  		<a href="javascript:list('${map.noticePager.curPage + 1 }')" aria-label="Next">
+	  	  	  <span aria-hidden="true">&raquo;</span>
+	  		</a>
+  	  	  </li>
+  		</c:if>
+	  </ul>
+	</div>
+	<br /><br />
    </div>
-   <!-- Modal confirm -->
-   <div class="modal" id="confirmModal" style="display: none; z-index: 1050;">
-       <div class="modal-dialog">
-           <div class="modal-content">
-               <div class="modal-body" id="confirmMessage">
-                  <h4>선택한 항목을 삭제하시겠습니까?</h4>
-               </div>
-               <div class="modal-footer">
-                   <button type="button" class="btn btn-default" id="confirmOk">확인</button>
-                   <button type="button" class="btn btn-default" id="confirmCancel">취소</button>
-               </div>
-           </div>
-       </div>
-   </div>
-    <!-- ***********************************content end*********************************** -->
-    <!-- ***********************************footer*********************************** -->
-    <jsp:include page="/resources/template/footer.jsp"/>
-</body></html>
+<!-- ***********************************content end*********************************** -->
+<!-- ***********************************footer*********************************** -->
+<jsp:include page="/resources/template/footer.jsp"/>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		resized2();
+
+		$('.changedeliver').change(function(){
+			var ordernum = $(this).parent().prev().text();
+			var deliverstatus = $(this).find('option:selected').val();
+			changedeliver(deliverstatus,ordernum);
+		});	
+ 	});//document.ready function end**************************************************************    
+
+	function liketd(count){
+		$('.listdetail').slideUp();
+		var liketd = ".td-"+count;
+		if(!$(liketd).next().is(":visible")){
+			$(liketd).next().slideDown();
+		}
+	}
+
+	//비동기식 변경
+	function changedeliver(deliverstatus,ordernum) {
+		if(deliverstatus.value == "0"){return false;}
+		$.ajax ({
+			type : "POST",
+			url : "/admin/changedeliver",
+			dataType : "json",
+			data : "param1="+deliverstatus+"&param2="+ordernum,
+			success : function(){
+			},
+			error : function() {
+			}
+		});
+	}
+	
+	//비동기식 찾기
+ 	function wtdeliver(deliverstatus){
+		$.ajax({
+			type : "POST",
+			url : "/admin/wtdeliver",
+			dataType : "json",
+			data : {param :deliverstatus},
+			success : function(wtmap){
+				changdata(wtmap);
+			},
+			error : function(){
+				alert('오류');
+			} 
+		});
+ 	}
+
+ 	function changdata(wtmap) {
+		//테이블 지우기
+		$('.orderlistforEach').remove();
+		$.each(wtmap.wtdeliver,function(index){
+			var wtdeliver = wtmap.wtdeliver[index];
+
+			var table = '<div class="orderlistforEach"><div class="row">';
+			//첫번째 요소 시작
+			table += '<div class="col-md-10 col-md-offset-1 liketd td-'+index+'" onclick="liketd('+index+')">';
+			table += '<div class="col-md-1 col-sm-2 col-xs-2 listleft">'+wtdeliver.orderlistnum+'</div>';
+			if(wtdeliver.username != null){
+				table += '<div class="col-md-5 col-sm-4 col-xs-3">'+wtdeliver.username+'</div>';
+			}else {
+				table += '<div class="col-md-5 col-sm-4 col-xs-3">'+wtdeliver.receivername+'</div>';
+			}
+			table += '<div class="col-md-4 col-sm-4 col-xs-4">'+wtdeliver.o_ordernum+'</div>';
+			//selectbox 시작
+			table += '<div class="col-md-2 col-sm-2 col-xs-3 listright"><select>';
+			var deliver1,deliver2,deliver3,deliver4,deliver5,deliver6,deliver7;
+			if(wtdeliver.deliverstatus == "1"){
+				deliver1 = 'selected';
+			}else if(wtdeliver.deliverstatus == "2"){
+				deliver2 = 'selected';
+			}else if(wtdeliver.deliverstatus == "3"){
+				deliver3 = 'selected';
+			}else if(wtdeliver.deliverstatus == "4"){
+				deliver4 = 'selected';
+			}else if(wtdeliver.deliverstatus == "5"){
+				deliver5 = 'selected';
+			}else if(wtdeliver.deliverstatus == "6"){
+				deliver6 = 'selected';
+			}else if(wtdeliver.deliverstatus == "7"){
+				deliver7 = 'selected';
+			}
+			table += '<option>배송상태</option>';
+			table += '<option '+deliver1+'>입금대기중</option>';
+			table += '<option '+deliver2+'>입금완료</option>';
+			table += '<option '+deliver3+'>주문완료</option>';
+			table += '<option '+deliver4+'>배송중</option>';
+			table += '<option '+deliver5+'>배송완료</option>';
+			table += '<option '+deliver6+'>환불대기중</option>';
+			table += '<option '+deliver7+'>환불완료</option>';
+			table += '</select></div></div>';
+			//첫번째 요소 끝
+			//두번째 요소 시작
+			table += '<div class="col-md-10 col-md-offset-1 listdetail"><div><div>';
+			table += '<span>수령자〉</span><p class="userid">'+wtdeliver.receivername+'</p><br/>';
+			if(wtdeliver.itemName != null){
+				table += '<span>샐러드〉</span><p class="itemname">'+wtdeliver.receivername+'</p><br/>';
+			}
+			if(wtdeliver.cstmMatelist != null){
+				table += '<span>커스텀〉</span><p class="customname">'+wtdeliver.cstmMatelist+'</p><br/>';
+			}
+			table += '<span>합계가격〉</span><p class="allprice">'+wtdeliver.allprice+'</p><br/>';
+			table += '<span>주문날짜〉</span><p class="orderdate">'+wtdeliver.orderdate+'</p><br/>';
+			table += '</div></div></div>';
+			//두번째 요소 끝
+			table += '</div></div>';
+			//넣기
+			$('#beforelist').before(table);
+		})
+		//페이징 text변경
+		$('#listpaging').children().children().remove();
+		var wtnoticePager = wtmap.wtnoticePager;
+		var table2 = '';
+		if(wtnoticePager.curPage > 1){
+			table2 += '<li><a href="javascript:list('+wtnoticePager.curPage - 1+')" aria-label="Previous">';
+			table2 += '<span aria-hidden="true">&laquo;</span></a></li>';
+		}
+		for(var j = wtnoticePager.blockBegin; j<=wtnoticePager.blockEnd; j++){
+			if(j = wtnoticePager.curPage){
+				table2 += '<li><a>'+j+'</a></li>';
+			}else {
+				table2 += '<li><a href="javascript:list('+j+')">'+j+'</a></li>';
+			}
+		}
+		if(wtnoticePager.curPage < wtnoticePager.totPage){
+			table2 += '<li><a href="javascript:list('+wtnoticePager.curPage + 1+')" aria-label="Next">';
+			table2 += '<span aria-hidden="true">&raquo;</span></a></li>';
+		}
+		$('.pagination').append(table2);
+ 	}
+ 	/*******************************************************************/
+ 	//창크기 514px보다 작아졌을 때 폰트크기 고정(테이블 안부셔지게)
+ 	$(window).resize(function() {
+     	resized2();
+ 	});
+ 	function resized2() {
+     	var windowWidth = $(window).width();
+       	if(windowWidth < 540) {
+   			$('#notice-tab').css('font-size','12px');
+   			/*검색폰트,크기 조정*/
+   			$('#listsearch').css('margin','0px 15px 0px 0px');
+   			$('#listsearch>input').css('height','25px');
+   			$('#listsearch>input').css('font-size','12px');
+   			$('#listsearch>div>button').css('height','25px');
+   			$('#listsearch>div>button').css('font-size','12px');
+   			$('#listsearch>div>button').css('line-height','10px');
+   			/*페이징폰트,크기 조정*/
+   			$('.pagination').css('font-size','12px');
+       	}else{
+       		$('#notice-tab').css('font-size','14px');
+       		/*검색폰트,크기 조정*/
+   			$('#listsearch').css('margin','0px 0px 0px 0px');
+   			$('#listsearch>input').css('height','30px');
+   			$('#listsearch>input').css('font-size','14px');
+   			$('#listsearch>div>button').css('height','30px');
+   			$('#listsearch>div>button').css('font-size','14px');
+   			$('#listsearch>div>button').css('line-height','12px');
+   			/*페이징폰트,크기 조정*/
+   			$('.pagination').css('font-size','14px');
+       	}
+ 	}
+</script>
+</html>

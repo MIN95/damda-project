@@ -41,21 +41,20 @@
         /*checkbox_end*/
 
         /*pagination start*/
-        #content #content_content .pagination {
-            margin-bottom: 50px;
-        }
-
-        #content #content_content .pagination>li>a {
+		#mypagepaging{
+			text-align: center;
+			margin-top: 20px;
+			margin-bottom: 50px;
+		}
+        #content #mypagepaging .pagination>li>a {
             color: black;
+            cursor: pointer;
         }
 
-        #content #content_content .pagination>li>a:hover {
+        #content #mypagepaging .pagination>li>a:hover {
             font-weight: bold;
         }
-
         /*pagination end*/
-
-
 
         #content #content_content table {
             text-align: center;
@@ -94,9 +93,10 @@
         #content #content_content table td:nth-child(3) {
             text-align: left;
         }
-
+        
         #content #content_content table img {
             width: 100%;
+            height:20%;
         }
 
         #content #content_content table input[type="text"] {
@@ -107,7 +107,7 @@
 			cursor: pointer;
         }
         
-       #content #content_content table span {
+       	#content #content_content table span {
             display: inline-block;
             margin-left: 20px;
             margin-bottom: 5px;
@@ -177,86 +177,94 @@
 				</tr>
 			</thead>
 		<tbody>
+		  <c:set var="mydetailcnt" value="${0 }"/>
 		  <c:forEach items="${map.mypageDetail }" var="mypageDetail" varStatus="status">
 			<tr id="orderlisttr">
 				<td></td>
 				<td>
-				  <c:if test="${mypageDetail.photopath == null }">
-					<a href="#"><img src="/resources/imgs/s01.jpg" /></a>
-				  </c:if>
-				  <c:if test="${mypageDetail.photopath != null }">
-					<a href="#"><img src="${mypageDetail.photopath }" /></a>
+				  <c:if test="${mypageDetail.photoPath != null }">
+					<a href="#"><img src="${mypageDetail.photoPath }" /></a>
 				  </c:if>
 				</td>
 				<td>
-			  	  <fmt:formatNumber value="${mypageDetail.price }" pattern="#,###" var="price"/>
-			  	  <c:if test="${mypageDetail.itemname == null }">
-					<a href="#"><input type="text" name="itemname" id="itemname" value="커스텀 샐러드" readonly /></a>
-					<span>${mypageDetail.cstmmatelist }</span>
-					<p>금액&nbsp;:&nbsp;<c:out value="${price }원"/></p>
+			  	  <fmt:formatNumber value="${mypageDetail.itemPrice }" pattern="#,###" var="itemPrice"/>
+			  	  <fmt:formatNumber value="${mypageDetail.cstmPrice }" pattern="#,###" var="cstmPrice"/>
+			  	  <c:if test="${mypageDetail.itemName == null }">
+			  	  	<c:set var="mydetailcnt" value="${mydetailcnt + 1 }"/>
+					<a href="#"><input type="text" name="itemname" id="itemname" value="[custom] 샐러드 NO.${mypageDetail.cstmtNum }" readonly /></a>
+					<span>${mypageDetail.cstmMatelist }</span>
+					<p>금액&nbsp;:&nbsp;<c:out value="${cstmPrice }원"/></p>
 				  </c:if>
-				  <c:if test="${mypageDetail.cstmmatelist == null }">
-					<a href="#"><input type="text" name="itemname" id="itemname" value="${mypageDetail.itemname}" readonly /></a>
+				  <c:if test="${mypageDetail.cstmMatelist == null }">
+					<a href="#"><input type="text" name="itemname" id="itemname" value="[salad] ${mypageDetail.itemName}" readonly /></a>
 					<span></span>
-					<p>금액&nbsp;:&nbsp;<c:out value="${price }원"/></p>
+					<p>금액&nbsp;:&nbsp;<c:out value="${itemPrice }원"/></p>
 				  </c:if>
 				</td>
 				<td>
+				  <c:if test="${mypageDetail.deliverstatus == 1}">
+				  	<button type="button">입금대기중</button>
+				  </c:if>
+				  <c:if test="${mypageDetail.deliverstatus == 2}">
+				  	<button type="button">입금완료</button>
+				  </c:if>
+				  <c:if test="${mypageDetail.deliverstatus == 3}">
+				  	<button type="button">주문완료</button>
+				  </c:if>
 				  <c:if test="${mypageDetail.deliverstatus == 4}">
 				  	<button type="button">배송중</button>
 				  </c:if>
 				  <c:if test="${mypageDetail.deliverstatus == 5}">
 				  	<button type="button">배송완료</button>
-				  	<button type="button" style="margin:10px 0px 0px 0px;" onclick="">리뷰쓰기</button>
+				  	  <c:if test="${mypageDetail.reviewnum == 0 }">
+				  	  	<button type="button" style="margin:10px 0px 0px 0px;" onclick="goReview('${mypageDetail.o_ordernum}',${mypageDetail.cstmtNum },${mypageDetail.itemNum })">리뷰쓰기</button>
+				  	  </c:if>
+				  	  <c:if test="${mypageDetail.reviewnum > 0 }">
+				  	  	<button type="button" style="margin:10px 0px 0px 0px;" class="disabled">리뷰작성완료</button>
+				  	  </c:if>
 				  </c:if>
 				  <c:if test="${mypageDetail.deliverstatus == 6}">
-				  	<button type="button">취소대기중</button>
-				  </c:if>
-				  <c:if test="${mypageDetail.deliverstatus == 7}">
-				  	<button type="button">취소완료</button>
-				  </c:if>
-				  <c:if test="${mypageDetail.deliverstatus == 8}">
 				  	<button type="button">환불대기중</button>
 				  </c:if>
-				  <c:if test="${mypageDetail.deliverstatus == 9}">
+				  <c:if test="${mypageDetail.deliverstatus == 7}">
 				  	<button type="button">환불완료</button>
 				  </c:if>
 				</td>
 				</tr>
 			  </c:forEach>
 			</tbody>
-		</table>		
-		<!-- 페이징 시작 -->
-		<div class="col-md-offset-3 col-md-9 col-sm-offset-4 col-sm-6 col-xs-offset-2 col-xs-8">
-			<ul class="pagination">
-			  <c:if test="${map.noticePager.curPage > 1}">
-				<li>
-    				<a href="javascript:list('${map.noticePager.curPage - 1 }')" aria-label="Previous">
-        				<span aria-hidden="true">&laquo;</span>
-    				</a>
-				</li>
-			  </c:if>
-			  <c:forEach var="num" begin="${map.noticePager.blockBegin }" end="${map.noticePager.blockEnd}">
-				<c:choose>
-	  		  	  <c:when test="${num == map.noticePager.curPage }">
-					<li><span>${num}</span></li>
-		  		  </c:when>
-		  		  <c:otherwise>
-		  			<li><a href="javascript:list('${num }')">${num}</a></li>
-	  		      </c:otherwise>
-		  	  	</c:choose>
-			  </c:forEach>
-			  <c:if test="${map.noticePager.curPage < map.noticePager.totPage}">
-				<li>
-				    <a href="javascript:list('${map.noticePager.curPage + 1 }','${map.noticePager.totPage }')" aria-label="Next">
-				        <span aria-hidden="true">&raquo;</span>
-				    </a>
-				</li>
-			  </c:if>
-			</ul>
-		</div>
-	</div>
-	<div></div>
+		</table>	
+</div>
+<!-- 페이징 시작 -->
+<div class="col-md-12 col-xs-12 col-sm-12" id="mypagepaging">
+  <ul class="pagination">
+  	<c:if test="${map.noticePager.curPage > 1 }">
+  	  <li>
+ 	  	<a href="javascript:list('${map.noticePager.curPage - 1 }')" aria-label="Previous">
+	  	  <span aria-hidden="true">&laquo;</span>
+	  	</a>
+  	  </li>
+  	</c:if>
+  	<c:forEach var="num" begin="${map.noticePager.blockBegin }" end="${map.noticePager.blockEnd }">
+  	  <c:choose>
+  	  	<c:when test="${num == map.noticePager.curPage }">
+  	  	  <li><a>${num }</a></li>
+  	  	</c:when>
+  	  	<c:otherwise>
+  	  	  <li><a href="javascript:list('${num }')">${num }</a></li>
+  	  	</c:otherwise>
+  	  </c:choose>
+  	</c:forEach>
+  	<c:if test="${map.noticePager.curPage < map.noticePager.totPage }">
+  	  <li>
+	  	<a href="javascript:list('${map.noticePager.curPage + 1 }')" aria-label="Next">
+	  	  <span aria-hidden="true">&raquo;</span>
+	  	</a>
+  	  </li>
+  	</c:if>
+  </ul>
+</div>
+<!-- 페이징 끝 -->
 <!-- content end -->
 <jsp:include page="/resources/template/footer.jsp"/>
 </body>
@@ -295,6 +303,14 @@
 	function list(page){
 		location.href = "${path}/mypage/detail/${map.mypageDetail[0].o_ordernum }?curPage="+page;
  	}
-	
+	/**************************************************************/
+	//리뷰로 이동
+	function goReview(ordernum,customnum,itemnum){
+		if(customnum != "0"){
+			location.href = "/mypage/detail/review?ordernum="+ordernum+"&customnum="+customnum;
+		}else if(itemnum != "0"){
+			location.href = "/mypage/detail/review?ordernum="+ordernum+"&itemnum="+itemnum;
+		}
+	}
 </script>
 </html>

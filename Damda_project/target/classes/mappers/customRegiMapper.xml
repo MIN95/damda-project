@@ -4,12 +4,17 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
 <mapper namespace="com.bit.pro.mappers.customRegiMapper">
- <select id="selectMateAll" resultType="com.bit.pro.vo.MateVo">
- 	SELECT PHOTO.P_INGREDIENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.ORIGINALNAME , MATERIAL.* FROM PHOTO JOIN MATERIAL ON MATENUM=P_INGREDIENTNUM WHERE PHOTO.PHOTOCTG2="thumbnail" ORDER BY MATENUM DESC LIMIT #{startList}, #{listSize} 
- 	<!-- 페이징을 위한 명령어 LIMT 첫번째row위치, 읽어올갯수 -->
+ <select id="selectMateCtgP" resultType="com.bit.pro.vo.MateVo">
+ 	SELECT PHOTO.P_INGREDIENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.ORIGINALNAME , MATERIAL.* FROM PHOTO JOIN MATERIAL ON MATENUM=P_INGREDIENTNUM WHERE PHOTO.PHOTOCTG2="thnumbnail" and MATERIAL.MATECTG like CONCAT(#{matectg},'%') ORDER BY MATENUM DESC LIMIT #{startList}, #{listSize} 
  </select>
  <select id="selectMateAllCnt" resultType="int">
- 	SELECT COUNT(*) AS LISTCOUNT FROM MATERIAL
+ 	SELECT COUNT(*) AS LISTCOUNT FROM MATERIAL WHERE MATECTG like CONCAT(#{matectg},'%') 
+ </select>
+ <select id="selectMateSaleP" resultType="com.bit.pro.vo.MateVo">
+ 	SELECT PHOTO.P_INGREDIENTNUM, PHOTO.PHOTOPATH, PHOTO.PHOTONAME, PHOTO.ORIGINALNAME , MATERIAL.* FROM PHOTO JOIN MATERIAL ON MATENUM=P_INGREDIENTNUM WHERE PHOTO.PHOTOCTG2="thnumbnail" and MATERIAL.SALESTATUS like CONCAT(#{salestatus},'%') ORDER BY MATENUM DESC LIMIT #{startList}, #{listSize} 
+ </select>
+ <select id ="selectMateSaleCnt" resultType="int">
+ 	SELECT COUNT(*) AS LISTCOUNT FROM MATERIAL WHERE SALESTATUS like CONCAT(#{salestatus},'%')
  </select>
  <insert id="insertMate" parameterType="com.bit.pro.vo.MateVo">
  	INSERT INTO MATERIAL (MATENAME, MATEPRICE, MATECTG, SALESTATUS) VALUES (#{mateName},#{mateprice},#{matectg},#{salestatus})
@@ -29,14 +34,48 @@
  
   <!-- 미현 시작 -->
  <select id="customSelectThnumb" resultType="com.bit.pro.vo.MateVo">
- 	SELECT M.*,P.PHOTOPATH,P.PHOTOCTG2 FROM 
-	MATERIAL M JOIN PHOTO P ON M.MATENUM = P.P_INGREDIENTNUM 
-	WHERE P.PHOTOCTG2 = "thnumbnail"
+    SELECT M.*,P.PHOTOPATH,P.PHOTOCTG2 FROM 
+   MATERIAL M JOIN PHOTO P ON M.MATENUM = P.P_INGREDIENTNUM 
+   WHERE P.PHOTOCTG2 = "thnumbnail"
  </select>
  <select id="customSelectDetail" resultType="com.bit.pro.vo.MateVo">
- 	SELECT M.*,P.PHOTOPATH,P.PHOTOCTG2 FROM 
-	MATERIAL M JOIN PHOTO P ON M.MATENUM = P.P_INGREDIENTNUM 
-	WHERE P.PHOTOCTG2 = "detail" AND P.P_INGREDIENTNUM = #{matenum}
+    SELECT M.*,P.PHOTOPATH,P.PHOTOCTG2 FROM 
+   MATERIAL M JOIN PHOTO P ON M.MATENUM = P.P_INGREDIENTNUM 
+   WHERE P.PHOTOCTG2 = "detail" AND P.P_INGREDIENTNUM = #{matenum}
  </select>
  <!-- 미현 끝 -->
+ <!-- /////////////////////////////미현 2 시작/////////////////////////////////////// -->
+ <insert id="customsave" useGeneratedKeys="true" keyProperty="cstmtnum">
+    INSERT INTO CUSTOM (cstmprice,cstmmatelist) VALUES (#{cstmprice},#{cstmmatelist})
+    <selectKey keyProperty="cstmtnum" resultType="Integer" order="AFTER">
+       SELECT LAST_INSERT_ID()
+    </selectKey>
+ </insert>
+ <insert id="cartsaveNouser" useGeneratedKeys="true" keyProperty="cartnum">
+    INSERT INTO CART (c_nousernum,c_customnum,ea,cartcheck) VALUES (#{c_nousernum},#{c_customnum},1,0)
+    <selectKey keyProperty="cartnum" resultType="Integer" order="AFTER">
+       SELECT LAST_INSERT_ID()
+    </selectKey>
+ </insert>
+ <insert id="cartsaveUser" useGeneratedKeys="true" keyProperty="cartnum">
+    INSERT INTO CART (c_usernum,c_customnum,ea,cartcheck) VALUES (#{c_usernum},#{c_customnum},1,0)
+    <selectKey keyProperty="cartnum" resultType="Integer" order="AFTER">
+       SELECT LAST_INSERT_ID()
+    </selectKey>
+ </insert>
+ <insert id="myrecipesave" useGeneratedKeys="true" keyProperty="recipenum">
+    INSERT INTO MYRECIPE (mr_customnum,mr_usernum) VALUES (#{mr_customnum},#{c_usernum})
+    <selectKey keyProperty="recipenum" resultType="Integer" order="AFTER">
+       SELECT LAST_INSERT_ID()
+    </selectKey>
+ </insert>
+ <!-- 카트에서 캡쳐된 사진 포토디비에 저장 -->
+ <insert id="captureCart">
+    INSERT INTO PHOTO (photoctg,photoctg2,photopath,photoname,originalname,p_customnum) VALUES ("custom","thumbnail",#{photopath},#{photoname},#{originalphotoname},#{p_customnum})
+ </insert>
+ <!-- 카트에서 캡쳐된 사진 포토디비에 저장 -->
+ <insert id="captureMyrecipe">
+    INSERT INTO PHOTO (photoctg,photoctg2,photopath,photoname,originalname,p_customnum) VALUES ("custom","thumbnail",#{photopath},#{photoname},#{originalphotoname},#{p_customnum})
+ </insert>
+ <!-- /////////////////////////////미현 2 끝/////////////////////////////////////// -->
 </mapper>

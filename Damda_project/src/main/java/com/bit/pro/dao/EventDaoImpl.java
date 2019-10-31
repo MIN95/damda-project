@@ -20,7 +20,7 @@ public class EventDaoImpl implements EventDao{
 	private static final String NAMESPACE = "com.bit.pro.mappers.eventMapper";
 
 	@Override
-	public List<EventVo> selectEventAll(pagination pagination) throws SQLException {
+	public List<EventVo> selectEventAll(pagination pagination) {
 		return sqlSession.selectList(NAMESPACE+".selectEventAll",pagination);
 	}
 

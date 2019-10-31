@@ -344,11 +344,12 @@
 		selectCtg = $("#selectCtg").val();
 		selectGrade = $("#selectGrade").val();
 		if ($(this).attr("id") == "prevPage") {
-			page = "${pageMaker.startPage}" - 1;
+			page = $(".pages").eq(0).text()-1;
+// 			page = "${pageMaker.startPage}" - 1;
 		} else if ($(this).attr("id") == "nowPage") {
 			page = $(this).text();
 		} else if ($(this).attr("id") == "nextPage") {
-			page = "${pageMaker.endPage }" + 1;
+			page = "${pageMaker.startPage}" + 6;
 		}
 		$("#pageInfo").val(page);
 		selectUser(selectCtg, selectGrade, page);
@@ -476,9 +477,6 @@
 							} else if (userGrade.text() == "family") {
 								userGrade
 										.append('<i class="markAdd fas fa-award" style="color:#DA8A67;"></i>');
-							} else if (userGrade.text() == "staff") {
-								userGrade
-										.append('<i class="markAdd fas fa-crown" style="color:#E5AE00;"></i>');
 							}
 						})
 		page = $("#pageInfo").val();

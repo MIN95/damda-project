@@ -1,7 +1,9 @@
 package com.bit.pro.service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.ui.Model;
 
@@ -48,10 +50,25 @@ public interface CartService {
 	//커스텀등록
 	void myRecipeInsert(int userNum, int customNum) throws SQLException;
 	
+	//주문페이지 이동
+	void cartOrder(int cartCheck, int userNum) throws SQLException;
+	
+	//주문 취소시
+	void cartOrder_noUser(int cartCheck, String nouserNum) throws SQLException;
+	
+	
 	/********************미현 시작**********************************************************/
-	//주문상세내역 출력
+	//주문내역 출력
+	List<OrderListVo> mypage(int usernum, int nowPage, int scale) throws SQLException;
+	//주문내역 레코드 개수
+	int mypagecountArticle(int usernum) throws SQLException;
+	//주문디테일 출력
 	List<OrderListVo> mypageDetail(String o_ordernum,int nowPage, int scale) throws SQLException;
-	//주문 레코드 갯수
-	int countArticle() throws SQLException;
+	//주문디테일 레코드 개수
+	int countArticle(String o_ordernum) throws SQLException;
+	//비회원일때 주문조회체크
+	HashMap<String, Object> chknouser(Map<String, Object> chkmap) throws SQLException;
+	//비회원 주문조회 디테일
+	List<OrderListVo> nouserDetail(String o_ordernum, int nowPage, int scale) throws SQLException;
 	/********************미현 끝**********************************************************/
 }

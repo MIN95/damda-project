@@ -336,7 +336,7 @@
      function itemPagingBtn(qnaKind,page) {
         $('#qnaPageDiv').remove();
         var pageMaker = {};
-        var idx=1;
+        var idx=0;
 		var selectList=""
         var sendData = {
            "qnaKind" : qnaKind,
@@ -353,17 +353,17 @@
 				var endPage  = pageMaker.endPage;
 				$("#buttonDiv").append('<div id="qnaPageDiv" class="row col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12 text-center"><ul id="qnaPaging" class="pagination"></ul></div>');
                 if(pageMaker.prev==true){
-                	$("#qnaPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Previous">&laquo;</a><input type="text" value="'+(pageMaker.startPage-1)+'" hidden /></li>');
+                	$("#itemPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Previous">&laquo;<input type="text" value="'+ (pageMaker.startPage - 1)+ '" hidden /></a></li>');
                 }
                 for(;startPage<=endPage;startPage++){
                   selectList='<li>'
-                  selectList+='<a class="hidden_btn" id="hidden_btn'+idx+'" style="cursor:pointer">'+idx+'<input type="text" value="'+idx+'" hidden /></a>'
+                	  selectList += '<a class="hidden_btn" style="cursor:pointer">'+ (pageMaker.startPage+idx) + '<input type="text" value="'+ (pageMaker.startPage+idx) +'" hidden /></a>'
                   selectList+='</li>';
                   $("#qnaPaging").append(selectList);
                   idx++;
                 }    
                 if(pageMaker.next && pageMaker.endPage >0 ){
-                  $("#qnaPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Next">&raquo;</a><input type="text" value="'+(pageMaker.endPage+1)+'" hidden /></li>');
+                	$("#itemPaging").append('<li><a style="cursor:pointer" class="hidden_btn" aria-label="Next">&raquo;<input type="text" value="'+ (pageMaker.endPage + 1) + '" hidden /></a></li>');
                 }
                 page=$("#pageInfo").val();
                 $(".hidden_btn").css("color","#333333");

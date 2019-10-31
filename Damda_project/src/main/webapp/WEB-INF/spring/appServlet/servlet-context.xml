@@ -30,12 +30,11 @@
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
 	 <beans:property name="maxUploadSize" value="10485760"/>
 	</beans:bean>
-	 
+	
 	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver"> 
 	<beans:property name="order" value="0"/> 
 	</beans:bean>
 	
 	<beans:bean id="fileDownloadView" class="com.bit.pro.util.FileDownloadView"/>
-	
 
 </beans:beans>

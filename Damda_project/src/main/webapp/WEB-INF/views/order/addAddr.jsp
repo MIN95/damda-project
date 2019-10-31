@@ -1,129 +1,302 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>주소추가</title>
+<title>주소록</title>
 <script type="text/javascript" src="/resources/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="/resources/js/bootstrap.js"></script>
 
 <link rel="stylesheet" href="/resources/css/bootstrap-theme.css" />
 <link rel="stylesheet" href="/resources/css/bootstrap.css" />
-
+        
 <style type="text/css">
-.addr{
-	margin-top:30px;
 
+.addrList{
+   display : inline-block;
+   text-align:center;
+   font-size: 15px;
 }
 
-p{
-	margin-bottom:20px;
+thead th{
+   text-align: center;
+        border-top: 2px solid darksalmon;
+        border-bottom: 1px;
 }
+
+thead th:nth-child(1){
+   width:8%;
+}
+
+thead th:nth-child(2){
+   width:20%;
+}
+
+thead th:nth-child(3){
+   width:60%;
+}
+
+thead th:nth-child(4){
+   width:12%;
+}
+
+
+tbody tr{
+   text-align: center;
+   border-top: 1px solid darksalmon;
+    border-bottom: 1px solid darksalmon;
+    
+}
+
+
+tbody tr>td:nth-child(3){
+
+   
+    
+}
+   
+   .selectaddrbtn{
+      text-align:center;
+       background-color:darksalmon;
+       color:white;
+    }
+    
+    .selectaddrbtn:hover{
+       background-color:darksalmon;
+       color:white;
+    }
+    
+  
+    
+    div{
+       text-align:center;
+    }
 
 </style>
 
 </head>
 <body>
-
-<div class="container-fluid col-xs-10 col-xs-offset-1 addr">
-<p>주소와 지칭할 별명을 입력해주세요.</p>
-<form class="form-horizontal" action="addmyaddr" name="addaddrform" id="addaddrform" method="post">
-<div class="form-group">
-    <label for="addrname" class="col-sm-2 control-label" >별명</label>
-  	
-	<div class="col-sm-5 col-md-7 col-sm-offset-2 col-md-offset-2">
-   	 	<input type="text" class="form-control" id="addrname" name="addrname" placeholder="별명" >
-   	</div>
-	
+ <div class="container-fluid col-xs-10 col-xs-offset-1 addr" >
+ <br>
+ <p id="noaddr"></p>
+ <table class="addrList">
+    <thead>
+       <tr>
+          <th></th>
+          <th>별명</th>
+          <th colspan="4">주소</th>
+          <th></th>
+       </tr>
+    </thead>
+    
+    <tbody>
+    <% int i=0; %>
+    <c:forEach items="${selectAddr }" var="selectAddr" >
+    <div class="form-check form-check-inline">
+          <tr>
+             <td>
+                <input class="form-check-input" type="radio" name="selectaddr" id="selectaddr" value="<%=i++%>">
+   
+             
+             </td>
+             <c:if test="${selectAddr.addrname != null}">
+             <td>
+             <label class="form-check-label" for="inlineRadio1">${selectAddr.addrname }
+             
+             </label>
+             </td>
+             
+             </c:if>
+             <td colspan="4">
+                <c:if test="${selectAddr.useraddr1 != null}">
+                <p>${selectAddr.useraddr1}</p>
+                <p>${selectAddr.useraddr2}</p>
+                <p>(${selectAddr.userpostnum})</p>
+                </c:if>
+             </td>
+             <td>
+                <input type="button" class="btn btn-lg btn-default" value="삭제" onclick="del(${selectAddr.addridx });">
+             </td>
+          </tr>
+    </div>
+    </c:forEach>
+    </tbody>
+ 
+ </table>
+ 
+ 
+ <input type="hidden" id="maxidx" value="${maxidx}" />
+ <div>
+     <button type="button" class="btn btn-default addaddrbtn" id="addaddrbtn" onclick="location.href='/order/addaddr'">주소추가</button>
+     <button type="button" class="btn btn-default selectaddrbtn" id="selectaddrbtn" >주소선택</button>
   </div>
-  <div class="form-group">
-    <label for="useraddr" class="col-sm-2 control-label" >주소</label>
-   		<div>
-		    <div class="col-xs-4 col-sm-2 col-md-3">
-			    <input type="text" class="form-control" id="userpostnum" name="userpostnum" placeholder="우편번호" maxlength="6">
-			</div>
-			 <div class="col-xs-2 col-sm-2 col-md-2">
-		      <input type="button" name="findAddr" id="findAddr" class="btn btn-default" onClick="findJuso();" value="주소찾기" />
-		    </div>
-		    
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-5 col-md-7 col-sm-offset-2 col-md-offset-2">
-			<input type="text" class="form-control" id="useraddr1" name="useraddr1" placeholder="주소">
-		</div>
-	</div>
-	<div class="form-group"> 	
-		<div class="col-sm-5 col-md-7 col-sm-offset-2 col-md-offset-2">
-	   	 	<input type="text" class="form-control" id="useraddr2" name="useraddr2" placeholder="상세주소" >
-	   	</div>
-	 </div>
-	  <div class="form-group">
-	    <div class="col-sm-offset-4 col-sm-4 col-xs-offset-4 col-xs-4 col-md-offset-4 col-md-4">
-	      <button type="submit" class="btn btn-default addbtn" id="addbtn">추가하기</button>
-	   	<button type="button" class="btn btn-default" onclick="location.href='/order/myaddr'">취소</button>
-	    </div>
-	  </div>
-	  
-	  
-</form>
+ 
+ </div>
  
  
-</div>
-
-
-
+<!-- 주소록 추가 모달 -->
+    <div id="issuccess">${addr}</div>
+    
+   <!-- Modal err -->
+   <div class="modal" id="addrModal" style="display: none; z-index: 1050;">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-body text-center" id="confirmMessage">
+                  <br />
+                  <p style="color:darksalmon; font-size:16px;" id="sub">비밀번호 오류.</p> 
+                  <br/>
+                  <p id="content">비밀번호를 정확히 입력해주세요.</p>
+               <br />
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" id="Ok">확인</button>
+                      <button type="button" class="btn btn-default" id="cancel">취소</button>
+                  </div>
+                 </div>
+           </div>
+       </div>
+   </div>
+   
 </body>
+
 <script type="text/javascript">
 
+function del(addridx){
+   var myModal = $("#addrModal");
+   $("#sub").text("주소 삭제");
+   $("#content").text("주소를 삭제하시겠습니까?");
+   $('#cancel').show();
+   myModal.modal("show").css('top', '35%');
+   
+    $("#Ok").click(function(){
+        myModal.modal("hide");
+        location.href="/order/deleteAddr?idx="+addridx; 
+    });
+
+    $("#cancel").click(function(){
+       myModal.modal("hide");
+    });
+
+}
 
 $(window).resize(function(){
     window.resizeTo(570,460);
 });
 
+function update(url){
+   var ajaxOption = {
+      url:url,
+      async:true,
+      type:"POST",
+      dataType:"html",
+      cache:false
+   };
 
-//주소찾기 팝업
-function findJuso(){
-	var pop = window.open("<%="http://localhost:8080/order/"%>popup","addaddr","width=570,height=420, scrollbars=yes, resizable=yes"); 	
+   $.ajax(ajaxOption).done(function(data){
+      //content영역 삭제
+      $("#addr").children().remove();
+      //content영역 교체
+      $("#addr").html(data);
+
+   });
 }
-	
-function jusoCallBack(roadAddrPart1,addrDetail, zipNo){
-// 팝업페이지에서 주소입력한 정보를 받아서, 현 페이지에 정보를 등록합니다.
-document.addaddrform.useraddr1.value = roadAddrPart1;
-document.addaddrform.useraddr2.value = addrDetail;
-document.addaddrform.userpostnum.value = zipNo;
-}
+
+function ajaxTest(){
+    $.ajax({
+      type : "GET",
+      url : "myaddr",
+      dataType : "html",
+      error : function() {
+        alert('통신실패!!');
+      },
+      success : function(data) {
+        $('.content').html(data);
+      }
+
+    });
+  }
+
 
 
 $(document).ready(function() {
-	$('#findAddr').click(function(){
-			findJuso();
-		});
-	
-	//주소록 추가 모달
-	$('#issuccess').hide();
-	var issuccess = $('#issuccess').text();
-	var myModal = $("addrModal");
-	if(issuccess == "yes"){
-		$("#sub").text("주소 추가 성공");
-		$("#content").text("주소가 추가되었습니다.");
-	  	myModal.modal("show").css('top', '35%');
-  	    $("#Ok").click(function(){
-  	  		myModal.modal("hide");
-  	    });
-	}else if(issuccess == "no"){
-		$("#sub").text("주소 추가 실패");
-		$("#content").text("주소는 5개까지 추가할 수 있습니다.");
-		myModal.modal("show").css('top', '35%');
-  	    $("#Ok").click(function(){
-  	  		myModal.modal("hide");
-  	    });
-	};
-	
-});
+   var addrname;
+   var addr1val;
+   var addr2val;
+   var addr2val;
+   var postnumval
 
+   
+   //버튼 누르면 select한 정보 뜬다
+   $('#selectaddrbtn').on('click',function(){
+      var addrVal = $('input[name="selectaddr"]:checked').val();
+      if(addrVal==0){
+         addrname = $('label').eq(0).html();
+         addr1val = 1;
+         addr2val = 2;
+         postnumval = 3;
+      }else if(addrVal==1){
+         addrname = $('label').eq(0).html();
+         addr1val = 4;
+         addr2val = 5;
+         postnumval = 6;
+      }else if(addrVal==2){
+         addrname = $('label').eq(0).html();
+         addr1val = 7;
+         addr2val = 8;
+         postnumval = 9;
+      }else if(addrVal==3){
+         addrname = $('label').eq(0).html();
+         addr1val = 10;
+         addr2val = 11;
+         postnumval = 12;
+      }else if(addrVal==4){
+         addrname = $('label').eq(0).html();
+         addr1val = 13;
+         addr2val = 14;
+         postnumval = 15;
+      }
+      
+      var addr1 = $('p').eq(addr1val).text();
+      var addr2 = $('p').eq(addr2val).text();
+      var postnum = $('p').eq(postnumval).text().substring(1,6);
+      //alert("val:"+addrVal + ", addr1 : " + addr1 + ", addr2 : "+addr2 + ", post : "+postnum);
+      
+      
+      opener.myAddrCallBack(addrname, postnum, addr1, addr2);
+      window.close();
+      
+   });
+      
+
+
+   
+   $('#cancel').hide();
+
+   //주소록 추가 모달
+   $('#issuccess').hide();
+   var issuccess = $('#issuccess').text();
+   var myModal = $("#addrModal");
+
+   if(issuccess == "yes"){
+      $("#sub").text("주소 추가 성공");
+      $("#content").text("주소가 추가되었습니다.");
+        myModal.modal("show").css('top', '35%');
+         $("#Ok").click(function(){
+             myModal.modal("hide");
+         });
+   }else if(issuccess == "no"){
+      $("#sub").text("주소 추가 실패");
+      $("#content").text("주소는 5개까지 추가할 수 있습니다.");
+      myModal.modal("show").css('top', '35%');
+         $("#Ok").click(function(){
+             myModal.modal("hide");
+         });
+   };
+
+
+   
+});
 
 </script>
 

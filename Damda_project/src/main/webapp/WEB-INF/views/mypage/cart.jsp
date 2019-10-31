@@ -540,9 +540,17 @@
         $('.total_strong').html(s_total); //최종금액
     }
 
-    //주문하기로 이동
+    //주문하기로 이동 ajax로 1로 update해주고 성공시 페이지 이동
     function order(){
-    		window.location.href='/order/';
+    	 $.ajax({
+     		url:"/mypage/cartorder",
+     		type:'post',
+     		data:"",
+     		success: function(data){
+             	console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>success');
+	    		window.location.href='/order/';
+             }
+     	});      	
     }
     
   	//수량 DB update allitem

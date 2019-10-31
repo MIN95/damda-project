@@ -195,6 +195,11 @@
         #qnaTab table tr th {
         text-align: center;
         }
+        
+        .empty_div{
+        	clear: both;
+        	height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -225,7 +230,9 @@
             	<h3>문의 내역</h3>
             </div>
             <div id="content_content" class="col-md-6">
-            </div> 
+            </div>
+
+			<div class="empty_div">　</div>
 <!-- content end -->
 <jsp:include page="/resources/template/footer.jsp"/>
 </body>
@@ -234,6 +241,8 @@
             grid();
             var m_userNum = "${m_userNum}";  
             $('#content_content').load('callMyQna', {'m_userNum' : m_userNum});
+//          	$('#isntQna').css('display','none');    //qna내역이 있을때 
+//          	$('#isntQna').css('display','block');	//qna내역이 없을때(if)
 		       
         }); 
  
