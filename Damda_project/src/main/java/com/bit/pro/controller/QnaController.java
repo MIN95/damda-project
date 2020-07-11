@@ -1,35 +1,24 @@
 package com.bit.pro.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.bit.pro.dao.QnaDao;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bit.pro.service.QnaService;
 import com.bit.pro.util.Criteria;
 import com.bit.pro.util.PageMaker;
-import com.bit.pro.vo.AllItemVo;
 import com.bit.pro.vo.MailVo;
 import com.bit.pro.vo.PhotoVo;
 import com.bit.pro.vo.QnaVo;
@@ -45,7 +34,7 @@ public class QnaController {
 	private QnaService qnaService;
 	
 	//User section
-	//qna ÆäÀÌÁö
+	//qna í˜ì´ì§€
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String qnaList(HttpServletRequest req,HttpSession session,Model model) throws Exception {
 		if((String) session.getAttribute("userid")!=null) {	
@@ -55,13 +44,13 @@ public class QnaController {
 		return dir+"/qna_list";
 	}
 	
-	//ÆäÀÌÂ¡¸®½ºÆ®(ajax)
+	//í˜ì´ì§•ë¦¬ìŠ¤íŠ¸(ajax)
 	@ResponseBody 
 	@RequestMapping(value = "/pagingList", method = RequestMethod.GET)
 	public List<QnaVo> itemPagingList(Criteria cri,QnaVo qnaVo) throws Exception {
 		return qnaService.selectQnaList(cri,qnaVo);	
 	}	
-	//»ó¼¼ÆäÀÌÁö
+	//ìƒì„¸í˜ì´ì§€
 	@RequestMapping(value = "/detail",method= RequestMethod.GET)
 	public String qnaDetail(HttpServletRequest req,HttpSession session,Model model) throws Exception {
 		session=req.getSession();
@@ -78,17 +67,16 @@ public class QnaController {
 		if(sqlResult==1) {
 			return dir+"/qna_detail"; 
 		}else {
-			model.addAttribute("msg", "Á¢±Ù½ÇÆĞ");
+			model.addAttribute("msg", "ì ‘ê·¼ì‹¤íŒ¨");
 			return "redirect:/qna/";
 		} 
 	}
-	//°ü¸®ÀÚ qna´äº¯µî·Ï
+	//ê´€ë¦¬ì qnaë‹µë³€ë“±ë¡
 	@RequestMapping(value = "/detail", method = RequestMethod.POST)
 	public String insertQnaAnswer(QnaVo qnaVo,MailVo mailVo) throws Exception {
 		qnaService.insertQnaAnswer(qnaVo);
-		System.out.println("qnaVo--->"+qnaVo);
-		//´äº¯¾Ë¸² ¸ŞÀÏ º¸³»±â 
-		if(qnaVo.getAnswerNotice()==1 && qnaVo.getAnswerStatus().equals("¹Ì´äº¯")) {
+		//ë‹µë³€ì•Œë¦¼ ë©”ì¼ ë³´ë‚´ê¸° 
+		if(qnaVo.getAnswerNotice()==1 && qnaVo.getAnswerStatus().equals("ë¯¸ë‹µë³€")) {
 			qnaService.sendEmail(mailVo,qnaVo);
 		} 
 		 
@@ -96,21 +84,23 @@ public class QnaController {
 		return "redirect:/qna/detail?no="+qnaNum;
 	}
 	
-	//Ã·ºÎÆÄÀÏ ´Ù¿î·Îµå
+	//ì²¨ë¶€íŒŒì¼ ë‹¤ìš´ë¡œë“œ
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
-	public ModelAndView downloadQnaFile(HttpServletRequest req,HttpServletResponse resp) throws Exception {
+	public ModelAndView downloadQnaFile(HttpServletRequest req,int no,RedirectAttributes redirectAttributes) throws Exception {
 		String fileFullPath = req.getParameter("filePath");
 		File downloadFile = new File(fileFullPath);
 		if(!downloadFile.canRead()){
-			 throw new Exception("File can't read(ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù)");
+			 	ModelAndView mav = new ModelAndView("redirect:/qna/detail?no="+no);
+			    redirectAttributes.addFlashAttribute("message", "íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤");
+			    return mav;
 		}
-		return new ModelAndView("fileDownloadView", "downloadFile",downloadFile);
+		return new ModelAndView("fileDownloadView", "downloadFile",downloadFile); 
     }
 	
-	//qnaµî·ÏÆäÀÌÁö
+	//qnaë“±ë¡í˜ì´ì§€
 	@RequestMapping(value = "/insert", method = RequestMethod.GET)
 	public String qnaInsert(Model model,HttpServletRequest req,HttpSession session) {
-		//¼¼¼Ç»ı¼º ÈÄ ¼¼¼ÇÀÌ »õ·Î¸¸µé¾îÁø(·Î±×ÀÎµÈ)¼¼¼ÇÀÌ¸é ¹®ÀÇ±Û ÀÛ¼º°¡´Éor·Î±×ÀÎÃ¢À¸·Î º¸³»±â
+		//ì„¸ì…˜ìƒì„± í›„ ì„¸ì…˜ì´ ìƒˆë¡œë§Œë“¤ì–´ì§„(ë¡œê·¸ì¸ëœ)ì„¸ì…˜ì´ë©´ ë¬¸ì˜ê¸€ ì‘ì„±ê°€ëŠ¥orë¡œê·¸ì¸ì°½ìœ¼ë¡œ ë³´ë‚´ê¸°
 		session=req.getSession();
 		if((String) session.getAttribute("userid")!=null) {		 
 			String m_userId = (String) session.getAttribute("userid");
@@ -123,23 +113,23 @@ public class QnaController {
 		}
 	}
 	
-	//qnaµî·ÏÀúÀå
+	//qnaë“±ë¡ì €ì¥
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String qnaInsertSave(QnaVo qnaVo,PhotoVo photoVo,Model model,MultipartHttpServletRequest multi) throws Exception {
 		int sqlResult = qnaService.insertQna(qnaVo,photoVo,multi); 
-		//¸®ÅÏ°á°ú	
+		//ë¦¬í„´ê²°ê³¼	
 		if(sqlResult==0) {
-			//¹®ÀÇµî·Ï½ÇÆĞ
-			model.addAttribute("msg","´Ù½Ã ½ÃµµÇØÁÖ¼¼¿ä");
+			//ë¬¸ì˜ë“±ë¡ì‹¤íŒ¨
+			model.addAttribute("msg","ë‹¤ì‹œ ì‹œë„í•´ì£¼ì„¸ìš”");
 			return "redirect:/qna/insert";
 		}else {
-			//»óÇ°µî·Ï¼º°ø
-			model.addAttribute("msg","¼º°øÀûÀ¸·Î ¹®ÀÇ¸¦ µî·ÏÇÏ¼Ì½À´Ï´Ù");
-			//µî·ÏÇÑ ¹®ÀÇ±Û¹øÈ£ ¸®ÅÏ
+			//ìƒí’ˆë“±ë¡ì„±ê³µ
+			model.addAttribute("msg","ì„±ê³µì ìœ¼ë¡œ ë¬¸ì˜ë¥¼ ë“±ë¡í•˜ì…¨ìŠµë‹ˆë‹¤");
+			//ë“±ë¡í•œ ë¬¸ì˜ê¸€ë²ˆí˜¸ ë¦¬í„´
 			return "redirect:/qna/detail?no="+sqlResult;
 		}
 	}
-	//¹®ÀÇ±Û ¼öÁ¤ÆäÀÌÁö
+	//ë¬¸ì˜ê¸€ ìˆ˜ì •í˜ì´ì§€
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String qnaUpdate(HttpServletRequest req,Model model) throws Exception {	 
 		int qnaNum = Integer.parseInt(req.getParameter("no"));
@@ -149,26 +139,26 @@ public class QnaController {
 		if(sqlResult==1) {
 			return dir+"/qna_update"; 
 		}else {
-			model.addAttribute("msg", "Á¢±Ù½ÇÆĞ");
+			model.addAttribute("msg", "ì ‘ê·¼ì‹¤íŒ¨");
 			return "redirect:/qna/detail?no="+qnaNum;
 		}
 	
 	}
-	//qna¼öÁ¤ÀúÀå
+	//qnaìˆ˜ì •ì €ì¥
 		@RequestMapping(value = "/update", method = RequestMethod.POST)
 		public String qnaUpdateSave(@RequestParam(required=false,defaultValue="0",value="fileStatus")List<Integer> statusList
 									,@RequestParam(required=false,defaultValue="0",value="filePath")List<String> pathList
 									,QnaVo qnaVo,PhotoVo photoVo,Model model,MultipartHttpServletRequest multi) throws Exception {
 			int sqlResult = qnaService.UpdateQna(qnaVo,photoVo,multi,statusList,pathList); 
-			//¸®ÅÏ°á°ú	
+			//ë¦¬í„´ê²°ê³¼	
 			if(sqlResult==0) {
-				//¹®ÀÇµî·Ï½ÇÆĞ
-				model.addAttribute("msg","´Ù½Ã ½ÃµµÇØÁÖ¼¼¿ä");
+				//ë¬¸ì˜ë“±ë¡ì‹¤íŒ¨
+				model.addAttribute("msg","ë‹¤ì‹œ ì‹œë„í•´ì£¼ì„¸ìš”");
 				return "redirect:/qna/update?no="+sqlResult;
 			}else {
-				//»óÇ°µî·Ï¼º°ø
-				model.addAttribute("msg","¼º°øÀûÀ¸·Î ¹®ÀÇ¸¦ ¼öÁ¤ÇÏ¼Ì½À´Ï´Ù");
-				//µî·ÏÇÑ ¹®ÀÇ±Û¹øÈ£ ¸®ÅÏ
+				//ìƒí’ˆë“±ë¡ì„±ê³µ
+				model.addAttribute("msg","ì„±ê³µì ìœ¼ë¡œ ë¬¸ì˜ë¥¼ ìˆ˜ì •í•˜ì…¨ìŠµë‹ˆë‹¤");
+				//ë“±ë¡í•œ ë¬¸ì˜ê¸€ë²ˆí˜¸ ë¦¬í„´
 				return "redirect:/qna/detail?no="+sqlResult;
 			}
 		}
@@ -181,9 +171,9 @@ public class QnaController {
 		int sqlResult = qnaService.deleteQna(qnaNum,pathList);
 		
 		if(sqlResult==1) {
-			model.addAttribute("msg", "±ÛÀÌ ¼º°øÀûÀ¸·Î »èÁ¦µÇ¾ú½À´Ï´Ù");
+			model.addAttribute("msg", "ê¸€ì´ ì„±ê³µì ìœ¼ë¡œ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤");
 		}else {
-			model.addAttribute("msg", "´Ù½Ã ½ÃµµÇØÁÖ¼¼¿ä");
+			model.addAttribute("msg", "ë‹¤ì‹œ ì‹œë„í•´ì£¼ì„¸ìš”");
 		}
 		return "redirect:/qna/";
 	}
@@ -202,7 +192,7 @@ public class QnaController {
 		return dir+"/qna_detail";
 	}
 	
-	//ÆäÀÌÂ¡ ¹öÆ°
+	//í˜ì´ì§• ë²„íŠ¼
 	@ResponseBody 
 	@RequestMapping(value = "/pagingBtn", method = RequestMethod.GET)
 	public PageMaker itemPagingBtn(Criteria cri,QnaVo qnaVo,HttpServletRequest req) throws Exception {
@@ -210,9 +200,9 @@ public class QnaController {
 		int m_userNum = qnaVo.getM_userNum();
 		int dataCnt = 0;
 		if(qnaKind!=null) {
-			if(qnaKind.equals("ÀüÃ¼")) {
+			if(qnaKind.equals("ì „ì²´")) {
 				dataCnt = qnaService.selectAllCnt();
-			}else if(qnaKind.equals("¸¶ÀÌÆäÀÌÁö")){
+			}else if(qnaKind.equals("ë§ˆì´í˜ì´ì§€")){
 				dataCnt = qnaService.selectMyQnaCnt(m_userNum);
 			}else {
 				dataCnt = qnaService.selectCnt(qnaKind);				
