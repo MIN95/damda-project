@@ -154,10 +154,10 @@
 						<input type="hidden" id="qnaNum" name="qnaNum" value="${qnaVo.qnaNum}" />
 						<c:forEach items="${FileList}" var="FileList" varStatus="status">
 							<div>
-							<a href="/qna/download?filePath=${FileList.photoPath }">
+							<a id="fileDown" href="/qna/download?no=${qnaVo.qnaNum}&filePath=${FileList.photoPath}">
 								<span class="attachedFile">
 								<img alt="attached" style='width:15px;heigth:15px;' src="/resources/icon/attach-clip.png">
-								${FileList.originalName }
+								<c:out value="${FileList.originalName }" />
 								</span>
 							</a>
 							</div>
@@ -251,6 +251,12 @@
  		if(qnaStyle==0) {
  			$("#qnaSubTh").append("<img style='width:15px;heigth:15px;' src='/resources/icon/save_lock.png'>");
  		}
+		//첨부파일 다운로드 실패		
+ 		var responseMessage = "<c:out value="${message}" />";
+        if(responseMessage != ""){
+            alert(responseMessage); 
+        }
+ 		
  	});//////////////////////////////////document.ready end
  	
  	$(window).resize(function() {
@@ -308,6 +314,5 @@
 	    	$('#filePathSend').submit();
 	    });
  	});
- 	
  	</script>
 </html>
