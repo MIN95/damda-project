@@ -158,13 +158,13 @@
                <table class="table text-center">
                   <thead>
                      <tr>
-                        <th>No</th>
-                        <th>Category</th>
-                        <th>Subject</th>
-                        <th>Writer</th>
-                        <th>Date</th>
-                        <th>answer</th>
-                        <th><input type="checkbox" id="delCheckAll" class="custom-control-input"></th>
+                        <th style="width:10%;">No</th>
+                        <th style="width:16%;">Category</th>
+                        <th style="width:30.2%;">Subject</th>
+                        <th style="width:12%;">Writer</th>
+                        <th style="width:16%;">Date</th>
+                        <th style="width:16%;">answer</th>
+                        <th style="width:16%;"><input type="checkbox" id="delCheckAll" class="custom-control-input"></th>
                      </tr>
                   </thead> 
                   <tbody id="qnaTbody">
