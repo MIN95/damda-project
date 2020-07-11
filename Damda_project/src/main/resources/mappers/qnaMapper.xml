@@ -21,10 +21,10 @@
 	FROM
 	(
 	SELECT qnanum,qnakind,qnasub,m_userid,qnapw,answerstatus,DATE_FORMAT(qnadate, '%Y-%m-%d') AS qnadate FROM main_qna
+	WHERE qnakind = #{qnaKind} ORDER BY qnanum
 	) q,
 	(SELECT @RNUM:=0) TMP 
-	WHERE qnakind = #{qnaKind}
-	ORDER BY q.qnanum DESC, ROWNUM DESC LIMIT #{startpoint}, #{row}
+	ORDER BY ROWNUM DESC LIMIT #{startpoint}, #{row}
 </select>
 
 <!-- select MyqnaList -->
