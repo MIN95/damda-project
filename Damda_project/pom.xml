@@ -32,6 +32,7 @@
 		
 		<!-- json -->
 		<!--remove annotation in program
+
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
@@ -43,6 +44,7 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.9.3</version>
 		</dependency>
+
 		-->
 	
 	
